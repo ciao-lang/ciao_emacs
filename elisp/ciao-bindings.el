@@ -802,8 +802,8 @@ how things are set up in your @tt{.emacs} file).")
 ;;     ["LPdoc automatic documenter manual" ciao-goto-lpdoc-manual t]
      ["List all key bindings" ciao-describe-mode t]
      "----"
-     ["Ciao semantic search" ciao-semantic-find t]
-     "----"
+;;     ["Ciao semantic search" ciao-semantic-find t]
+;;     "----"
      ["Ciao environment (mode) version" ciao-report-mode-version t]
    )
   "Help menu for the Ciao mode.")
