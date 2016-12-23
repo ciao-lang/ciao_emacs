@@ -49,7 +49,7 @@
    (ciao-builder-cmdstr cmd)
    (ciao-get-builder-proc-buffer)))
 
-;; TODO: Missing sub- and special targets (e.g., core/ciaobase, core/engine, etc.)
+;; TODO: Missing sub- and special targets (e.g., core.ciaobase, core.engine, etc.)
 (defun ask-bundle (msg)
   (let
       ((bundle-list
@@ -82,20 +82,20 @@
     (ciao-builder-command (concat "build " target))))
 
 ;;;###autoload
-(defun ciao-build-nodocs () 
-  "(Re)Build the specified Ciao bundle (no docs)"
+(defun ciao-build-bin () 
+  "(Re)Build the specified Ciao bundle [bin]"
   (interactive)
   (let 
-      ((target (ask-bundle "(Re)Build the specified Ciao bundle (no docs): ")))
-    (ciao-builder-command (concat "build_nodocs " target))))
+      ((target (ask-bundle "(Re)Build the specified Ciao bundle [bin]: ")))
+    (ciao-builder-command (concat "build --bin " target))))
 
 ;;;###autoload
 (defun ciao-build-docs () 
   "(Re)Build the specified Ciao bundle (only docs)"
   (interactive)
   (let 
-      ((target (ask-bundle "(Re)Build the specified Ciao bundle (only docs): ")))
-    (ciao-builder-command (concat "build_docs " target))))
+      ((target (ask-bundle "(Re)Build the specified Ciao bundle [docs]: ")))
+    (ciao-builder-command (concat "build --docs " target))))
 
 ;;;###autoload
 (defun ciao-install () 

@@ -2,21 +2,54 @@
 
 :- doc(title,  "Bundle Hooks for Ciao Emacs").
 
-% TODO: prune (ciao_emacs moved)
 :- use_module(library(bundle/bundle_flags), [get_bundle_flag/2]).
 :- use_module(library(bundle/bundle_paths), [bundle_path/3, bundle_path/4]).
-:- use_module(ciaobld(builder_aux), [
-        builddir_bin_copy_as/4,
-        builddir_bin_link_as/4
-	]).
 :- use_module(ciaobld(config_common), [cmdname_ver/5]).
 :- use_module(library(pathnames), [path_concat/3]).
 
 % ===========================================================================
+:- doc(section, "Configuration rules").
 
-'$builder_hook'(item_subs(['ciao_emacs/dot_emacs', 'ciao_emacs/emacs_mode'])).
+:- use_module(library(system), [find_executable/2]).
 
-:- doc(section, "Emacs Mode").
+:- bundle_flag(with_emacs_mode, [
+    comment("Enable Emacs-based IDE"),
+    details(
+      % .....................................................................
+      "Set to \"yes\" if you wish to install the Ciao emacs libraries which\n"||
+      "implement the Emacs-based IDE (integrated development environment)\n"||
+      "(highly recommended).  It should be set to no if emacs is not\n"||
+      "installed in the system.  It is safe to leave as \"yes\" otherwise."),
+    valid_values(['yes', 'no']),
+    %
+    default_comment("Emacs detected"),
+    rule_default(VerifyEmacs, verify_emacs(VerifyEmacs)),
+    %
+    interactive
+]).
+
+verify_emacs(Value) :-
+	( emacs_installed -> Value = yes ; Value = no ).
+
+emacs_installed :- find_emacs(_).
+
+% TODO: it should consider auto_install option!
+find_emacs(File) :- find_executable('emacs', File).
+
+:- bundle_flag(emacs_for_ciao, [
+    comment("Emacs version to be used"),
+    details(
+      % .....................................................................
+      "The version of emacs that you wish to use with Ciao. The development\n"||
+      "environment will be compiled for use with this version."),
+    needed_if(flag(with_emacs_mode(yes))),
+    rule_default(DefValue, find_emacs(DefValue)),
+    %
+    interactive
+]).
+
+% ===========================================================================
+:- doc(section, "Build rules").
 
 :- use_module(ciaobld(config_common), [
     instype/1,
@@ -32,12 +65,12 @@
 	[del_file_nofail/1,
 	 del_files_nofail/1]).
 
-:- use_module(library(bundle/bundle_info),
-	[root_bundle/1,
-	 enum_sub_bundles/2,
-	 bundle_version/2,
-	 bundle_version_patch/2]).
+:- use_module(library(bundle/bundle_info), [bundle_version/2]).
 
+% NOTE! Be careful if moving library(emacs/emacs_batch) inside this module.
+%   There is builder dependency between these hooks and
+%   core/library/emacs/emacs_batch.pl!
+%      
 :- use_module(library(emacs/emacs_batch), [
 	emacs_style_path/2,
 	emacs_type/1,
@@ -72,25 +105,22 @@ emacsmode_elisp_dir := ~bundle_path(ciao_emacs, 'elisp').
 % TODO: define one .el per bundle or collect all, during dot_emacs build/installation
 %       That may solve @bug{lpdoclibdir_emacs_mode}
 
-% (for installation)
-'$builder_hook'(emacs_mode:item_def(Desc)) :-
-	( with_emacs_mode(yes) ->
-	    Desc = [
-              files_from('elisp/icons', ~icon_dir, [del_rec]),
-	      lib_file_list('elisp', ~emacs_mode_files)]
-	; Desc = []
-	).
+'$builder_hook'(item_nested(emacs_mode)).
+'$builder_hook'(emacs_mode:files_from('elisp/icons', ~icon_dir, [del_rec])) :- % (for installation)
+	with_emacs_mode(yes).
+'$builder_hook'(emacs_mode:lib_file_list('elisp', ~emacs_mode_files)) :- % (for installation)
+	with_emacs_mode(yes).
 %
 '$builder_hook'(emacs_mode:prebuild_docs) :-
 	( with_emacs_mode(yes) -> prebuild_docs_emacs_mode
 	; true
 	).
-'$builder_hook'(emacs_mode:build_nodocs) :-
+'$builder_hook'(emacs_mode:build_bin) :-
 	( with_emacs_mode(yes) -> build_emacs_mode
 	; true
 	).
 '$builder_hook'(emacs_mode:build_docs) :- !.
-'$builder_hook'(emacs_mode:clean_norec) :- clean_emacs_mode.
+'$builder_hook'(emacs_mode:clean_bin) :- clean_emacs_mode.
 
 build_emacs_mode :-
 	% TODO: Use better log names (append them?)
@@ -107,7 +137,7 @@ build_emacs_mode :-
 get_bindir_elisp(EmacsDir) :- % (for CIAOBINDIR)
 	( emacs_type('Win32') ->
 	    % TODO: Why?
-	    Dir = ~bundle_path(~root_bundle, builddir, 'bin')
+	    Dir = ~bundle_path(core, builddir, 'bin')
 	; Dir = ~instciao_bindir
 	),
 	get_dir_elisp(Dir, EmacsDir).
@@ -135,13 +165,21 @@ cmdpath_elisp(Bundle, Cmd, Kind, Expr) :-
 script_extension('.bat') :- ( using_windows ; emacs_type('Win32') ), !.
 script_extension('').
 
-:- use_module(ciaobld(builder_meta), [ensure_load_bundle_metasrc/2]).
-:- use_module(ciaobld(builder_cmds), [bundle_manual_base/2]).
+:- use_module(ciaobld(manifest_compiler), [
+    ensure_load_manifest/1,
+    bundle_manual_base/2
+]).
 
 % Enumerate all manuals of Bundle
 get_bundle_manual_base_elisp(Bundle, NameVersion):-
-	ensure_load_bundle_metasrc(Bundle, bundle_hooks),
+	ensure_load_manifest(Bundle),
 	bundle_manual_base(Bundle, NameVersion).
+
+:- use_module(engine(internals), ['$bundle_id'/1]).
+
+% Manuals from all bundles
+all_manuals(Bases) :-
+	Bases = ~findall(B, ('$bundle_id'(Bundle), get_bundle_manual_base_elisp(Bundle, B))).
 
 % ---------------------------------------------------------------------------
 % Generate ciao-config.el (from ciao-config.el.skel)
@@ -157,9 +195,7 @@ generate_emacs_config :-
 	In = ~path_concat(~emacsmode_elisp_dir, 'ciao-config.el.skel'),
 	Out = ~path_concat(~emacsmode_elisp_dir, 'ciao-config.el'),
 	% manual bases (name and version)
-	root_bundle(RootBundle),
-	Bases = ~findall(B, ((Bundle = RootBundle ; enum_sub_bundles(RootBundle, Bundle)),
-	                     get_bundle_manual_base_elisp(Bundle, B))),
+	all_manuals(Bases),
 	elisp_string_list(Bases, BasesStr, []),
 	%
 	( instype(local) ->
@@ -173,11 +209,11 @@ generate_emacs_config :-
 	    % Emacs type (for ciao mode)
             'CIAO_EMACS_TYPE' = ~emacs_type,
 	    %
-            'CIAO_VERSION' = ~bundle_version_patch(ciao),
+            'CIAO_VERSION' = ~bundle_version(ciao),
 	    % Paths
 	    'CIAOBINDIR' = ~get_bindir_elisp,
 	    'BUNDLEDIR_CORE' = ~get_dir_elisp(BundleDirCore),
-	    'LPDOCDIR' = ~get_dir_elisp(~docformatdir(any)),
+	    'LPDOCDIR' = ~get_dir_elisp(~docformatdir(any)), % TODO: WRONG!!! This should be extracted from workspaces! (dynamically if possible)
 	    'LPDOCLIBDIR' = ~get_dir_elisp(BundleDirLPDoc),
 	    % Manual bases (for ciao-help.el)
             'MANUAL_BASES' = BasesStr,
@@ -304,5 +340,6 @@ addprops([X|Xs], Props) := [X-Props | ~addprops(Xs, Props)].
 
 % ---------------------------------------------------------------------------
 
+'$builder_hook'(item_nested(dot_emacs)).
 :- include(.('dot_emacs.hooks')).
 
