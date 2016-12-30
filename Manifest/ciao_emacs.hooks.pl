@@ -191,6 +191,12 @@ all_manuals(Bases) :-
 :- use_module(library(aggregates), [findall/3]).
 :- use_module(library(bundle/doc_flags), [docformatdir/2]).
 
+final_bundledir(Bundle) := Path :- % TODO: duplicated?
+	( instype(local) ->
+	    Path = ~bundle_path(Bundle, '.')
+	; Path = ~instciao_bundledir(Bundle)
+	).
+
 generate_emacs_config :-
 	In = ~path_concat(~emacsmode_elisp_dir, 'ciao-config.el.skel'),
 	Out = ~path_concat(~emacsmode_elisp_dir, 'ciao-config.el'),
@@ -198,11 +204,10 @@ generate_emacs_config :-
 	all_manuals(Bases),
 	elisp_string_list(Bases, BasesStr, []),
 	%
-	( instype(local) ->
-	    BundleDirCore = ~bundle_path(core, '.'),
-	    BundleDirLPDoc = ~bundle_path(lpdoc, '.')
-	; BundleDirCore = ~instciao_bundledir(core),
-	  BundleDirLPDoc = ~instciao_bundledir(lpdoc)
+	BundleDirCore = ~final_bundledir(core),
+	( '$bundle_id'(lpdoc) ->
+	    BundleDirLPDoc = ~final_bundledir(lpdoc)
+	; BundleDirLPDoc = BundleDirCore % TODO: incorrect
 	),
 	%
 	eval_template_file(In, [
