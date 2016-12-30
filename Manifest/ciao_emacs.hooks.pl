@@ -209,6 +209,10 @@ generate_emacs_config :-
 	    BundleDirLPDoc = ~final_bundledir(lpdoc)
 	; BundleDirLPDoc = BundleDirCore % TODO: incorrect
 	),
+	( '$bundle_id'(lpdoc) ->
+	    DocDir = ~docformatdir(any) % TODO: WRONG!!! This should be extracted from workspaces! (dynamically if possible)
+	; DocDir = BundleDirCore % TODO: incorrect
+	),
 	%
 	eval_template_file(In, [
 	    % Emacs type (for ciao mode)
@@ -218,7 +222,7 @@ generate_emacs_config :-
 	    % Paths
 	    'CIAOBINDIR' = ~get_bindir_elisp,
 	    'BUNDLEDIR_CORE' = ~get_dir_elisp(BundleDirCore),
-	    'LPDOCDIR' = ~get_dir_elisp(~docformatdir(any)), % TODO: WRONG!!! This should be extracted from workspaces! (dynamically if possible)
+	    'LPDOCDIR' = ~get_dir_elisp(DocDir),
 	    'LPDOCLIBDIR' = ~get_dir_elisp(BundleDirLPDoc),
 	    % Manual bases (for ciao-help.el)
             'MANUAL_BASES' = BasesStr,
