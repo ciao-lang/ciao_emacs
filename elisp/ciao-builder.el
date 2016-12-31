@@ -133,39 +133,58 @@
 ;; TODO: only works in instype=local installation
 ;; TODO: add tags-search
 
+;; Workspaces
 ;; TODO: only works in instype=local installation
 (defun ciao--root-dir ()
   "Guess a value for CIAOROOT"
   (expand-file-name (concat ciao-bin-dir "/../..")))
 
+(defun ciao--all-workspaces ()
+  "All workspaces (given CIAOPATH and CIAOROOT)"
+  (append (mapcar 'directory-file-name
+		  (parse-colon-path (getenv "CIAOPATH")))
+	  (list (ciao--root-dir))))
+
 ;;;###autoload
 (defun ciao-grep-root ()
-  "Run grep on Ciao source files (at root directory)"
+  "Run grep on Ciao source files at CIAOROOT"
   (interactive)
-  (let ((re (read-from-minibuffer "Search Ciao code at root directory (Regexp): ")))
+  (let ((re (read-from-minibuffer "Search Ciao code at CIAOROOT (Regexp): ")))
     (ciao--grep-common re (list (ciao--root-dir)))))
 
 ;;;###autoload
 (defun ciao-grep-all ()
-  "Run grep on Ciao source files (at root directory and workspaces given by CIAOPATH)"
+  "Run grep on Ciao source files at all workspaces"
   (interactive)
-  (let ((dirs (append (mapcar 'directory-file-name
-			      (parse-colon-path (getenv "CIAOPATH")))
-		      (list (ciao--root-dir))))
-	(re (read-from-minibuffer "Search Ciao code at CIAOPATH workspaces and root directory (Regexp): ")))
+  (let ((dirs (ciao--all-workspaces))
+	(re (read-from-minibuffer "Search Ciao code at all workspaces (Regexp): ")))
     (ciao--grep-common re dirs)))
 
 ;;;###autoload
 (defun ciao-grep ()
-  "Run grep on Ciao source files (under the default directory)"
+  "Run grep on Ciao source files (at the default directory)"
   (interactive)
-  (let ((re (read-from-minibuffer "Search Ciao code under the default directory (Regexp): ")))
+  (let ((re (read-from-minibuffer "Search Ciao code at the default directory (Regexp): ")))
       (ciao--grep-common re (list (expand-file-name default-directory)))))
 
 (defun ciao--grep-common (regexp dirs)
   "Run grep with REGEXP on Ciao source files at directory DIR"
   (let* ((grep-cmd (concat (ciao--root-dir) "/core/cmds/grep-source.bash"))
 	 (args (append (list grep-cmd "-e" regexp) dirs))
+	 (cmdstr (mapconcat 'shell-quote-argument args " ")))
+      (grep cmdstr)))
+
+;;;###autoload
+(defun ciao-grep-versions-all ()
+  "Run grep for bundle version numbers at all workspaces"
+  (interactive)
+  (let ((dirs (ciao--all-workspaces)))
+    (ciao--grep-versions-common dirs)))
+
+(defun ciao--grep-versions-common (dirs)
+  "Run grep for bundle version numbers at directory DIR"
+  (let* ((grep-cmd (concat (ciao--root-dir) "/core/cmds/grep-versions.bash"))
+	 (args (append (list grep-cmd) dirs))
 	 (cmdstr (mapconcat 'shell-quote-argument args " ")))
       (grep cmdstr)))
 
