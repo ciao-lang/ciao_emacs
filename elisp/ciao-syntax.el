@@ -199,8 +199,8 @@ rigidly along with this one."
 ;; ---------------------------------------------------------------------------
 
 ;; TODO: Use with care, this is experimental.
-(defun ciao-indent-file ()
-  "Indent a Ciao or Prolog file using `plindent'."
+(defun ciao-format-file ()
+  "Format a Ciao program using `ciaofmt'."
   (interactive)
   (setq tmp_file_1 (concat (buffer-file-name) ".1.tmp"))
   (setq current-point (point))
@@ -208,7 +208,7 @@ rigidly along with this one."
   (setq source-buffer (current-buffer))
   (with-temp-file tmp_file_1
     (insert-buffer source-buffer))
-  (shell-command (concat (ciao-get-config :plindent-bin) " " tmp_file_1 " -") source-buffer)
+  (shell-command (concat (ciao-get-config :ciaofmt-bin) " " tmp_file_1 " -") source-buffer)
   (delete-file tmp_file_1)
   (set-window-start (selected-window) current-start)
   (goto-char current-point)

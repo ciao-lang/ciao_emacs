@@ -40,7 +40,7 @@
     :ciaosh-bin ,{{CIAOSHELL}}    
     :ciaopp-bin ,{{CIAOPPSHELL}}
     :lpdoc-bin ,{{LPDOCEXEC}}
-    :plindent-bin ,{{PLINDENT}}
+    :ciaofmt-bin ,{{CIAOFMTEXEC}}
     ))
 
 (defun ciao-get-config (prop)

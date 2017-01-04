@@ -86,7 +86,7 @@ emacs native ports for the mac."
 
 (require 'ciao-help) ; ciao-goto-manuals, ciao-help-on-current-symbol
 (require 'ciao-splash) ; ciao-startup
-(require 'ciao-syntax) ; ciao-indent-line, ciao-indent-file,
+(require 'ciao-syntax) ; ciao-indent-line, ciao-format-file,
 		       ; ciao-insert-script-header
 (require 'ciao-font-lock) ; ciao-fontify-buffer,
 			  ; ciao-font-lock-defaults-create,
@@ -378,7 +378,7 @@ writing programs: @cindex{script header, inserting automatically}
    ")
 
   (ciao-define-key map "\C-cIS" 'ciao-insert-script-header)
-  (ciao-define-key map "\C-ci"  'ciao-indent-file)
+  (ciao-define-key map "\C-ci"  'ciao-format-file)
 
   (ciao-documentation-section
    "Debugging programs"
@@ -670,7 +670,7 @@ how things are set up in your @tt{.emacs} file).")
      ["Check buffer syntax (incl. assertions)"   ciao-check-buffer-syntax t]
      "----"
      ["Update syntax-based coloring"             ciao-fontify-buffer t]
-     ["Indent and format file"                   ciao-indent-file t]
+     ["Format source code"                       ciao-format-file t]
      ["Insert script header"                     ciao-insert-script-header t]
      "----"
      ["Make active module from buffer"           ciao-make-activemod t]

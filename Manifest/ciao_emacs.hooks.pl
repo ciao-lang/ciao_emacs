@@ -227,10 +227,10 @@ generate_emacs_config :-
 	    % Manual bases (for ciao-help.el)
             'MANUAL_BASES' = BasesStr,
 	    % Command binaries
-	    'PLINDENT' = ~cmdpath_elisp(core, 'plindent', plexe),
 	    'CIAOSHELL' = ~cmdpath_elisp(core, 'ciao', script),
 	    'CIAOPPSHELL' = ~cmdpath_elisp(ciaopp, 'ciaopp', plexe),
-	    'LPDOCEXEC' = ~cmdpath_elisp(lpdoc, 'lpdoc', plexe)
+	    'LPDOCEXEC' = ~cmdpath_elisp(lpdoc, 'lpdoc', plexe),
+	    'CIAOFMTEXEC' = ~cmdpath_elisp(ciaofmt, 'ciaofmt', plexe)
         ], Out).
 
 elisp_string_list(Xs) --> "(", elisp_string_list_(Xs), ")".
