@@ -111,8 +111,8 @@ emacsmode_elisp_dir := ~bundle_path(ciao_emacs, 'elisp').
 '$builder_hook'(emacs_mode:lib_file_list('elisp', ~emacs_mode_files)) :- % (for installation)
 	with_emacs_mode(yes).
 %
-'$builder_hook'(emacs_mode:prebuild_docs) :-
-	( with_emacs_mode(yes) -> prebuild_docs_emacs_mode
+'$builder_hook'(emacs_mode:prepare_build_docs) :-
+	( with_emacs_mode(yes) -> prepare_build_docs_emacs_mode
 	; true
 	).
 '$builder_hook'(emacs_mode:build_bin) :-
@@ -248,7 +248,7 @@ elisp_string_list_([]) --> [].
 % Generation of LPdoc documentation source for emacs-mode based on
 % `ciao-documentation.el`. Update `CiaoMode.pl` timestamp if
 % `CiaoMode.lpdoc` has changed.
-prebuild_docs_emacs_mode :-
+prepare_build_docs_emacs_mode :-
 	EmacsModeDir = ~emacsmode_elisp_dir,
 	emacs_batch_call(EmacsModeDir, 'emacs_mode2', % TODO: right log name?
 	  ['--eval', '(setq load-path (cons "." load-path))',
