@@ -14,7 +14,7 @@
     details( % TODO: configurable?
       % .....................................................................
       "Specify the name of the emacs lisp file defining the Ciao mode."),
-    needed_if(flag(with_emacs_mode(yes))),
+    needed_if(flag(enabled(yes))),
     rule_set_value(Value, (
       flag(ciao:registration_type(SysregType)),
       get_emacs_init_file(SysregType, Value))),
@@ -37,7 +37,7 @@ get_emacs_init_file(_, 'ciao-mode-init.el').
       "(modify emacs initialization file)."),
     valid_values(['yes', 'no']),
     %
-    needed_if(flag(with_emacs_mode(yes))),
+    needed_if(flag(enabled(yes))),
     % TODO: This set value means that no question is really asked
     rule_set_value(Value, (
       flag(ciao:registration_type(SysregType)),
@@ -74,7 +74,7 @@ get_dotemacs(user) := ~path_concat(~get_home, '.emacs').
       % .....................................................................
       "Specify in what file/directory you want to insert/copy the Ciao Emacs\n"||
       "Mode initialization code."),
-    needed_if(flag(with_emacs_mode(yes))),
+    needed_if(flag(enabled(yes))),
     rule_default(Value, (
       flag(ciao:registration_type(SysregType)),
       flag(ciao:instype(InsType)),
@@ -134,7 +134,7 @@ dotemacs := ~get_bundle_flag(ciao_emacs:dotemacs).
 emacs_site_start := ~get_bundle_flag(ciao_emacs:emacs_site_start).
 
 '$builder_hook'(dot_emacs:register) :-
-	( with_emacs_mode(yes) ->
+	( enabled(yes) ->
 	    ( emacs_init_file(InitFile) ->
 	        % Register in some .emacs
 	        warn_on_nosuccess(register_in_script(InitFile, ";", ~emacs_load_script))
@@ -152,7 +152,7 @@ emacs_site_start := ~get_bundle_flag(ciao_emacs:emacs_site_start).
 	; true
 	).
 '$builder_hook'(dot_emacs:unregister) :-
-	( with_emacs_mode(yes) ->
+	( enabled(yes) ->
 	    ( emacs_init_file(InitFile) ->
 	        warn_on_nosuccess(unregister_from_script(InitFile, ";"))
 	    ; has_site_start_d(SiteStartD) ->

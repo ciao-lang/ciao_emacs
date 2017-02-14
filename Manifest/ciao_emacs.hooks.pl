@@ -12,7 +12,7 @@
 
 :- use_module(library(system), [find_executable/2]).
 
-:- bundle_flag(with_emacs_mode, [
+:- bundle_flag(enabled, [
     comment("Enable Emacs-based IDE"),
     details(
       % .....................................................................
@@ -23,12 +23,12 @@
     valid_values(['yes', 'no']),
     %
     default_comment("Emacs detected"),
-    rule_default(VerifyEmacs, verify_emacs(VerifyEmacs)),
+    rule_default(HasEmacs, has_emacs(HasEmacs)),
     %
     interactive
 ]).
 
-verify_emacs(Value) :-
+has_emacs(Value) :-
 	( emacs_installed -> Value = yes ; Value = no ).
 
 emacs_installed :- find_emacs(_).
@@ -42,7 +42,7 @@ find_emacs(File) :- find_executable('emacs', File).
       % .....................................................................
       "The version of emacs that you wish to use with Ciao. The development\n"||
       "environment will be compiled for use with this version."),
-    needed_if(flag(with_emacs_mode(yes))),
+    needed_if(flag(enabled(yes))),
     rule_default(DefValue, find_emacs(DefValue)),
     %
     interactive
@@ -79,7 +79,7 @@ find_emacs(File) :- find_executable('emacs', File).
 	emacs_update_autoloads/3,
         emacs_clean_log/2]).
 
-with_emacs_mode := ~get_bundle_flag(ciao_emacs:with_emacs_mode).
+enabled := ~get_bundle_flag(ciao_emacs:enabled).
 
 emacsmode_elisp_dir := ~bundle_path(ciao_emacs, 'elisp').
 
@@ -107,16 +107,16 @@ emacsmode_elisp_dir := ~bundle_path(ciao_emacs, 'elisp').
 
 '$builder_hook'(item_nested(emacs_mode)).
 '$builder_hook'(emacs_mode:files_from('elisp/icons', ~icon_dir, [del_rec])) :- % (for installation)
-	with_emacs_mode(yes).
+	enabled(yes).
 '$builder_hook'(emacs_mode:lib_file_list('elisp', ~emacs_mode_files)) :- % (for installation)
-	with_emacs_mode(yes).
+	enabled(yes).
 %
 '$builder_hook'(emacs_mode:prepare_build_docs) :-
-	( with_emacs_mode(yes) -> prepare_build_docs_emacs_mode
+	( enabled(yes) -> prepare_build_docs_emacs_mode
 	; true
 	).
 '$builder_hook'(emacs_mode:build_bin) :-
-	( with_emacs_mode(yes) -> build_emacs_mode
+	( enabled(yes) -> build_emacs_mode
 	; true
 	).
 '$builder_hook'(emacs_mode:build_docs) :- !.
