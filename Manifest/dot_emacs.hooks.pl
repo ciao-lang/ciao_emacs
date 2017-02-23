@@ -16,7 +16,7 @@
       "Specify the name of the emacs lisp file defining the Ciao mode."),
     needed_if(flag(enabled(yes))),
     rule_set_value(Value, (
-      flag(ciao:registration_type(SysregType)),
+      flag(builder:registration_type(SysregType)),
       get_emacs_init_file(SysregType, Value))),
     interactive
 ]).
@@ -40,7 +40,7 @@ get_emacs_init_file(_, 'ciao-mode-init.el').
     needed_if(flag(enabled(yes))),
     % TODO: This set value means that no question is really asked
     rule_set_value(Value, (
-      flag(ciao:registration_type(SysregType)),
+      flag(builder:registration_type(SysregType)),
       update_dotemacs_(SysregType, Value))),
     rule_default('yes'),
     %
@@ -60,7 +60,7 @@ update_dotemacs_(user, yes).
       "added."),
     needed_if(flag(update_dotemacs(yes))),
     rule_default(DefValue, (
-      flag(ciao:registration_type(SysregType)),
+      flag(builder:registration_type(SysregType)),
       get_dotemacs(SysregType, DefValue))),
     %
     interactive
@@ -76,8 +76,8 @@ get_dotemacs(user) := ~path_concat(~get_home, '.emacs').
       "Mode initialization code."),
     needed_if(flag(enabled(yes))),
     rule_default(Value, (
-      flag(ciao:registration_type(SysregType)),
-      flag(ciao:instype(InsType)),
+      flag(builder:registration_type(SysregType)),
+      flag(builder:instype(InsType)),
       get_emacs_site_start(emacs, SysregType, InsType, Value))),
     %
     interactive([advanced])
