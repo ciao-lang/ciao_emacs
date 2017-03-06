@@ -97,22 +97,6 @@ is set by default to @tt{html} or to the environment variable
 			"Change default doc format used by LPdoc auto-documenter?"
 			ciao-lpdoc-docformats))
 
-(defcustom ciao-lpdoc-libpath (or (getenv "LPDOCLIB") (ciao-get-config :lpdoc-lib-dir))
-  "Path in which the LPdoc library is installed."
-  :group 'lpdoc
-  :type 'directory)
-
-;;;###autoload
-(defun ciao-set-lpdoc-libpath () 
-  "Change the path in which the LPdoc library is installed. It is
-set by default to @tt{/home/clip/lib} or to the environment  
-variable @tt{LPDOCLIB} if it is defined. @cindex{lpdoc lib path, setting}
-@cindex{auto-documenter lib path, setting}"
-  (interactive)
-  (setq ciao-lpdoc-libpath
-	(read-file-name "Change path in which LPdoc lib is installed? "
-   		        "" ciao-lpdoc-libpath nil ciao-lpdoc-libpath))) 
-
 ;;------------------------------------------------------------
 ;; Communication with LPdoc process of the inferior mode
 
@@ -247,7 +231,8 @@ inferior process"
 
 (defun ciao-lpdoc-default-settings-file ()
   "The default settings file (@tt{SETTINGS_DEFAULT.pl})."
-  (concat ciao-lpdoc-libpath "/lib/SETTINGS_DEFAULT.pl"))  
+  (concat (ciao-get-config :bundledir-lpdoc)
+	  "/lib/SETTINGS_DEFAULT.pl"))  
 
 (defun ciao-lpdoc-gen-default-settings (sourcefile)
   "Creates a simple @tt{SETTINGS.pl} file for `sourcefile',
@@ -309,15 +294,7 @@ buffer) for the given `sourcefile'."
   ;; The name of the module: file name without directory and extension
   (insert (file-name-sans-extension
 	   (file-name-nondirectory sourcefile)))
-  (insert "\'.")
-  (goto-char (point-min))
-  (search-forward "htmldir := ")
-  (kill-line)
-  (insert "\'\'.")
-  (goto-char (point-min))
-  (search-forward "output_name := ")
-  (kill-line)
-  (insert "_ :- fail."))
+  (insert "\'."))
 
 ;;------------------------------------------------------------
 ;; Interactive commands

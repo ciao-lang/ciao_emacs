@@ -83,18 +83,17 @@ get_dotemacs(user) := ~path_concat(~get_home, '.emacs').
     interactive([advanced])
 ]).
 
-:- use_module(ciaobld(config_common), [instciao_bundledir/2]).
-:- use_module(library(system), [winpath/2]).
+:- use_module(ciaobld(install_aux), [inst_bundle_path/3]).
 
 get_emacs_site_start(EmacsKind, all, global, Value) :-
 	emacs_site_start_(EmacsKind, Value),
 	!.
 get_emacs_site_start(_, _, InsType, Value) :-
-	( InsType = local -> Value0 = ~bundle_path(core, '.') % TODO: strange
-	; InsType = global -> Value0 = ~instciao_bundledir(core)
+	% TODO: probably incorrect
+	( InsType = local -> Value = ~bundle_path(ciao_emacs, '.')
+	; InsType = global -> Value = ~inst_bundle_path(ciao_emacs, '.')
 	; fail
-	),
-	winpath(Value, Value0). % (translate in Unix format, if necessary)
+	).
 
 emacs_site_start_(EmacsKind, SiteStart) :-
 	possible_emacs_site_start(EmacsKind, SiteStart),
@@ -113,18 +112,15 @@ possible_emacs_site_start(emacs) :=
 
 % ---------------------------------------------------------------------------
 
-:- use_module(ciaobld(config_common), [
-    instype/1,
-    instciao_bundledir/2
-]).
+:- use_module(ciaobld(install_aux), [instype/1, inst_bundle_path/3]).
 
 :- use_module(library(pathnames), [path_concat/3]).
 :- use_module(library(lists), [append/3]).
 :- use_module(library(file_utils), [string_to_file/2]).
 :- use_module(library(system), [mktemp_in_tmp/2]).
 :- use_module(library(system_extra), [warn_on_nosuccess/1]).
-:- use_module(ciaobld(builder_aux),
-	[rootprefix/1, storedir_install/1, storedir_uninstall/1]).
+:- use_module(ciaobld(install_aux),
+	[rootprefix/1, instdir_install/1, instdir_uninstall/1]).
 :- use_module(ciaobld(register_in_script), [
  	register_in_script/3, unregister_from_script/2]).
 
@@ -143,8 +139,8 @@ emacs_site_start := ~get_bundle_flag(ciao_emacs:emacs_site_start).
 	        mktemp_in_tmp('emacsloaderXXXXXX', Loader),
 		string_to_file(~emacs_load_script, Loader),
 		InitFile = ~path_concat(SiteStartD, ~emacsinitfile),
-		storedir_install(dir(SiteStartD)),
-		storedir_install(file_noexec(Loader, InitFile)),
+		instdir_install(dir(SiteStartD)),
+		instdir_install(file(Loader, InitFile)),
 		del_file_nofail(Loader)
 	    ; % Do not register
 	      true
@@ -157,7 +153,7 @@ emacs_site_start := ~get_bundle_flag(ciao_emacs:emacs_site_start).
 	        warn_on_nosuccess(unregister_from_script(InitFile, ";"))
 	    ; has_site_start_d(SiteStartD) ->
 	        InitFile = ~path_concat(SiteStartD, ~emacsinitfile),
-		storedir_uninstall(file(InitFile))
+		instdir_uninstall(file(InitFile))
             ; % Do not unregister
 	      true
 	    )
@@ -169,7 +165,7 @@ has_site_start_d(SiteStartD) :-
 	is_site_start_d(SiteStartD).
 
 emacs_load_script(S) :-
-	Lib = ~ciaolibemacs,
+	Lib = ~final_ciaolibemacs,
 	Lib2 = ~emacs_style_path(Lib),
 	emacs_load_script_(Lib2, S, []).
 
@@ -182,14 +178,8 @@ emit_atom(X, S, S0) :-
 	atom_codes(X, Codes),
 	append(Codes, S0, S).
 
-% The absolute path for the 'ciao-site-file.el' file
-ciaolibemacs(LibEmacs) :-
-	( instype(local) ->
-	    LibEmacs = ~path_concat(~emacsmode_elisp_dir, 'ciao-site-file.el')
-	; % TODO: Place the version in the right place automatically?
-	  % TODO: Verify that the rest of .el files are in the correct directory.
-	  LibEmacs = ~path_concat(~instciao_bundledir(core), 'ciao-site-file.el')
-	).
+% Final path for the 'ciao-site-file.el' file
+final_ciaolibemacs := ~final_bundle_path(ciao_emacs, 'elisp/ciao-site-file.el').
 
 % Obtain the appropriate configuration file for this system or
 % installation (.emacs or site-start.el). This predicate fails if no
@@ -204,6 +194,7 @@ emacs_init_file := InitFile :-
 	  %  - if the site-start.d directory was not found
 	  %  - and, we are not using rootprefix (--destdir=DIR in
 	  %    install)
+	  instype(global),
 	  \+ (rootprefix(Prefix), \+ Prefix = ''),
 	  Dir = ~emacs_site_start,
 	  \+ is_site_start_d(Dir) ->

@@ -21,7 +21,7 @@
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
 
-(defvar ciao-bin-dir {{CIAOBINDIR}}
+(defvar ciao-bin-dir {{BUILDDIRBIN}}
   "Where the actual Ciao binaries are.")
 
 (defvar ciao-config 
@@ -30,10 +30,10 @@
     ;; Version	     
     :version "{{CIAO_VERSION}}"
     ;; Paths
-    :bin-dir {{CIAOBINDIR}}
-    :bundledir-core {{BUNDLEDIR_CORE}}
-    :lpdoc-lib-dir {{LPDOCLIBDIR}}
-    :lpdoc-dir {{LPDOCDIR}}
+    :bin-dir {{BUILDDIRBIN}}
+    :builddoc-dir {{BUILDDIRDOC}}
+    :bundledir-ciao-emacs {{BUNDLEDIR_CIAO_EMACS}}
+    :bundledir-lpdoc {{BUNDLEDIR_LPDOC}}
     ;; Manuals
     :manual-bases {{MANUAL_BASES}}
     ;; Binaries

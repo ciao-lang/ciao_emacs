@@ -2,11 +2,6 @@
 
 :- doc(title,  "Bundle Hooks for Ciao Emacs").
 
-:- use_module(library(bundle/bundle_flags), [get_bundle_flag/2]).
-:- use_module(library(bundle/bundle_paths), [bundle_path/3, bundle_path/4]).
-:- use_module(ciaobld(config_common), [cmdname_ver/5]).
-:- use_module(library(pathnames), [path_concat/3]).
-
 % ===========================================================================
 :- doc(section, "Configuration rules").
 
@@ -51,20 +46,18 @@ find_emacs(File) :- find_executable('emacs', File).
 % ===========================================================================
 :- doc(section, "Build rules").
 
-:- use_module(ciaobld(config_common), [
-    instype/1,
-    instciao_bindir/1,
-    instciao_bundledir/2
-]).
-
 :- use_module(library(llists), [flatten/2, append/2]).
+:- use_module(library(pathnames), [path_concat/3]).
 :- use_module(library(system), [using_windows/0]).
 :- use_module(library(system), [touch/1]).
 :- use_module(library(system_extra), [move_if_diff/2]).
 :- use_module(library(system_extra),
 	[del_file_nofail/1,
 	 del_files_nofail/1]).
+:- use_module(ciaobld(config_common), [concat_ext/3]).
 
+:- use_module(library(bundle/bundle_paths), [bundle_path/3, bundle_path/4]).
+:- use_module(library(bundle/bundle_flags), [get_bundle_flag/2]).
 :- use_module(library(bundle/bundle_info), [bundle_version/2]).
 
 % NOTE! Be careful if moving library(emacs/emacs_batch) inside this module.
@@ -106,9 +99,9 @@ emacsmode_elisp_dir := ~bundle_path(ciao_emacs, 'elisp').
 %       That may solve @bug{lpdoclibdir_emacs_mode}
 
 '$builder_hook'(item_nested(emacs_mode)).
-'$builder_hook'(emacs_mode:files_from('elisp/icons', ~icon_dir, [del_rec])) :- % (for installation)
+'$builder_hook'(emacs_mode:assets('elisp/icons')) :- % (for installation)
 	enabled(yes).
-'$builder_hook'(emacs_mode:lib_file_list('elisp', ~emacs_mode_files)) :- % (for installation)
+'$builder_hook'(emacs_mode:assets('elisp', ~emacs_mode_files)) :- % (for installation)
 	enabled(yes).
 %
 '$builder_hook'(emacs_mode:prepare_build_docs) :-
@@ -134,31 +127,19 @@ build_emacs_mode :-
         EL = ~ciao_mode_el_files,
 	emacs_batch_byte_compile(Dir, 'emacs_mode', EL).
 
-get_bindir_elisp(EmacsDir) :- % (for CIAOBINDIR)
-	( emacs_type('Win32') ->
-	    % TODO: Why?
-	    Dir = ~bundle_path(core, builddir, 'bin')
-	; Dir = ~instciao_bindir
-	),
-	get_dir_elisp(Dir, EmacsDir).
-
-% TODO: use ciao-root-dir for all emacs_type?
-get_dir_elisp(Dir, EmacsDir) :-
-	emacs_type('MacOSBundle'),
-	!,
-	flatten(["(concat ciao-root-dir \"", ~atom_codes(Dir), "\")"], EmacsDir).
+% TODO: make it relocatable (from the elisp side)
 get_dir_elisp(Dir, EmacsDir) :-
 	% TODO: missing escape of Dir2
 	Dir2 = ~emacs_style_path(Dir),
 	flatten(["\"", ~atom_codes(Dir2), "\""], EmacsDir).
 
 % Path to a bundle command binary, as elisp expression
-% (see cmdname_ver/5)
-cmdpath_elisp(Bundle, Cmd, Kind, Expr) :-
+% TODO: make it relocatable (from the elisp side)
+cmdpath_elisp(_Bundle, Cmd, Kind, Expr) :-
 	( Kind = plexe -> K = plexe
 	; Kind = script -> K = ext(~script_extension)
 	),
-	CmdName = ~cmdname_ver(yes, Bundle, Cmd, K),
+	CmdName = ~concat_ext(K, Cmd),
 	Expr = ~flatten(["(concat ciao-bin-dir \"/", ~atom_codes(CmdName), "\")"]).
 
 % TODO: Why .bat? (only for 'ciaocl' at this moment)
@@ -171,9 +152,9 @@ script_extension('').
 ]).
 
 % Enumerate all manuals of Bundle
-get_bundle_manual_base_elisp(Bundle, NameVersion):-
+get_bundle_manual_base_elisp(Bundle, Name):-
 	ensure_load_manifest(Bundle),
-	bundle_manual_base(Bundle, NameVersion).
+	bundle_manual_base(Bundle, Name).
 
 :- use_module(engine(internals), ['$bundle_id'/1]).
 
@@ -189,30 +170,23 @@ all_manuals(Bases) :-
 
 :- use_module(library(text_template), [eval_template_file/3]).
 :- use_module(library(aggregates), [findall/3]).
-:- use_module(library(bundle/doc_flags), [docformatdir/2]).
-
-final_bundledir(Bundle) := Path :- % TODO: duplicated?
-	( instype(local) ->
-	    Path = ~bundle_path(Bundle, '.')
-	; Path = ~instciao_bundledir(Bundle)
-	).
+:- use_module(ciaobld(install_aux), [final_bundle_path/3, final_builddir_path/3]).
 
 generate_emacs_config :-
 	In = ~path_concat(~emacsmode_elisp_dir, 'ciao-config.el.skel'),
 	Out = ~path_concat(~emacsmode_elisp_dir, 'ciao-config.el'),
-	% manual bases (name and version)
+	% manual base names
 	all_manuals(Bases),
 	elisp_string_list(Bases, BasesStr, []),
 	%
-	BundleDirCore = ~final_bundledir(core),
+	BundleDirCore = ~final_bundle_path(core, '.'),
+	BundleDirCiaoEmacs = ~final_bundle_path(ciao_emacs, '.'),
 	( '$bundle_id'(lpdoc) ->
-	    BundleDirLPDoc = ~final_bundledir(lpdoc)
+	    BundleDirLPDoc = ~final_bundle_path(lpdoc, '.')
 	; BundleDirLPDoc = BundleDirCore % TODO: incorrect
 	),
-	( '$bundle_id'(lpdoc) ->
-	    DocDir = ~docformatdir(any) % TODO: WRONG!!! This should be extracted from workspaces! (dynamically if possible)
-	; DocDir = BundleDirCore % TODO: incorrect
-	),
+	BuildDirBin = ~final_builddir_path(core, 'bin'), % TODO: 'core' hardwired
+	BuildDirDoc = ~final_builddir_path(core, 'doc'), % TODO: 'core' hardwired
 	%
 	eval_template_file(In, [
 	    % Emacs type (for ciao mode)
@@ -220,10 +194,10 @@ generate_emacs_config :-
 	    %
             'CIAO_VERSION' = ~bundle_version(ciao),
 	    % Paths
-	    'CIAOBINDIR' = ~get_bindir_elisp,
-	    'BUNDLEDIR_CORE' = ~get_dir_elisp(BundleDirCore),
-	    'LPDOCDIR' = ~get_dir_elisp(DocDir),
-	    'LPDOCLIBDIR' = ~get_dir_elisp(BundleDirLPDoc),
+	    'BUILDDIRBIN' = ~get_dir_elisp(BuildDirBin),
+	    'BUILDDIRDOC' = ~get_dir_elisp(BuildDirDoc),
+	    'BUNDLEDIR_CIAO_EMACS' = ~get_dir_elisp(BundleDirCiaoEmacs),
+	    'BUNDLEDIR_LPDOC' = ~get_dir_elisp(BundleDirLPDoc),
 	    % Manual bases (for ciao-help.el)
             'MANUAL_BASES' = BasesStr,
 	    % Command binaries
@@ -265,13 +239,10 @@ prepare_build_docs_emacs_mode :-
 
 emacs_mode_files :=
     ~append([
-      ~addprops(['ciao-site-file.el'], [copy_and_link]),
-      ~addprops(~ciao_mode_el_files, [copy_and_link]),
-      ~addprops(~ciao_mode_elc_files, [copy_and_link])
+      ['ciao-site-file.el'],
+      ~ciao_mode_el_files,
+      ~ciao_mode_elc_files
     ]).
-
-% TODO: use a different directory?
-icon_dir := ~path_concat(~instciao_bundledir(core), 'icons').
 
 % TODO: Remember to 'update builder/src/win32/Ciao.iss.skel'
 %       if the files here are modified. Ideally, that file should not
@@ -297,7 +268,6 @@ ciao_mode_lisp_files := [
 	'java-ciaopp',
 	'ciao-builder',
 	'ciao-optim-comp',
-	'ciao-org',
 	'ciao-widgets',
 	'ciao-common',
 	'ciao-config',
@@ -339,13 +309,6 @@ add_prefix([],     _Preffix, []).
 add_prefix([L|Ls], Preffix,  [R|Rs]) :-
 	atom_concat(Preffix, L, R),
 	add_prefix(Ls, Preffix, Rs).
-
-% ---------------------------------------------------------------------------
-% (Auxiliary predicates)
-
-% Add the property list Prop to each of Xs (for bundle description)
-addprops([], _Props) := [].
-addprops([X|Xs], Props) := [X-Props | ~addprops(Xs, Props)].
 
 % ---------------------------------------------------------------------------
 

@@ -230,7 +230,7 @@ things manually so that the Ciao mode is loaded by default in
 your system. This can be done by including in your @file{.emacs}
 file a line such as:
 
-@tt{(load ""<INSTALL_STOREDIR>/ciao-mode-init"")}
+@tt{(load ""<INSTALL_CIAOROOT>/ciao-mode-init"")}
 
 @noindent This loads the above mentioned file from the Ciao
 library. If you would like to configure things in a different

@@ -56,7 +56,7 @@
 (defun ciao-help-info-entry-exists-p (inf)
   "Detects if the (Ciao) info manual `inf' actually exists."
   (file-exists-p
-   (concat (ciao-get-config :lpdoc-dir) "/" (car inf))))
+   (concat (ciao-get-config :builddoc-dir) "/" (car inf))))
 
 ;; The list of manuals for the available bundles
 
@@ -91,7 +91,7 @@
 (ciao-help-add-manual "Ciao" ciao-manuals)
 (ciao-help-add-manual "Ciao Listener" ciao-manuals)
 
-(defvar ciao-info-dir (ciao-get-config :lpdoc-dir)
+(defvar ciao-info-dir (ciao-get-config :builddoc-dir)
   "Where the actual Ciao (LPdoc) info directory is.")
 
 ;; (previous code)

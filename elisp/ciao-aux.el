@@ -42,16 +42,14 @@
 
 (require 'ciao-config) ; ciao-get-config
 
+;; TODO: useful for finding in several locations?
 ; look at installation or source directories
 (defun ciao-find-icon (icon)
   "Icon with absolute path (for xemacs)"
-  (let (bundledir-core bundledir-ciao-emacs icon-ins icon-src)
-    (setq bundledir-core (ciao-get-config :bundledir-core))
-    (setq bundledir-ciao-emacs (concat bundledir-core "/../bndls/ciao_emacs/"))
-    (setq icon-ins (expand-file-name icon bundledir-core))
+  (let (bundledir-ciao-emacs icon-ins icon-src)
+    (setq bundledir-ciao-emacs (ciao-get-config :bundledir-ciao-emacs))
     (setq icon-src (expand-file-name icon bundledir-ciao-emacs))
-    (cond ((file-exists-p icon-ins) icon-ins)
-	  ((file-exists-p icon-src) icon-src))))
+    (cond ((file-exists-p icon-src) icon-src))))
 
 ;;---------------------------------------------------------------------------
 ;; Ciao's own windows abstraction

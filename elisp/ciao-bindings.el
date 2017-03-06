@@ -131,7 +131,6 @@ emacs native ports for the mac."
 (require 'ciao-lpdoc) ; ciao-set-lpdoc-system,
 		      ; ciao-set-lpdoc-system-args,
 		      ; ciao-set-lpdoc-docformat,
-		      ; ciao-set-lpdoc-libpath,
 		      ; ciao-visit-lpdoc-settings, ciao-gen-doc,
 		      ; ciao-gen-buffer-doc, ciao-start-viewer
 (require 'ciao-vc) ; ciao-new-version,
@@ -586,7 +585,6 @@ help menu (see @ref{Customization}).
   (ciao-define-key map "\C-cSL"    'ciao-set-library-path)
   (ciao-define-key map "\C-cSD"    'ciao-set-lpdoc-system)
   (ciao-define-key map "\C-cS\C-d" 'ciao-set-lpdoc-system-args)
-  (ciao-define-key map "\C-cS\C-l" 'ciao-set-lpdoc-libpath)
 
   (ciao-documentation-section 
    "Other commands" 
@@ -780,7 +778,6 @@ how things are set up in your @tt{.emacs} file).")
 ;;     ["Customize all LPdoc environment settings" (customize-group 'lpdoc) t]
      ["Set LPdoc executable"                   ciao-set-lpdoc-system t]
      ["Set LPdoc executable args"              ciao-set-lpdoc-system-args t]
-     ["Set LPdoc library path"                 ciao-set-lpdoc-libpath t]
      "----"
      ["Set root directory for scratchpad"      ciao-set-scratchpad-root t]
      "----"
