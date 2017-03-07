@@ -73,14 +73,14 @@ programming environment."
   (interactive)
   (setq ciao-main-filename
 	(read-file-name "Change Ciao main file? " 
-			"" (buffer-file-name) t (buffer-file-name)))
+			(buffer-file-name) (buffer-file-name) t))
   ;; TODO: Only ciaopp?
   (ciao-send-command 'ciaopp-cproc
 		     (concat "set_prolog_flag(main_module,\'" ciao-main-filename "\').")
 		     t))
 ;;   (setq ciao-main-filename 
 ;; 	(read-file-name "Change Ciao main module? " 
-;; 			"" (ciao-get-module-name) nil (ciao-get-module-name))))
+;; 			(ciao-get-module-name) (ciao-get-module-name))))
 
 ;;------------------------------------------------------------
 ;; Queries for the Ciao toplevel process, with parsing of errors from

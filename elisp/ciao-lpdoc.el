@@ -51,7 +51,7 @@ variable @tt{LPDOC} if it is defined. @cindex{lpdoc command, setting}
   (interactive)
   (setq ciao-lpdoc-system
 	(read-file-name "Change Ciao LPdoc auto-documenter executable? "
-   		        "" ciao-lpdoc-system nil ciao-lpdoc-system))) 
+   		        ciao-lpdoc-system ciao-lpdoc-system))) 
 
 (defcustom ciao-lpdoc-system-args (or (getenv "LPDOCARGS") "")
   "Arguments passed to LPdoc executable."
@@ -66,8 +66,8 @@ is defined. @cindex{lpdoc command args, setting}
 @cindex{auto-documenter command args, setting}" 
   (interactive)
   (setq ciao-lpdoc-system-args
-     (read-file-name "Change args passed to LPdoc auto documenter executable? "
-	        "" ciao-lpdoc-system-args nil ciao-lpdoc-system-args))) 
+	(read-string "Change args passed to LPdoc auto documenter executable? " 
+		     ciao-lpdoc-system-args nil)))
 
 ;; TODO: Ask Ciao what are the docformats
 (defvar ciao-lpdoc-docformats

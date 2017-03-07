@@ -99,7 +99,7 @@ executables know its installation path."
   (interactive)
   (ciao-do-set-ciao-root nil
    (read-file-name "Change Ciao root path (CIAOROOT)? " 
-		   "" (getenv "CIAOROOT") nil (getenv "CIAOROOT"))))
+		   (getenv "CIAOROOT") (getenv "CIAOROOT"))))
 
 (defun ciao-initialize-ciao-path (ignorea ignoreb) 
   (ciao-do-set-ciao-path nil (or (getenv "CIAOPATH") "")))
@@ -120,7 +120,7 @@ variable @tt{CIAOPATH})."
   (interactive)
   (ciao-do-set-ciao-path nil
    (read-file-name "Change paths for Ciao bundles (CIAOPATH)? " 
-		   "" (getenv "CIAOPATH") nil (getenv "CIAOPATH"))))
+		   (getenv "CIAOPATH") (getenv "CIAOPATH"))))
 
 (defcustom ciao-system (or (getenv "CIAO") (ciao-get-config :ciaosh-bin))
   "Name of Ciao executable which runs the classical top level."
@@ -134,7 +134,7 @@ is defined. @cindex{toplevel command, setting}"
   (interactive)
   (setq ciao-system
 	(read-file-name "Change Ciao top-level executable? " 
-			"" ciao-system nil ciao-system)))
+			ciao-system ciao-system)))
 
 (defun ciao-system-args-interactive ()
     (if (string= system-type "windows-nt") "-i" ""))
@@ -190,7 +190,7 @@ variable @tt{CIAOPP} if it is defined. @cindex{preprocessor command, setting}"
   (interactive)
   (setq ciao-ciaopp-system
 	(read-file-name "Change Ciao preprocessor executable? "
-   		        "" ciao-ciaopp-system nil ciao-ciaopp-system))) 
+   		        ciao-ciaopp-system ciao-ciaopp-system))) 
 
 (defun ciao-ciaopp-system-args-interactive ()
     (if (string= system-type "windows-nt") "-T -i" "-T"))
