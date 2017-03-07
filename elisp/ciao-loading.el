@@ -54,40 +54,6 @@
   "Used to contain sometimes the last source buffer used (useful
 for returning to it after processing).")
 
-;; 'ignore' is because custom passes id of symbol
-(defun ciao-do-set-library-path (ignore ciaolib) 
-  (if (string= ciaolib "") 
-      (progn
-	(setenv "CIAOLIB" nil)
-	(setq ciao-library-path ""))
-    (setenv "CIAOLIB" ciaolib)
-    (setq ciao-library-path ciaolib)))
-
-;;------------------------------------------------------------
-;; Library path for Ciao processes
-;;------------------------------------------------------------
-
-(defun ciao-initialize-library-path (ignorea ignoreb) 
-  (ciao-do-set-library-path nil (or (getenv "CIAOLIB") "")))
-
-(defcustom ciao-library-path ""
-  "Path to the Ciao System libraries (reads/sets the CIAOLIB
-environment variable ). Typically left empty, since ciao
-executables know which library to use."
-  :group 'ciaocore
-  :type 'string
-  :initialize 'ciao-initialize-library-path
-  :set 'ciao-do-set-library-path
-  )
-
-(defun ciao-set-library-path () 
-  "Change the location of the Ciao library paths (changes the
-   environment variable @tt{CIAOLIB})."
-  (interactive)
-  (ciao-do-set-library-path nil
-   (read-file-name "Change Ciao library path? " 
-		   "" (getenv "CIAOLIB") nil (getenv "CIAOLIB"))))
-
 ;;------------------------------------------------------------
 ;; Main file
 ;;

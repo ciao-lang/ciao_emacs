@@ -170,7 +170,8 @@ all_manuals(Bases) :-
 
 :- use_module(library(text_template), [eval_template_file/3]).
 :- use_module(library(aggregates), [findall/3]).
-:- use_module(ciaobld(install_aux), [final_bundle_path/3, final_builddir_path/3]).
+:- use_module(ciaobld(install_aux),
+	[final_ciao_root/1, final_bundle_path/3, final_builddir_path/3]).
 
 generate_emacs_config :-
 	In = ~path_concat(~emacsmode_elisp_dir, 'ciao-config.el.skel'),
@@ -194,6 +195,7 @@ generate_emacs_config :-
 	    %
             'CIAO_VERSION' = ~bundle_version(ciao),
 	    % Paths
+	    'CIAOROOT' = ~final_ciao_root,
 	    'BUILDDIRBIN' = ~get_dir_elisp(BuildDirBin),
 	    'BUILDDIRDOC' = ~get_dir_elisp(BuildDirDoc),
 	    'BUNDLEDIR_CIAO_EMACS' = ~get_dir_elisp(BundleDirCiaoEmacs),

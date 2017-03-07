@@ -30,6 +30,7 @@
     ;; Version	     
     :version "{{CIAO_VERSION}}"
     ;; Paths
+    :root-dir "{{CIAOROOT}}"
     :bin-dir {{BUILDDIRBIN}}
     :builddoc-dir {{BUILDDIRDOC}}
     :bundledir-ciao-emacs {{BUNDLEDIR_CIAO_EMACS}}

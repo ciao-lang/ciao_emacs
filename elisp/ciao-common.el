@@ -60,6 +60,68 @@ libraries)."
   :tag "LPdoc"
   :group 'ciao)
 
+;;---------------------------------------------------------------------------
+
+;; 'ignore' is because custom passes id of symbol
+(defun ciao-do-set-ciao-root (ignore dir) 
+  (if (string= dir "") 
+      (progn
+	(setenv "CIAOROOT" nil)
+	(setq ciao-root-dir ""))
+    (setenv "CIAOROOT" dir)
+    (setq ciao-root-dir dir)))
+
+;; 'ignore' is because custom passes id of symbol
+(defun ciao-do-set-ciao-path (ignore dir) 
+  (if (string= dir "") 
+      (progn
+	(setenv "CIAOPATH" nil)
+	(setq ciao-path-dirs ""))
+    (setenv "CIAOPATH" dir)
+    (setq ciao-path-dirs dir)))
+
+(defun ciao-initialize-ciao-root (ignorea ignoreb) 
+  (ciao-do-set-ciao-root nil (or (getenv "CIAOROOT") (ciao-get-config :root-dir))))
+
+(defcustom ciao-root-dir ""
+  "Path to the Ciao system path (reads/sets the CIAOROOT
+environment variable ). Typically left empty, since Ciao
+executables know its installation path."
+  :group 'ciaocore
+  :type 'string
+  :initialize 'ciao-initialize-ciao-root
+  :set 'ciao-do-set-ciao-root
+  )
+
+(defun ciao-set-ciao-root () 
+  "Change the location of the Ciao system (changes the
+   environment variable @tt{CIAOROOT})."
+  (interactive)
+  (ciao-do-set-ciao-root nil
+   (read-file-name "Change Ciao root path (CIAOROOT)? " 
+		   "" (getenv "CIAOROOT") nil (getenv "CIAOROOT"))))
+
+(defun ciao-initialize-ciao-path (ignorea ignoreb) 
+  (ciao-do-set-ciao-path nil (or (getenv "CIAOPATH") "")))
+
+(defcustom ciao-path-dirs ""
+  "Colon-separated paths to collections of Ciao
+bundles (reads/sets the CIAOPATH environment variable ). Left
+empty to use the default value."
+  :group 'ciaocore
+  :type 'string
+  :initialize 'ciao-initialize-ciao-path
+  :set 'ciao-do-set-ciao-path
+  )
+
+(defun ciao-set-ciao-path () 
+  "Change the paths for Ciao bundles (changes the environment
+variable @tt{CIAOPATH})."
+  (interactive)
+  (ciao-do-set-ciao-path nil
+   (read-file-name "Change paths for Ciao bundles (CIAOPATH)? " 
+		   "" (getenv "CIAOPATH") nil (getenv "CIAOPATH"))))
+
 (defcustom ciao-system (or (getenv "CIAO") (ciao-get-config :ciaosh-bin))
   "Name of Ciao executable which runs the classical top level."
   :group 'ciaocore

@@ -28,7 +28,10 @@
 
 (require 'comint)
 (require 'ciao-config) ; ciao-get-config
-(require 'ciao-common) ; ciaoide (group), ciao-set-ciao-system,
+(require 'ciao-common) ; ciaoide (group),
+                       ; ciao-set-ciao-root,
+                       ; ciao-set-ciao-path,
+                       ; ciao-set-ciao-system,
 		       ; ciao-set-ciao-system-args,
 		       ; ciao-set-ciaopp-system,
 		       ; ciao-set-ciaopp-system-args
@@ -92,7 +95,6 @@ emacs native ports for the mac."
 			  ; ciao-font-lock-defaults-create,
 			  ; ciao-inferior-font-lock-defaults-create
 (require 'ciao-loading) ; run-ciao-toplevel, ciao-set-main-filename,
-			; ciao-set-library-path,
 			; ciao-check-buffer-syntax, ciao-load-buffer,
 			; ciao-load-from-main-module,
 			; ciao-load-region, ciao-load-predicate,
@@ -582,7 +584,6 @@ help menu (see @ref{Customization}).
   (ciao-define-key map "\C-cS\C-c" 'ciao-set-ciao-system-args)
   (ciao-define-key map "\C-cSP"    'ciao-set-ciaopp-system)
   (ciao-define-key map "\C-cS\C-p" 'ciao-set-ciaopp-system-args)
-  (ciao-define-key map "\C-cSL"    'ciao-set-library-path)
   (ciao-define-key map "\C-cSD"    'ciao-set-lpdoc-system)
   (ciao-define-key map "\C-cS\C-d" 'ciao-set-lpdoc-system-args)
 
@@ -765,11 +766,12 @@ how things are set up in your @tt{.emacs} file).")
   (list "CiaoOpts"
      ["Customize all Ciao settings"            ciao-customize-all t] 
      "----"
+     ["Set Ciao system path (CIAOROOT)"        ciao-set-ciao-root t]
+     ["Set Ciao bundle paths (CIAOPATH)"       ciao-set-ciao-path t]
+     "----"
 ;;     ["Customize all Ciao system settings" (customize-group 'ciaocore) t]
      ["Set Ciao toplevel executable"           ciao-set-ciao-system t]
      ["Set Ciao toplevel args"                 ciao-set-ciao-system-args t]
-     "----"
-     ["Set Ciao library path"                  ciao-set-library-path t]
      "----"
 ;;     ["Customize all CiaoPP environment settings" (customize-group 'ciaopp) t]
      ["Set Ciao Preprocessor executable"       ciao-set-ciaopp-system t]
