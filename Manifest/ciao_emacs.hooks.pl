@@ -50,7 +50,7 @@ find_emacs(File) :- find_executable('emacs', File).
 :- use_module(library(pathnames), [path_concat/3]).
 :- use_module(library(system), [using_windows/0]).
 :- use_module(library(system), [touch/1]).
-:- use_module(library(system_extra), [move_if_diff/2]).
+:- use_module(library(system_extra), [move_if_diff/3]).
 :- use_module(library(system_extra),
 	[del_file_nofail/1,
 	 del_files_nofail/1]).
@@ -232,7 +232,7 @@ prepare_build_docs_emacs_mode :-
 	   '-f', 'ciao-mode-documentation']),
 	%
 	( move_if_diff(~path_concat(EmacsModeDir, 'CiaoMode.new.lpdoc'),
-	               ~path_concat(EmacsModeDir, 'CiaoMode.lpdoc')) ->
+	               ~path_concat(EmacsModeDir, 'CiaoMode.lpdoc'), new) ->
 	    touch(~path_concat(EmacsModeDir, 'CiaoMode.pl'))
 	; true
 	).
