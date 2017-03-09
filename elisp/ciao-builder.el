@@ -145,7 +145,7 @@
   "Run grep on Ciao source files at CIAOROOT"
   (interactive)
   (let ((re (read-from-minibuffer "Search Ciao code at CIAOROOT (Regexp): ")))
-    (ciao--grep-common re (list (ciao-root-dir)))))
+    (ciao--grep-common re (list ciao-root-dir))))
 
 ;;;###autoload
 (defun ciao-grep-all ()
@@ -164,7 +164,7 @@
 
 (defun ciao--grep-common (regexp dirs)
   "Run grep with REGEXP on Ciao source files at directory DIR"
-  (let* ((grep-cmd (concat (ciao-root-dir) "/core/cmds/grep-source.bash"))
+  (let* ((grep-cmd (concat ciao-root-dir "/core/cmds/grep-source.bash"))
 	 (args (append (list grep-cmd "-e" regexp) dirs))
 	 (cmdstr (mapconcat 'shell-quote-argument args " ")))
       (grep cmdstr)))
@@ -178,7 +178,7 @@
 
 (defun ciao--grep-versions-common (dirs)
   "Run grep for bundle version numbers at directory DIR"
-  (let* ((grep-cmd (concat (ciao-root-dir) "/core/cmds/grep-versions.bash"))
+  (let* ((grep-cmd (concat ciao-root-dir "/core/cmds/grep-versions.bash"))
 	 (args (append (list grep-cmd) dirs))
 	 (cmdstr (mapconcat 'shell-quote-argument args " ")))
       (grep cmdstr)))
