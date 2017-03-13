@@ -193,7 +193,7 @@ generate_emacs_config :-
 	    % Emacs type (for ciao mode)
             'CIAO_EMACS_TYPE' = ~emacs_type,
 	    %
-            'CIAO_VERSION' = ~bundle_version(ciao),
+            'CIAO_VERSION' = ~bundle_version(core), % get version from 'core'
 	    % Paths
 	    'CIAOROOT' = ~final_ciao_root,
 	    'BUILDDIRBIN' = ~get_dir_elisp(BuildDirBin),
