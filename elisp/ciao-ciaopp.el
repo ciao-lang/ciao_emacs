@@ -490,40 +490,50 @@ running the preprocessor in order to visit the output file and see the
 results from running the preprocessor."
   (interactive)
   (let ((ciaoppbuff (ciao-proc-get-buffer 'ciaopp-cproc))
-	(origbuffer (current-buffer)))
-    (if (not ciaoppbuff)
-	(message "Preprocessor buffer not active.")
-      (ciao-switch-other-window ciaoppbuff)
-      (let ((file (ciao-ciaopp-get-output-file)))
-	(if file
-	    (progn
-	      (if (get-file-buffer file)
-		  ;; The complication is to not complain if disk more recent!
-		  (progn 
-		    (switch-to-buffer (get-file-buffer file))
-		    (let ((local-buff-point (point)))
-		      (kill-buffer (get-file-buffer file))
-		      (find-file file)
-		      (goto-char local-buff-point)))
-		(find-file file)
-		))
-	  (message "No output file written out by preprocessor.")
-	  ;; If not output to visit, get cursor back to original buffer
-	  (ciao-switch-other-window origbuffer))))))
+	(ciaoshbuff (ciao-proc-get-buffer 'ciaosh-cproc))
+	(origbuffer (current-buffer))
+	(file nil))
+    (if (and (not ciaoppbuff) (not (eq origbuffer ciaoshbuff)))
+	(message "No preprocessor buffer seems active.")
+      (if (eq origbuffer ciaoshbuff)
+	  ;; Switch to ciaopp buffer to look for output file name,
+	  ;; unless command was issued in a ciao top-level (ciaosh)
+	  ;; buffer: in this special case we stay and look for the
+	  ;; output file name there.
+	  (setq file (ciao-ciaopp-get-output-file 'ciaosh-cproc))
+	(ciao-switch-other-window ciaoppbuff)
+	(setq file (ciao-ciaopp-get-output-file 'ciaopp-cproc)))
+      (if file
+	  (progn
+	    (if (get-file-buffer file)
+		;; The complication is to not complain if disk more recent!
+		(progn 
+		  (switch-to-buffer (get-file-buffer file))
+		  (let ((local-buff-point (point)))
+		    (kill-buffer (get-file-buffer file))
+		    (find-file file)
+		    (goto-char local-buff-point)))
+	      (find-file file)
+	      ))
+	(message "No output file written out by preprocessor.")
+	;; If no output to visit, get cursor back to original buffer
+	(ciao-switch-other-window origbuffer)))))
 
 ;; TODO: Add a special parsing for CiaoPP or include that in
 ;;   ciao-parsing.el?
 
-(defun ciao-ciaopp-get-output-file ()
-  "Parse latest written output file from CiaoPP output"
+(defun ciao-ciaopp-get-output-file (cproc)
+  "Parse latest written output file from CiaoPP output. Argument is
+the process in which we are looking (needed to know which propmt
+pattern to look for)."
   (save-excursion
     (let ((mbeg 0) (mend 0) (file nil))
       (goto-char (point-max))
       (move-to-column 0) ;; skip prompt if at prompt
-      ;; (search-backward-regexp (ciao-proc-any-prompt-pattern 'ciaopp-cproc)
+      ;; (search-backward-regexp (ciao-proc-any-prompt-pattern cproc)
       ;;                         nil t)
       ;; It is safe (and more precise) to be more specific here:
-      (search-backward-regexp (ciao-proc-prompt-pattern 'ciaopp-cproc)
+      (search-backward-regexp (ciao-proc-prompt-pattern cproc)
 			      nil t)
       (end-of-line)
       (if (search-forward-regexp "written file " nil t)
