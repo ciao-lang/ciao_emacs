@@ -71,7 +71,7 @@ buffer. An active module is a remote procedure call server (see the
 @lib{activemod} library documentation for details)."
   (interactive)
   (let ((method (read-string "Address publishing method: " 
-			     "actmods/filebased_publish")))
+			     "actmod/filebased_publish")))
     (ciao-send-compiler-command
      (concat "make_actmod('" (buffer-file-name) "','" method "')." ))))
 
