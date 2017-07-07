@@ -26,7 +26,7 @@
 ;;---------------------------------------------------------------------------
 
 (require 'easymenu)
-(require 'ciao-bindings)
+(require 'ciao-bindings) ; ciao-general-toolbar
 (require 'ciao-help) ; ciao-goto-manuals, ciao-help-on-current-symbol
 (require 'ciao-loading) ; ciao-find-last-run-errors,
 			; ciao-unmark-last-run-errors

@@ -608,12 +608,17 @@ creates widgets for each element."
 	;; TODO: add a ciaopp-java logo?
 	(ciao-insert-image 'png (ciao-get-logo :ciaopp) "")
 	(ciao-insert-image 'png (ciao-get-logo :java) "Java"))
-    ;; Default: Ciao
-    (progn
-      (insert "      ")
-      (ciao-insert-image 'png (ciao-get-logo :ciaopp) "")
-      (insert "   "))
+    (if (eq ciao-ciaopp-prog-lang 2)
+	(progn
+	  (ciao-insert-image 'png (ciao-get-logo :ciaopp) "")
+	  (ciao-insert-image 'png (ciao-get-logo :xc) "xC"))
+	;; Default: Ciao
+	(progn
+	  (insert "      ")
+	  (ciao-insert-image 'png (ciao-get-logo :ciaopp) "")
+	  (insert "   "))
     )
+  )
   (ciao-insert-with-face 
    "Preprocessor Option Browser" 'ciao-title-widget-face)
   (insert "   ")
