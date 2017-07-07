@@ -91,6 +91,7 @@
 ;; Other modes are based on functionality described here:
 ;;
 ;;   java-ciaopp.el: mode for preprocessing of Java
+;;   xc-ciaopp.el: mode for preprocessing of Xc
 ;;
 ;; ===========================================================================
 

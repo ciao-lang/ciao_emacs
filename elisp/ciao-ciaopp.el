@@ -163,10 +163,13 @@ the CiaoPP buffer.")
 	  (or
 	   (eq action 'customize)
 	   (eq action 'customize-no-set-hook)))
-     (if (eq ciao-ciaopp-prog-lang 0)           
-	 "customize(all)."
+
+     (if (eq ciao-ciaopp-prog-lang 1)
        "customize_java(all)."
-       )
+       (if (eq ciao-ciaopp-prog-lang 2)
+	 "customize_xc(all)."
+	 "customize(all)."
+       ))
      )
 
     ; e) browse options, not using graphical menu 
@@ -179,13 +182,17 @@ the CiaoPP buffer.")
 
       (if (not (eq ciao-last-source-buffer-used nil))
 
-	  (if (eq ciao-ciaopp-prog-lang 0)           
-	    (concat "customize_and_preprocess('" 
-		  (buffer-file-name ciao-last-source-buffer-used) "').")
- 
+	  (if (eq ciao-ciaopp-prog-lang 1)
 	    (concat "customize_and_preprocess_java('" 
+		    (buffer-file-name ciao-last-source-buffer-used) "').")
+	    (if (eq ciao-ciaopp-prog-lang 2)
+		(concat "customize_and_preprocess_xc('" 
+		    (buffer-file-name ciao-last-source-buffer-used) "').")
+	        (concat "customize_and_preprocess('" 
 		  (buffer-file-name ciao-last-source-buffer-used) "').")
 	    )
+	  )
+	
 	(error "INTERNAL ERROR: cannot find the last source buffer used!")
 	nil))
 
@@ -228,6 +235,21 @@ corresponding toolbar buttons."
   (message "Sets the ciao-ciaopp-prog-lang variable to Java")
   (ciao-do-preprocess-buffer 'customize t)
   )
+
+
+;;;###autoload
+(defun xc-browse-preprocessor-options ()
+  "Browse and select (using the preprocessor menus) the actions to be
+performed by the preprocessor when performing analisys used by the
+corresponding toolbar buttons."
+  (interactive)
+  (message "Browsing preprocessor options... ")
+  (ciao-remember-last-menu-key  -1)
+  (setq ciao-ciaopp-prog-lang 2 )
+  (message "Sets the ciao-ciaopp-prog-lang variable to Xc")
+  (ciao-do-preprocess-buffer 'customize t)
+  )
+
 
 (defun ciao-toggle-ciaopp-use-graphical-menu ()
   "Toggle graphical/textual menu."

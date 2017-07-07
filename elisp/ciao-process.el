@@ -47,6 +47,7 @@
   '(:ciao "ciao-logo.png"
     :ciaopp "ciaopp-logo.png"
     :java "java-logo.png"
+    :xc "xc-logo.png"
     ))
 (defun ciao-get-logo (key) (plist-get ciao-logos key))
 
