@@ -58,10 +58,10 @@
 ; ---------------------------------------------------------------------------
 ; Key bindings
 
-;; (define-key java-mode-map "\C-cA"    'ciao-analyze-buffer)
+(define-key java-mode-map "\C-cM"    'java-browse-preprocessor-options)
+(define-key java-mode-map "\C-cA"    'ciao-analyze-buffer)
 ;; (define-key java-mode-map "\C-cT"    'ciao-check-assertions)
 ;; (define-key java-mode-map "\C-cO"    'ciao-optimize-buffer)
-(define-key java-mode-map "\C-cM"    'java-browse-preprocessor-options)
 (define-key java-mode-map "\C-c\C-v" 'ciao-show-preprocessor-output)
 (define-key java-mode-map "\C-c`"    'ciao-find-last-run-errors)
 (define-key java-mode-map "\C-ce"    'ciao-unmark-last-run-errors)
@@ -82,7 +82,7 @@
      "----"
      "----"
 ;;     Commented by JNL 
-;;     ["Analyze buffer"                         ciao-analyze-buffer t]
+     ["Analyze buffer"                         ciao-analyze-buffer t]
 ;;     ["Check buffer assertions"                ciao-check-assertions t]
 ;;     ["Optimize buffer"                        ciao-optimize-buffer t]
 ;;     ["Browse analysis/checking/optimizing options"         
