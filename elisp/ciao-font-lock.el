@@ -96,7 +96,7 @@ modern emacses, and also in ascii mode with emacs>= 21.1)."
      ;; Resources and Granularity
      "compound_resource" "platform_constants" "platform"
      "load_resource_module" "resource" "head_cost" "literal_cost"
-     "trust_default" "granularity_resources"
+     "trust_default" "granularity_resources" "default_cost"
      ;; Unit-Testing
      "load_test_module"
      "load_test_package"
