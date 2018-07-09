@@ -247,7 +247,7 @@ affect other syntax highlighting."
                      "[^\\\"]\\(\"\\)[ \t\n]*)[ \t\n]*\\.")) ; was [ \t]*$
      0 'ciao-face-sectioning-5-face keep)
     ;; other lpdoc comments
-    ;; "^[ \t]*:-[ \t\n]+\\(comment\\|doc\\)([ \t\n]*\\(version\\(_maintenance\\)?\\|doinclude\\|hide\\|filetype\\|nodoc\\)\\>" 
+    ;; "^[ \t]*:-[ \t\n]+\\(comment\\|doc\\)([ \t\n]*\\(version\\(_maintenance\\)?\\|doinclude\\|hide\\|filetype\\|nodoc\\|stability\\)\\>" 
     ;; These ones have a string in the second argument
     ((lambda (limit)
        (ciao-font-lock-match 
