@@ -70,12 +70,14 @@ modern emacses, and also in ascii mode with emacs>= 21.1)."
   "Names of module directives that may contain curly braces.")
 
 (defvar ciao-module-directives
-  '( "use_module" "ensure_loaded" "use_active_module"
+  '( "use_module" "ensure_loaded"
      "use_package" "include" "use_foreign_library" "use_foreign_source"
      "reexport" "import"
      "initialization" "on_abort"
      ;; new OO-module system (JFMC)
      "use_class"
+     ;; old active modules
+     "use_active_module"
      ;; ociao
      "implements" "inherit_class"
      )

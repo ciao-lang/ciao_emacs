@@ -104,7 +104,7 @@ emacs native ports for the mac."
 			; ciao-unmark-last-run-errors,
 			; ciao-recenter-last-ciao-buffer
 (require 'ciao-compile) ; ciao-make-exec, ciao-make-po,
-			; ciao-make-activemod, ciao-compile-buffer,
+			; ciao-compile-buffer,
 			; ciao-compile-region, ciao-compile-predicate
 (require 'ciao-testing) ; ciao-load-query,
 			; ciao-run-tests-in-buffer-and-related,
@@ -278,7 +278,6 @@ implement the communication with the Ciao top level:
 
   (ciao-define-key map "\C-cx" 'ciao-make-exec)
   (ciao-define-key map "\C-co" 'ciao-make-po)
-  (ciao-define-key map "\C-ca" 'ciao-make-activemod)
 
   (ciao-define-key map "\C-cs" 'ciao-set-main-filename)
   (ciao-define-key map "\C-cL" 'ciao-load-from-main-module)
@@ -672,7 +671,6 @@ how things are set up in your @tt{.emacs} file).")
      ["Format source code"                       ciao-format-file t]
      ["Insert script header"                     ciao-insert-script-header t]
      "----"
-     ["Make active module from buffer"           ciao-make-activemod t]
      ["Make object file (.po) from buffer"       ciao-make-po t]
 ;;
 ;; These versions with nice comments do not work yet in xemacs --need to port.
@@ -711,8 +709,6 @@ how things are set up in your @tt{.emacs} file).")
 ;;      ["Insert script header"                     ciao-insert-script-header
 ;;       :help "Insert appropriate header so that this file is treated as a script (so that it can be run directly without compilation)."]
 ;;      "----"
-;;      ["Make active module from buffer"           ciao-make-activemod
-;;       :help "Compile an active module (active process that serves remotely the exported predicates) from this file."]
 ;;      ["Make object file (.po) from buffer"       ciao-make-po
 ;;       :help "Force compilation of a relocatable object file for this file (normally done automatically by the compiler when needed). "]
 ;; 

@@ -64,17 +64,6 @@ what needs to be recompiled."
   (ciao-send-compiler-command
    (concat "make_po('" (buffer-file-name) "').")))
 
-;;;###autoload
-(defun ciao-make-activemod ()
-  "Make an active module executable from the code in the current
-buffer. An active module is a remote procedure call server (see the
-@lib{activemod} library documentation for details)."
-  (interactive)
-  (let ((method (read-string "Address publishing method: " 
-			     "actmod/filebased_publish")))
-    (ciao-send-compiler-command
-     (concat "make_actmod('" (buffer-file-name) "','" method "',_)." ))))
-
 ;;------------------------------------------------------------
 ;; Traditional commands: Compiling
 ;;------------------------------------------------------------
