@@ -431,8 +431,6 @@ commands implement comunication with the Ciao top level:
    "These commands allow @index{preprocessing programs} with
 @apl{ciaopp}, the @index{Ciao preprocessor}.
 
-@include{README_CIAOPP.lpdoc}
-
 See the preprocessor manual for details. The following commands
 implement the communication with the Ciao preprocessor:
   ")
