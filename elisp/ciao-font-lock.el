@@ -77,7 +77,7 @@ modern emacses, and also in ascii mode with emacs>= 21.1)."
      ;; new OO-module system (JFMC)
      "use_class"
      ;; old active modules
-     "use_active_module"
+     ; "use_active_module"
      ;; ociao
      "implements" "inherit_class"
      )
