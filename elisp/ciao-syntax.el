@@ -208,7 +208,7 @@ rigidly along with this one."
   (setq source-buffer (current-buffer))
   (with-temp-file tmp_file_1
     (insert-buffer source-buffer))
-  (shell-command (concat (ciao-get-config :ciaofmt-bin) " " tmp_file_1 " -") source-buffer)
+  (shell-command (concat (ciao-get-config :ciaofmt-bin) " " tmp_file_1) source-buffer)
   (delete-file tmp_file_1)
   (set-window-start (selected-window) current-start)
   (goto-char current-point)
