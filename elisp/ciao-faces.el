@@ -167,7 +167,7 @@ reinitialize for the change to take effect."
     (((class grayscale) (background light)) (:foreground "DimGray" :italic t))
     (((class grayscale) (background dark)) (:foreground "LightGray" :italic t))
     (((class color) (background light)) (:foreground "OliveDrab"))
-    (((class color) (background dark)) (:foreground "GreenYellow"))
+    (((class color) (background dark)) (:foreground "OliveDrab2"))
     (t (:italic t)))
   "Face to use for atoms in functional notation."
   :group 'ciao-highlighting-faces-misc)
@@ -213,7 +213,7 @@ reinitialize for the change to take effect."
     (((class grayscale) (background dark))
      (:foreground "LightGray" :weight bold :italic t))
     (((class color) (background light)) (:foreground "Firebrick"))
-    (((class color) (background dark)) (:foreground "chocolate1"))
+    (((class color) (background dark)) (:foreground "SlateGray4")) ;; chocolate1
     (t (:weight bold :italic t)))
   "Face to use for code comments using fixed pitch (double %)."
   :group 'ciao-highlighting-faces-misc)
@@ -300,7 +300,7 @@ strings, commnds, etc.)."
     (((class grayscale) (background light)) (:foreground "LightGray"))
     (((class grayscale) (background dark)) (:foreground "DimGray"))
     (((class color) (background light)) (:foreground "NavyBlue"))
-    (((class color) (background dark)) (:foreground "RoyalBlue"))
+    (((class color) (background dark)) (:foreground "SlateGray3")) ;; RoyalBlue
     (t (:inverse-video t)))
   "Face to use for LPdoc textual comments."
   :group 'ciao-highlighting-faces-lpdoc)
@@ -318,7 +318,7 @@ strings, commnds, etc.)."
     (((class grayscale) (background light)) (:foreground "LightGray" :weight bold))
     (((class grayscale) (background dark)) (:foreground "DimGray" :weight bold))
     (((class color) (background light)) (:foreground "NavyBlue" :weight bold))
-    (((class color) (background dark)) (:foreground "RoyalBlue" :weight bold))
+    (((class color) (background dark)) (:foreground "SlateGray1" :weight bold)) ;; RoyalBlue
     (t (:inverse-video t :weight bold)))
   "Face to use for LPdoc verbatim text."
   :group 'ciao-highlighting-faces-lpdoc)
@@ -329,7 +329,7 @@ strings, commnds, etc.)."
     (((class grayscale) (background light)) (:foreground "LightGray" :weight bold))
     (((class grayscale) (background dark)) (:foreground "DimGray" :weight bold))
     (((class color) (background light)) (:foreground "NavyBlue" :weight bold))
-    (((class color) (background dark)) (:foreground "RoyalBlue" :weight bold))
+    (((class color) (background dark)) (:foreground "SlateGray1" :weight bold)) ;; RoyalBlue
     (t (:inverse-video t :weight bold)))
   "Face to use for LPdoc include commands."
   :group 'ciao-highlighting-faces-lpdoc)
@@ -353,7 +353,7 @@ strings, commnds, etc.)."
     (((class grayscale) (background light)) (:foreground "LightGray"))
     (((class grayscale) (background dark)) (:foreground "DimGray"))
     (((class color) (background light)) (:foreground "RoyalBlue"))
-    (((class color) (background dark)) (:foreground "CornflowerBlue"))
+    (((class color) (background dark)) (:foreground "SlateGray1")) ;; CornflowerBlue
     (t (:inverse-video t)))
   "Face to use LPdoc commands inserted in documentation text."
   :group 'ciao-highlighting-faces-lpdoc)
@@ -380,7 +380,7 @@ strings, commnds, etc.)."
     (((class grayscale) (background light)) (:foreground "LightGray"))
     (((class grayscale) (background dark)) (:foreground "DimGray"))
     (((class color) (background light)) (:foreground "RoyalBlue"))
-    (((class color) (background dark)) (:foreground "CornflowerBlue"))
+    (((class color) (background dark)) (:foreground "DodgerBlue1")) ;; CornflowerBlue
     (t (:inverse-video t)))
   "Face to use for the predicate-related directives."
   :group 'ciao-highlighting-faces-directive)
@@ -391,7 +391,7 @@ strings, commnds, etc.)."
     (((class grayscale) (background light)) (:foreground "LightGray" :weight bold))
     (((class grayscale) (background dark)) (:foreground "DimGray" :weight bold))
     (((class color) (background light)) (:foreground "NavyBlue" :weight bold))
-    (((class color) (background dark)) (:foreground "RoyalBlue" :weight bold))
+    (((class color) (background dark)) (:foreground "mediumpurple2" :weight bold)) ;; RoyalBlue
     (t (:inverse-video t :weight bold))
      )
      "Face to use for the module-related directives."
@@ -403,7 +403,7 @@ strings, commnds, etc.)."
     (((class grayscale) (background light)) (:foreground "LightGray" :weight bold))
     (((class grayscale) (background dark)) (:foreground "DimGray" :weight bold))
     (((class color) (background light)) (:foreground "NavyBlue" :weight bold))
-    (((class color) (background dark)) (:foreground "RoyalBlue" :weight bold))
+    (((class color) (background dark)) (:foreground "mediumpurple2" :weight bold)) ;; RoyalBlue
     (t (:inverse-video t :weight bold))
      )
      "Face to use for the conditional code directives."
@@ -415,7 +415,7 @@ strings, commnds, etc.)."
     (((class grayscale) (background light)) (:foreground "LightGray" :weight bold))
     (((class grayscale) (background dark)) (:foreground "DimGray" :weight bold))
     (((class color) (background light)) (:foreground "NavyBlue" :weight bold))
-    (((class color) (background dark)) (:foreground "RoyalBlue" :weight bold))
+    (((class color) (background dark)) (:foreground "DodgerBlue1" :weight bold)) ;; RoyalBlue
     (t (:inverse-video t :weight bold)))
   "Face to use for directives defined in the library."
   :group 'ciao-highlighting-faces-directive)
@@ -426,7 +426,7 @@ strings, commnds, etc.)."
     (((class grayscale) (background light)) (:foreground "LightGray"))
     (((class grayscale) (background dark)) (:foreground "DimGray"))
     (((class color) (background light)) (:foreground "NavyBlue"))
-    (((class color) (background dark)) (:foreground "RoyalBlue"))
+    (((class color) (background dark)) (:foreground "DodgerBlue1")) ;; RoyalBlue
     (t (:inverse-video t)))
   "Face to use for directives defined by the user (see
    ciao-user-directives custom variable to add new ones)."
@@ -496,7 +496,7 @@ strings, commnds, etc.)."
     (((class grayscale) (background light)) (:foreground "LightGray" :weight bold))
     (((class grayscale) (background dark)) (:foreground "DimGray" :weight bold))
     (((class color) (background light)) (:foreground "NavyBlue" :weight bold))
-    (((class color) (background dark)) (:foreground "RoyalBlue" :weight bold))
+    (((class color) (background dark)) (:foreground "DodgerBlue1" :weight bold)) ;; RoyalBlue
     (t (:inverse-video t :weight bold)))
   "Face to use for check assertions."
   :group 'ciao-highlighting-faces-assertions)
@@ -507,7 +507,7 @@ strings, commnds, etc.)."
     (((class grayscale) (background light)) (:foreground "LightGray" :weight bold))
     (((class grayscale) (background dark)) (:foreground "DimGray" :weight bold))
     (((class color) (background light)) (:foreground "Blue" :weight bold))
-    (((class color) (background dark)) (:foreground "LightSkyBlue" :weight bold))
+    (((class color) (background dark)) (:foreground "DodgerBlue1" :weight bold)) ;; LightSkyBlue
     (t (:inverse-video t :weight bold)))
   "Face to use for property definitions."
   :group 'ciao-highlighting-faces-assertions)
@@ -540,7 +540,7 @@ strings, commnds, etc.)."
     (((class grayscale) (background light)) (:foreground "LightGray" :weight bold))
     (((class grayscale) (background dark)) (:foreground "DimGray" :weight bold))
     (((class color) (background light)) (:foreground "MediumBlue" :weight bold))
-    (((class color) (background dark)) (:foreground "SkyBlue" :weight bold))
+    (((class color) (background dark)) (:foreground "DodgerBlue1" :weight bold)) ;; SkyBlue
     (t (:inverse-video t :weight bold)))
   "Face to use for type definitions."
   :group 'ciao-highlighting-faces-assertions)
@@ -763,7 +763,7 @@ strings, commnds, etc.)."
 	(((class color) (background light))
 	 (:bold t :foreground "blue4" :family "helvetica"))
 	(((class color) (background dark))
-	 (:bold t :foreground "RoyalBlue" :family "helvetica"))
+	 (:bold t :foreground "yellow" :family "helvetica"))
 	(t (:bold t :family "helvetica")))
     '((((type tty pc) (class color) (background light))
        (:foreground "blue4" :weight bold))
@@ -772,7 +772,7 @@ strings, commnds, etc.)."
       (((class color) (background light))
        (:weight bold :inherit variable-pitch :foreground "NavyBlue"))
       (((class color) (background dark))
-       (:weight bold :inherit variable-pitch :foreground "CornflowerBlue"))
+       (:weight bold :inherit variable-pitch :foreground "LightGoldenrod1")) ;; CornflowerBlue
       (t (:weight bold :inherit variable-pitch))))
   "Face for sectioning commands at level 5."
   :group 'ciao-highlighting-faces-lpdoc)
