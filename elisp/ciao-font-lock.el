@@ -250,22 +250,23 @@ affect other syntax highlighting."
      0 'ciao-face-sectioning-5-face keep)
     ;; other lpdoc comments
     ;; "^[ \t]*:-[ \t\n]+\\(comment\\|doc\\)([ \t\n]*\\(version\\(_maintenance\\)?\\|doinclude\\|hide\\|filetype\\|nodoc\\|stability\\)\\>" 
-    ;; These ones have a string in the second argument
-    ((lambda (limit)
-       (ciao-font-lock-match 
-	limit
-	"^[ \t]*:-[ \t\n]+\\(comment\\|doc\\)("
-	"[^\\\"]\"[ \t\n]*)[ \t\n]*\\.")) ; was: [ \t]*$
-     0
-     ,(if ciao-faces-use-variable-pitch-in-comments
-	  'ciao-face-lpdoc-comment-variable-pitch
-	'ciao-face-lpdoc-comment) keep)
     ;; These ones do not have a string in the second argument
     ((lambda (limit)
        (ciao-font-lock-match 
 	limit
 	"^[ \t]*:-[ \t\n]+\\(comment\\|doc\\)([ \t\n]*\\(version_maintenance\\|doinclude\\|hide\\|filetype\\|nodoc\\)\\>"
-	"[ \t\n]*)[ \t\n]*\\.")) ; was: [ \t]*$
+;	"[ \t\n]*)[ \t\n]*\\.")) ; was: [ \t]*$
+	")[ \t\n]*\\.")) ; was: [ \t]*$
+     0
+     ,(if ciao-faces-use-variable-pitch-in-comments
+	  'ciao-face-lpdoc-comment-variable-pitch
+	'ciao-face-lpdoc-comment) keep)
+    ;; These ones have a string in the second argument
+    ((lambda (limit)
+       (ciao-font-lock-match 
+	limit
+	"^[ \t]*:-[ \t\n]+\\(comment\\|doc\\)(*[^\\\"]*,[ \t\n]*\""
+	"[^\\\"]*\"[ \t\n]*)[ \t\n]*\\.")) ; was: [ \t]*$
      0
      ,(if ciao-faces-use-variable-pitch-in-comments
 	  'ciao-face-lpdoc-comment-variable-pitch
