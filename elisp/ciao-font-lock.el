@@ -321,7 +321,7 @@ affect other syntax highlighting."
 		 limit    
 		 (concat "^[ \t]*:-[ \t\n]*" 
 			 (regexp-opt ciao-predicate-directives t) "\\>")
-		 "[ \t]*\\({\\|\\.$\\|\\.[ \t\n]\\)"))
+		 (ciao-end-pred-directive-regexp)))
 	   nil
 	 (ciao-font-lock-avoid-curly) ;; Do not color trailing '{'
 	 t
@@ -332,23 +332,21 @@ affect other syntax highlighting."
         limit
         (concat "^[ \t]*:-[ \t\n]*" 
 		(regexp-opt ciao-builtin-directives t) "\\>")
-        ")[ \t]*\\.")) ; was: "^[ \t]*$\\|\\."
+        (ciao-end-directive-regexp)))
      0 ciao-face-builtin-directive keep)
     ((lambda (limit) ;; (Not nested module)
        (ciao-font-lock-match
 	limit
 	(concat "^[ \t]*:-[ \t\n]*"
 		(regexp-opt ciao-module-directives t) "\\>")
-;	")[ \t]*\\.")) ; was: [ \t]*
-	")[ \t]*\\."))
+	(ciao-end-directive-regexp)))
      0 ciao-face-module-directive keep)
     ((lambda (limit) 
        (ciao-font-lock-match
 	limit
 	(concat "^[ \t]*:-[ \t\n]*"
 		(regexp-opt ciao-module-simple-directives t) "\\>")
-;	")[ \t]*\\.")) ; was: [ \t]*
-	"[ \t]*\\."))
+	(ciao-end-directive-regexp)))
      0 ciao-face-module-directive keep)
     ;; Conditional code (package(condcomp))
     ((lambda (limit) 
@@ -356,7 +354,7 @@ affect other syntax highlighting."
 	limit
 	(concat "^[ \t]*:-[ \t\n]*"
 		(regexp-opt ciao-condcode-directives t) "\\>")
-	"\\."))
+	(ciao-end-directive-regexp)))
      0 ciao-face-condcode-directive keep)
 
     ((lambda (limit)
@@ -364,14 +362,14 @@ affect other syntax highlighting."
         limit
         (concat "^[ \t]*:-[ \t\n]*" 
 		(regexp-opt ciao-library-directives t) "\\>")
-        "^[ \t]*$\\|\\.")) ; was: "^[ \t]*$\\|\\.$"
+        (ciao-end-directive-regexp)))
      0 ciao-face-library-directive keep)
 
     ((lambda (limit) 
        (ciao-font-lock-match
         limit
         (concat "^[ \t]*:-[ \t\n]*" (regexp-opt ciao-user-directives t) "\\>")
-        "^[ \t]*$\\|\\.")) ; was: .$
+        (ciao-end-directive-regexp)))
      0 ciao-face-user-directive keep)
     ;; --- add whatever is like :- I dont know bla bla bla bla.
 
@@ -527,14 +525,21 @@ affect other syntax highlighting."
 (defun ciao-begin-assrt-regexp (identifier)
   (concat "^[ \t]*:-[ \t\n]*" identifier "[ \t\n]"))
 
-;older
-;"^[ \t]*:-[ \t]*\\(check\\)?[ \t]*\\(decl\\|pred\\|comp\\|calls\\|success\\) "
-
-(defun ciao-end-assrt-regexp ()
-  "[^#\\.]*\\(#\\|\\.\\)[ \t]*$")
-
 ;  "[^#\\.]*\\(#[ \t\n]*\\|\\.[ \t\n]*$\\)")
 ;  "[ \t]#[ \t\n]\\|^#[ \t\n]\\|\\.[ \t]*$")
+
+(defun ciao-end-assrt-regexp () "") ;; (keyword-based)
+;; line-based: "[^#\\.]*\\(#\\|\\.\\)[ \t]*$"
+
+(defun ciao-end-pred-directive-regexp () "") ;; (keyword-based)
+;; line-based: "[ \t]*\\({\\|\\.$\\|\\.[ \t\n]\\)"
+
+(defun ciao-end-block-directive-regexp () "") ;; (keyword-based)
+;; line-based: "[ \t]*\\({\\|\\.$\\|\\.[ \t\n]\\)"
+
+(defun ciao-end-directive-regexp () "") ;; (keyword-based)
+;; line-based: "^[ \t]*$\\|\\."
+
 
 (defun ciao-font-lock-match (limit beginexp endexp)
   (let ((begin 0) (end 0))
@@ -637,7 +642,7 @@ affect other syntax highlighting."
 	    (concat "^[ \t]*:-[ \t\n]*"
 		    "\\(public\\)?[ \t\n]*"
 		    (regexp-opt ciao-module-block-directives t) "\\>")
-	    "[ \t]*\\({\\|\\.$\\|\\.[ \t\n]\\)"))
+	    (ciao-end-block-directive-regexp)))
       nil
     (ciao-font-lock-avoid-curly) ;; Do not color trailing '{'
     t
