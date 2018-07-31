@@ -254,7 +254,7 @@ affect other syntax highlighting."
     ((lambda (limit)
        (ciao-font-lock-match 
 	limit
-	"^[ \t]*:-[ \t\n]+\\(comment\\|doc\\)([ \t\n]*\\(version_maintenance\\|doinclude\\|hide\\|filetype\\|nodoc\\)\\>"
+	"^[ \t]*:-[ \t\n]+\\(comment\\|doc\\)([ \t\n]*\\(version_maintenance\\|doinclude\\|hide\\|filetype\\|nodoc\\|stability\\)\\>"
 ;	"[ \t\n]*)[ \t\n]*\\.")) ; was: [ \t]*$
 	")[ \t\n]*\\.")) ; was: [ \t]*$
      0
