@@ -73,11 +73,11 @@
 
 (defconst ciao-mode-emacs-version 
 
-  "This mode is currently being developed using @apl{GNU emacs}
-version 25.2. It should also (hopefully) work with all other
-24.XX. 23.XX, 22.XX, 21.XX, 20.XX, and later 19.XX versions. We
-also try our best to keep things working under @apl{xemacs} and
-under some emacs native ports for the mac."
+  "This mode is currently being developed within @apl{GNU emacs}
+version 24.1. It should also (hopefully) work with all other
+23.XX, 22.XX, 21.XX, 20.XX, and later 19.XX versions. We also try
+our best to keep things working under @apl{xemacs} and under some
+emacs native ports for the mac."
 
   "This is a comment describing for which emacs version this Ciao
    emacs mode has been developed.")
