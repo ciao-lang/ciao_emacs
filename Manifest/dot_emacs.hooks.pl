@@ -116,7 +116,7 @@ possible_emacs_site_start(emacs) :=
 
 :- use_module(library(pathnames), [path_concat/3]).
 :- use_module(library(lists), [append/3]).
-:- use_module(library(file_utils), [string_to_file/2]).
+:- use_module(library(streams_utils), [string_to_file/2]).
 :- use_module(library(system), [mktemp_in_tmp/2]).
 :- use_module(library(system_extra), [warn_on_nosuccess/1]).
 :- use_module(ciaobld(install_aux),
