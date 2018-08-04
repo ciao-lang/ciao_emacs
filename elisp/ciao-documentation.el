@@ -159,6 +159,13 @@ accessible from the menu bar, so learning these key combinations
 is not necessary: the list is provided mainly for illustration of the
 capabilities available, as well as completeness and documentation.
 
+@cindex{keyboard} When referring to keyboard characters, printing
+characters are written thus: @key{a}, while control characters are
+written like this: @key{^A}.  Thus @key{^C} is the character you get by
+holding down the @key{CTL} key while you type @key{c}.  Finally, the
+special control characters carriage-return, line-feed and space are
+often abbreviated to @key{RET}, @key{LFD} and @key{SPC} respectively.
+
 ")
 
   ;; This inserts the documentation strings for the bindings.
