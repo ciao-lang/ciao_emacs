@@ -232,7 +232,7 @@ inferior process"
 (defun ciao-lpdoc-default-settings-file ()
   "The default settings file (@tt{SETTINGS_DEFAULT.pl})."
   (concat (ciao-get-config :bundledir-lpdoc)
-	  "/lib/SETTINGS_DEFAULT.pl"))  
+	  "/etc/SETTINGS_DEFAULT.pl"))  
 
 (defun ciao-lpdoc-gen-default-settings (sourcefile)
   "Creates a simple @tt{SETTINGS.pl} file for `sourcefile',
