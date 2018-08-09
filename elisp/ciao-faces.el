@@ -390,7 +390,7 @@ strings, commnds, etc.)."
   '((((type tty) (class color)) (:foreground "blue" :weight bold))
     (((class grayscale) (background light)) (:foreground "LightGray" :weight bold))
     (((class grayscale) (background dark)) (:foreground "DimGray" :weight bold))
-    (((class color) (background light)) (:foreground "DeepPink3" :weight bold))
+    (((class color) (background light)) (:foreground "Purple3" :weight bold))
     (((class color) (background dark)) (:foreground "mediumpurple2" :weight bold)) ;; RoyalBlue
     (t (:inverse-video t :weight bold))
      )
