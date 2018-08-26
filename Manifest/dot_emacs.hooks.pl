@@ -7,6 +7,7 @@
 :- use_module(library(bundle/bundle_paths), [bundle_path/3]).
 :- use_module(library(pathnames), [path_concat/3]).
 :- use_module(library(system), [file_exists/1, get_home/1]).
+:- use_module(engine(system_info), [get_os/1]).
 
 % TODO: Do not customize this
 :- bundle_flag(emacsinitfile, [
