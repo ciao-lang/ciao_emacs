@@ -17,9 +17,6 @@
 :- doc(author,"Manuel C. Rodriguez").
 :- doc(author,"Daniel Cabeza").
 
-:- include(ciao_docsrc(common/'ClipAddress')).
-:- include(ciao_docsrc(common/'Copyright')).
-
 :- doc(summary,"This documents the Ciao emacs interface (or @em{mode}
     in @apl{emacs} terms), which provides a rich, integrated user interface
     to the Ciao program development environment components, including the
