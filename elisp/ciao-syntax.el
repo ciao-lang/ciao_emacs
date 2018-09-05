@@ -242,6 +242,7 @@ details."
 
 ;; TODO: Add pattern for 'bash'. Better idea: change the prompt of
 ;;   external shell used for LPdoc.
+;;
 ;; (defcustom ciao-os-shell-prompt-pattern "\\(\\[[0-9]+\\]> \\|.*\\$ \\|.*> \\|[A-Z]:.*>\\)"
 ;; Refined inclusion of current Ubuntu default. Basically, 
 ;; eliminated spaces in (...>) prompt. May still need work.
@@ -249,7 +250,13 @@ details."
 ;;   errors in ciao buffers because LPdoc still uses an OS shell
 ;;   instead of a Ciao top level: this is what needs to be fixed
 ;;   really.  --MH
-(defcustom ciao-os-shell-prompt-pattern "\\(\\[[0-9]+\\]> \\|.*\\$ \\|[^ ]*> \\|[A-Z]:.*>\\)"
+;;
+;; Note: The "^[^ ]" parts are needed to make sure that the prompt
+;;   begins a line and is not a blank. This removes many false
+;;   positives but it is still not optimal --JF
+
+(defcustom ciao-os-shell-prompt-pattern
+  "\\(^\\[[0-9]+\\]> \\|^\\$ \\|^[^ ].*\\$ \\|^[^ ]*> \\|^[A-Z]:.*>\\)"
   "Regular expression used to describe typical shell prompt
 patterns (csh and bash), so that error location works in inferior
 shells. This is useful for example so that errors are located
