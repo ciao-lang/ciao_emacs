@@ -1,6 +1,6 @@
 :- bundle(ciao_emacs).
 % Manifest file for Ciao emacs mode
-version('1.16.0-alpha.3').
+version('1.18.0').
 %
 depends([core
 	 % lpdoc % (optional)
