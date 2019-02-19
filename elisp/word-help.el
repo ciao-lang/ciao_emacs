@@ -831,12 +831,15 @@ Case-insensitive if IGNORE-CASE is non-nil."
   (let (topic keyword)
     (message "Processing \"%s\" in %s..." indexname filename)
     (save-window-excursion
-      (Info-goto-node (concat "(" filename ")" indexname))
-      (goto-char (point-max))
-      (while (re-search-backward "\\* \\([^\n:]+\\):" nil t)
-	(setq topic (buffer-substring (match-beginning 1) (match-end 1)))
-	(setq keyword (word-help-map-index-entries topic index-map))
-	(word-help-keyword-insert index-ob keyword filename indexname topic ignore-case)))))
+      (condition-case e
+	  (progn
+	    (Info-goto-node (concat "(" filename ")" indexname))
+	    (goto-char (point-max))
+	    (while (re-search-backward "\\* \\([^\n:]+\\):" nil t)
+	      (setq topic (buffer-substring (match-beginning 1) (match-end 1)))
+	      (setq keyword (word-help-map-index-entries topic index-map))
+	      (word-help-keyword-insert index-ob keyword filename indexname topic ignore-case)))
+	(user-error (message "Ignoring missing index"))))))
 
 (defun word-help-get-index (help-mode)
   "Process all the entries in the global variable `word-help-info-files'.
