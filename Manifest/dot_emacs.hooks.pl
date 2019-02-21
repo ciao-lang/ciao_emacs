@@ -67,7 +67,13 @@ update_dotemacs_(user, yes).
     interactive
 ]).
 
-get_dotemacs(user) := ~path_concat(~get_home, '.emacs').
+get_dotemacs(user) := F :-
+	% First that exists, or ~/.emacs if none
+	( ( F0 = '.emacs' ; F0 = '.emacs.el' ; F0 = '.emacs.d/init.el' ),
+	  F1 = ~path_concat(~get_home, F0),
+	  file_exists(F1) -> F = F1
+	; F = ~path_concat(~get_home, '.emacs')
+	).
 
 :- bundle_flag(emacs_site_start, [
     comment("Emacs site start"),
