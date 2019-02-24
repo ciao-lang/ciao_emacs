@@ -72,7 +72,8 @@ get_dotemacs(user) := F :-
 	( ( F0 = '.emacs' ; F0 = '.emacs.el' ; F0 = '.emacs.d/init.el' ),
 	  F1 = ~path_concat(~get_home, F0),
 	  file_exists(F1) -> F = F1
-	; F = ~path_concat(~get_home, '.emacs')
+	; % It seems a better option for modern emacs
+	  F = ~path_concat(~get_home, '.emacs.d/init.el')
 	).
 
 :- bundle_flag(emacs_site_start, [
@@ -121,10 +122,11 @@ possible_emacs_site_start(emacs) :=
 
 :- use_module(ciaobld(install_aux), [instype/1, inst_bundle_path/3]).
 
-:- use_module(library(pathnames), [path_concat/3]).
+:- use_module(library(pathnames), [path_concat/3, path_split/3]).
 :- use_module(library(lists), [append/3]).
 :- use_module(library(stream_utils), [string_to_file/2]).
 :- use_module(library(system), [mktemp_in_tmp/2]).
+:- use_module(library(system_extra), [mkpath/1]).
 :- use_module(library(system_extra), [warn_on_nosuccess/1]).
 :- use_module(ciaobld(install_aux),
 	[rootprefix/1, instdir_install/1, instdir_uninstall/1]).
@@ -139,7 +141,9 @@ emacs_site_start := ~get_bundle_flag(ciao_emacs:emacs_site_start).
 '$builder_hook'(dot_emacs:register) :-
 	( enabled(yes) ->
 	    ( emacs_init_file(InitFile) ->
-	        % Register in some .emacs
+	        % Register in user init file
+	        path_split(InitFile, InitFileDir, _), % (just in case .emacs.d do not exist)
+	        mkpath(InitFileDir),
 	        warn_on_nosuccess(register_in_script(InitFile, ";", ~emacs_load_script))
 	    ; has_site_start_d(SiteStartD) ->
 	        % Register at emacs site start dir
