@@ -155,7 +155,7 @@ affect other syntax highlighting."
 ;; But: X = 0'a,X = 0'a,X = 0'a (all text would be considered an atom).
 ;;
 ;; Comments in the middle of assertions that contain a period:
-;; :- true pred l(X) %well...
+;; :- trust pred l(X) %well...
 ;;    : list( X ) "bla bla bla".
 ;; A preprocessor would remove the comment and it would work, but
 ;; as we cannot "remove" it, dot is consider the end of the assertion :(
