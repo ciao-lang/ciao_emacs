@@ -36,10 +36,7 @@
 (defun ciao-optim-comp-command (cmd)
   "Execute the `cmd' ciao command"
   (async-shell-command
-   (concat
-    "eval `INSIDE_EMACS=t "
-    ciao-bin-dir "/ciao oc:bash-env`; INSIDE_EMACS=t "
-    ciao-bin-dir "/ciao " cmd)
+   (concat "INSIDE_EMACS=t " ciao-bin-dir "/ciao " cmd)
    (ciao-get-optim-comp-proc-buffer)))
 
 ;;;###autoload
