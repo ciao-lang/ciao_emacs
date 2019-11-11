@@ -241,6 +241,15 @@ after comint-mode-hook.
 
 (require 'ciao-font-lock) ; ciao-emacs-can-do-font-lock-p
 
+;; Setup indentation ;; TODO: make it configurable?
+(defun ciao-setup-indent ()
+  "Setup Ciao indentation"
+  (setq-default indent-tabs-mode nil) ;; blanks instead of tabs
+  (setq ciao-first-indent-width 8)
+  (setq tab-width 8))
+
+(add-hook 'ciao-mode-hook 'ciao-setup-indent)
+
 ;; Turn on font lock (if not used globally)
 (if (ciao-emacs-can-do-font-lock-p)
     (progn
