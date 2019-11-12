@@ -144,7 +144,10 @@ rigidly along with this one."
 	  ((zerop prevcol) ciao-first-indent-width)
 	  ((looking-at "[\[{(;]")
 	   (max ciao-first-indent-width (+ ciao-indent-width (ciao-column-of-um-lparen))))
-	  ((looking-at "[,>]") (ciao-column-of-prev-term))
+;	  ((looking-at "[,>]") (ciao-column-of-prev-term))
+	  ((looking-at "[>]")
+           (+ (ciao-column-of-prev-term) 2))
+	  ((looking-at "[,]") (ciao-column-of-prev-term))
 	  (t (ciao-column-of-um-lparen)))))
 
 ;; JA 890601
