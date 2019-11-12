@@ -81,7 +81,7 @@
 ;; Indentation
 ;;------------------------------------------------------------
 
-(defcustom ciao-first-indent-width 8 ;; some people prefer 4
+(defcustom ciao-first-indent-width 4 ;; it was 8
   "First level indentation for a new goal."
   :group 'ciaolang
   :type 'integer) ;; it was 'tab-width' before

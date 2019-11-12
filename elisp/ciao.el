@@ -244,9 +244,8 @@ after comint-mode-hook.
 ;; Setup indentation ;; TODO: make it configurable?
 (defun ciao-setup-indent ()
   "Setup Ciao indentation"
-  (setq-default indent-tabs-mode nil) ;; blanks instead of tabs
-  (setq ciao-first-indent-width 8)
-  (setq tab-width 8))
+  ;; blanks instead of tabs
+  (setq-default indent-tabs-mode nil))
 
 (add-hook 'ciao-mode-hook 'ciao-setup-indent)
 
