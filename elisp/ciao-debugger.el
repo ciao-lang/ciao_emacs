@@ -85,8 +85,8 @@ right now. It is saved for when flag is not set.")
 
 (defun ciao-debugger-mode-variables ()
   "Initialize mode variables for the debugger."
-  (set (make-local-variable 'ciao-debug-last-frame) nil)
-  (set (make-local-variable 'ciao-debug-delete-prompt-marker) (make-marker)))
+  (setq-local ciao-debug-last-frame nil)
+  (setq-local ciao-debug-delete-prompt-marker (make-marker)))
 
 ;;------------------------------------------------------------
 ;; Interactive commands

@@ -174,7 +174,7 @@ affect other syntax highlighting."
   "Locally set `font-lock-defaults' for Ciao mode."
   ;; MR added to support font-lock
   (if (ciao-emacs-can-do-font-lock-p)
-      (set (make-local-variable 'font-lock-defaults)
+      (setq-local font-lock-defaults
 	   '(ciao-mode-font-lock-keywords 
 	     t nil nil 
 	     ;; Use all buffer refontifying...
@@ -679,7 +679,7 @@ affect other syntax highlighting."
   "Locally set `font-lock-defaults' for inferior Ciao process."
   ;; MR added to support font-lock
   (if (ciao-emacs-can-do-font-lock-p)
-      (set (make-local-variable 'font-lock-defaults)
+      (setq-local font-lock-defaults
 	   '(ciao-inferior-font-lock-keywords 
 	     t nil nil 
 	     ;; Use all buffer refontifying...

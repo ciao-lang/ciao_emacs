@@ -65,16 +65,16 @@
   (set-syntax-table ciao-mode-syntax-table)
   ;;
   (setq local-abbrev-table ciao-mode-abbrev-table)
-  (set (make-local-variable 'paragraph-start) (concat "^%%\\|^$\\|" page-delimiter)) ;'%%..'
-  (set (make-local-variable 'paragraph-separate) paragraph-start)
-  (set (make-local-variable 'paragraph-ignore-fill-prefix) t)
-  (set (make-local-variable 'indent-line-function) 'ciao-indent-line)
-  (set (make-local-variable 'comment-start) "%")
-  (set (make-local-variable 'comment-start-skip) "%+ *")
-  (set (make-local-variable 'comment-column) 48)
+  (setq-local paragraph-start (concat "^%%\\|^$\\|" page-delimiter)) ;'%%..'
+  (setq-local paragraph-separate paragraph-start)
+  (setq-local paragraph-ignore-fill-prefix t)
+  (setq-local indent-line-function 'ciao-indent-line)
+  (setq-local comment-start "%")
+  (setq-local comment-start-skip "%+ *")
+  (setq-local comment-column 48)
 ;; Obsolete since before 19.5
-;;   (set (make-local-variable 'comment-indent-hook) 'ciao-comment-indent)
-  (set (make-local-variable 'comment-indent-function) 'ciao-comment-indent)
+;;   (setq-local comment-indent-hook 'ciao-comment-indent)
+  (setq-local comment-indent-function 'ciao-comment-indent)
   )
 
 ;;------------------------------------------------------------

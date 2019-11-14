@@ -590,14 +590,11 @@ creates widgets for each element."
 ; (set-background-color "peach puff")
 ; (set-background-color "black")
 
-;  (set (make-local-variable 'widget-field-face)
-;                            'ciao-edit-widget-face)
-  (set (make-local-variable 'widget-button-pressed-face)
-       'ciao-button-pressed-widget-face)
-  (set (make-local-variable 'widget-mouse-face)
-       'ciao-button-widget-face) 
+;  (setq-local widget-field-face 'ciao-edit-widget-face)
+  (setq-local widget-button-pressed-face 'ciao-button-pressed-widget-face)
+  (setq-local widget-mouse-face 'ciao-button-widget-face) 
 
-  (set (make-local-variable 'cursor-type) nil)
+  (setq-local cursor-type nil)
 
   (insert "\n")
   ;; (ciao-insert-image 'xpm ciao-clip-logo "CLIP")

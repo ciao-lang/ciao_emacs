@@ -41,7 +41,7 @@ or not and if it is, what type.")
 ;; mode initialization code:
 ;;
 ;; ;; Using make-variable-buffer-local above
-;; ;;  (set (make-local-variable 'update-version-comments) 0) ; 0 means "uninitialized"
+;; ;;  (setq-local update-version-comments 0) ; 0 means "uninitialized"
 
 ;;;###autoload
 (defun ciao-new-version () 
