@@ -396,18 +396,20 @@ affect other syntax highlighting."
    ;; Strings as lpdoc comments (# "...")
    ((save-excursion
       (goto-char (nth 8 state))
-      (looking-at-p "\"")
-      (skip-chars-backward " \t\n")
-      (backward-char)
-      (looking-at-p "#"))
+      (and (looking-at-p "\"")
+           (progn
+             (skip-chars-backward " \t\n")
+             (backward-char)
+             (looking-at-p "#"))))
     'ciao-face-lpdoc-comment)
    ;; Strings as lpdoc comments (:- doc(, "..."))
    ((save-excursion
       (goto-char (nth 8 state))
-      (looking-at-p "\"")
-      (skip-chars-backward " \t\n")
-      (beginning-of-line)
-      (looking-at-p (ciao-doc-regexp "")))
+      (and (looking-at-p "\"")
+           (progn
+             (skip-chars-backward " \t\n")
+             (beginning-of-line)
+             (looking-at-p (ciao-doc-regexp "")))))
     'ciao-face-lpdoc-comment)
    ;; Strings
    ((save-excursion
@@ -424,15 +426,15 @@ affect other syntax highlighting."
       (goto-char (nth 8 state))
       (previous-line)
       (beginning-of-line)
-      (eq (get-text-property (point) 'face)
-                   'ciao-face-lpdoc-comment))
+      (and (looking-at-p "%")
+           (eq (get-text-property (point) 'face)
+               'ciao-face-lpdoc-comment)))
     'ciao-face-lpdoc-comment)
    ;; Special case for 0'%
    ((save-excursion
       (goto-char (nth 8 state))
-      (looking-at-p "%")
       (forward-char -2)
-      (looking-at-p "0'"))
+      (looking-at-p "0'%"))
     nil)
    (t 'ciao-face-comment))) ;; TODO: use font-lock-comment-face?
 
