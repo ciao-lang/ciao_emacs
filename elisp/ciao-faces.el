@@ -38,13 +38,6 @@
   :tag "Ciao Faces"
   :group 'ciao)
 
-(defcustom ciao-faces-use-variable-pitch-in-comments nil
-  "Controls whether variable pitch fonts are used when highlighting
-comments. Unset by default. After changing this you must exit and
-reinitialize for the change to take effect."
-  :group 'ciao-highlighting-faces
-  :type 'boolean)
-
 ;; Debugger
 (defgroup ciao-highlighting-faces-debugger nil
   "Ciao faces for debugger."
@@ -172,17 +165,6 @@ reinitialize for the change to take effect."
   "Face to use for atoms in functional notation."
   :group 'ciao-highlighting-faces-misc)
 
-;(defvar ciao-face-assrt-variable 'ciao-face-variable)
-;(defface ciao-face-assrt-variable ;; ciao-face-assrt-variable
-;  '((((type tty) (class color)) (:foreground "magenta" :weight bold))
-;    (((class grayscale) (background light)) (:foreground "DimGray" :italic t))
-;    (((class grayscale) (background dark)) (:foreground "LightGray" :italic t))
-;    (((class color) (background light)) (:foreground "DarkGoldenrod"))
-;    (((class color) (background dark)) (:foreground "goldenrod1"))
-;    (t (:italic t)))
-;  "Face to use for variables."
-;  :group 'ciao-highlighting-faces-misc)
-
 (defvar ciao-face-variable 'ciao-face-variable)
 (defface ciao-face-variable ;; ciao-face-variable
   '((((type tty) (class color)) (:foreground "magenta" :weight bold))
@@ -216,12 +198,6 @@ reinitialize for the change to take effect."
     (((class color) (background dark)) (:foreground "SlateGray4")) ;; chocolate1
     (t (:weight bold :italic t)))
   "Face to use for code comments using fixed pitch (double %)."
-  :group 'ciao-highlighting-faces-misc)
-
-(defvar ciao-face-comment-variable-pitch 'ciao-face-comment-variable-pitch)
-(defface ciao-face-comment-variable-pitch 
-  '((t (:inherit ciao-face-comment :family "helv")))
-  "Face to use for code comments using variable pitch (single %)."
   :group 'ciao-highlighting-faces-misc)
 
 (defvar ciao-face-clauseheadname 'ciao-face-clauseheadname)
@@ -281,18 +257,18 @@ strings, commnds, etc.)."
   "Face to use for LPdoc bug comments."
   :group 'ciao-highlighting-faces-lpdoc)
 
-(defvar ciao-face-lpdoc-version-comment 'ciao-face-lpdoc-version-comment)
-(defface ciao-face-lpdoc-version-comment ;; ciao-face-comment
-  '((((type tty) (class color)) (:foreground "red"))
-    (((class grayscale) (background light))
-     (:foreground "DimGray" :weight bold :italic t))
-    (((class grayscale) (background dark))
-     (:foreground "LightGray" :weight bold :italic t))
-    (((class color) (background light)) (:foreground "Firebrick"))
-    (((class color) (background dark)) (:foreground "chocolate1"))
-    (t (:weight bold :italic t)))
-  "Face to use for LPdoc version comments."
-  :group 'ciao-highlighting-faces-lpdoc)
+; (defvar ciao-face-lpdoc-version-comment 'ciao-face-lpdoc-version-comment)
+; (defface ciao-face-lpdoc-version-comment ;; ciao-face-comment
+;   '((((type tty) (class color)) (:foreground "red"))
+;     (((class grayscale) (background light))
+;      (:foreground "DimGray" :weight bold :italic t))
+;     (((class grayscale) (background dark))
+;      (:foreground "LightGray" :weight bold :italic t))
+;     (((class color) (background light)) (:foreground "Firebrick"))
+;     (((class color) (background dark)) (:foreground "chocolate1"))
+;     (t (:weight bold :italic t)))
+;   "Face to use for LPdoc version comments."
+;   :group 'ciao-highlighting-faces-lpdoc)
 
 (defvar ciao-face-lpdoc-comment 'ciao-face-lpdoc-comment)
 (defface ciao-face-lpdoc-comment ;; ciao-face-navyblue
@@ -303,13 +279,6 @@ strings, commnds, etc.)."
     (((class color) (background dark)) (:foreground "SlateGray3")) ;; RoyalBlue
     (t (:inverse-video t)))
   "Face to use for LPdoc textual comments."
-  :group 'ciao-highlighting-faces-lpdoc)
-
-(defvar ciao-face-lpdoc-comment-variable-pitch
-  'ciao-face-lpdoc-comment-variable-pitch) 
-(defface ciao-face-lpdoc-comment-variable-pitch 
-  '((t (:inherit ciao-face-lpdoc-comment :family "helv")))
-  "Face to use for LPdoc textual comments in variable pitch."
   :group 'ciao-highlighting-faces-lpdoc)
 
 (defvar ciao-face-lpdoc-verbatim 'ciao-face-lpdoc-verbatim)
@@ -323,29 +292,29 @@ strings, commnds, etc.)."
   "Face to use for LPdoc verbatim text."
   :group 'ciao-highlighting-faces-lpdoc)
 
-(defvar ciao-face-lpdoc-include 'ciao-face-lpdoc-include)
-(defface ciao-face-lpdoc-include ;; ciao-face-navyblue-bold
-  '((((type tty) (class color)) (:foreground "blue" :weight bold))
-    (((class grayscale) (background light)) (:foreground "LightGray" :weight bold))
-    (((class grayscale) (background dark)) (:foreground "DimGray" :weight bold))
-    (((class color) (background light)) (:foreground "NavyBlue" :weight bold))
-    (((class color) (background dark)) (:foreground "SlateGray1" :weight bold)) ;; RoyalBlue
-    (t (:inverse-video t :weight bold)))
-  "Face to use for LPdoc include commands."
-  :group 'ciao-highlighting-faces-lpdoc)
+; (defvar ciao-face-lpdoc-include 'ciao-face-lpdoc-include)
+; (defface ciao-face-lpdoc-include ;; ciao-face-navyblue-bold
+;   '((((type tty) (class color)) (:foreground "blue" :weight bold))
+;     (((class grayscale) (background light)) (:foreground "LightGray" :weight bold))
+;     (((class grayscale) (background dark)) (:foreground "DimGray" :weight bold))
+;     (((class color) (background light)) (:foreground "NavyBlue" :weight bold))
+;     (((class color) (background dark)) (:foreground "SlateGray1" :weight bold)) ;; RoyalBlue
+;     (t (:inverse-video t :weight bold)))
+;   "Face to use for LPdoc include commands."
+;   :group 'ciao-highlighting-faces-lpdoc)
 
-(defvar ciao-face-lpdoc-crossref 'ciao-face-lpdoc-crossref)
-(defface ciao-face-lpdoc-crossref ;; ciao-face-golden
-  '((((type tty) (class color)) (:foreground "blue" :weight light))
-    (((class grayscale) (background light))
-     (:foreground "Gray90" :weight bold :italic t))
-    (((class grayscale) (background dark))
-     (:foreground "DimGray" :weight bold :italic t))
-    (((class color) (background light)) (:foreground "DarkGoldenrod"))
-    (((class color) (background dark)) (:foreground "LightGoldenrod"))
-    (t (:weight bold :italic t)))
-  "Face to use for LPdoc cross-references."
-  :group 'ciao-highlighting-faces-lpdoc)
+; (defvar ciao-face-lpdoc-crossref 'ciao-face-lpdoc-crossref)
+; (defface ciao-face-lpdoc-crossref ;; ciao-face-golden
+;   '((((type tty) (class color)) (:foreground "blue" :weight light))
+;     (((class grayscale) (background light))
+;      (:foreground "Gray90" :weight bold :italic t))
+;     (((class grayscale) (background dark))
+;      (:foreground "DimGray" :weight bold :italic t))
+;     (((class color) (background light)) (:foreground "DarkGoldenrod"))
+;     (((class color) (background dark)) (:foreground "LightGoldenrod"))
+;     (t (:weight bold :italic t)))
+;   "Face to use for LPdoc cross-references."
+;   :group 'ciao-highlighting-faces-lpdoc)
 
 (defvar ciao-face-lpdoc-command 'ciao-face-lpdoc-command)
 (defface ciao-face-lpdoc-command ;; ciao-face-royalblue
@@ -635,9 +604,9 @@ strings, commnds, etc.)."
     (((class grayscale) (background light)) (:foreground "LightGray" :weight bold))
     (((class grayscale) (background dark)) (:foreground "DimGray" :weight bold))
     (((class color) (background light)) 
-     (:foreground "DodgerBlue4" :weight bold :family "helv" :height 1.1))
+     (:foreground "DodgerBlue4" :weight bold :height 1.1)) ; :family "helv" 
     (((class color) (background dark)) 
-     (:foreground "LightBlue2" :family "helv" :height 1.1))
+     (:foreground "LightBlue2" :height 1.1)) ; :family "helv" 
     (t (:inverse-video t :weight bold)))
   "Face to use for system splash message."
   :group 'ciao-highlighting-faces-toplevels)
@@ -653,9 +622,9 @@ strings, commnds, etc.)."
     (((class grayscale) (background light)) (:foreground "LightGray" :weight bold))
     (((class grayscale) (background dark)) (:foreground "DimGray" :weight bold))
     (((class color) (background light)) 
-     (:foreground "ForestGreen" :weight bold :family "helv"))
+     (:foreground "ForestGreen" :weight bold)) ; :family "helv"
     (((class color) (background dark)) 
-     (:foreground "lime green" :weight bold :family "helv"))
+     (:foreground "lime green" :weight bold)) ; :family "helv"
     (t (:inverse-video t :weight bold)))
   "Face to use for debug messages."
   :group 'ciao-highlighting-faces-messages)
@@ -664,9 +633,9 @@ strings, commnds, etc.)."
 (defface ciao-face-error-mess ;; ciao-face-warning
   '((((type tty) (class color)) (:foreground "red"))
     (((class color) (background light)) 
-     (:foreground "Red" :weight bold :family "helv"))
+     (:foreground "Red" :weight bold)) ; :family "helv"
     (((class color) (background dark)) 
-     (:foreground "Red" :weight bold :family "helv"))
+     (:foreground "Red" :weight bold)) ; :family "helv"
     (t (:inverse-video t :weight bold)))
   "Face to use for error messages."
   :group 'ciao-highlighting-faces-messages)
@@ -677,9 +646,9 @@ strings, commnds, etc.)."
     (((class grayscale) (background light)) (:foreground "LightGray" :weight bold))
     (((class grayscale) (background dark)) (:foreground "DimGray" :weight bold))
     (((class color) (background light)) 
-     (:foreground "Brown" :weight bold :family "helv"))
+     (:foreground "Brown" :weight bold)) ; :family "helv"
     (((class color) (background dark)) 
-     (:foreground "Brown" :weight bold :family "helv"))
+     (:foreground "Brown" :weight bold)) ; :family "helv"
     (t (:inverse-video t :weight bold)))
   "Face to use for warning messages."
   :group 'ciao-highlighting-faces-messages)
@@ -690,9 +659,9 @@ strings, commnds, etc.)."
     (((class grayscale) (background light)) (:foreground "LightGray"))
     (((class grayscale) (background dark)) (:foreground "DimGray"))
     (((class color) (background light)) 
-     (:foreground "brown" :family "helv"))
+     (:foreground "brown")) ; :family "helv"
     (((class color) (background dark)) 
-     (:foreground "brown" :family "helv"))
+     (:foreground "brown")) ; :family "helv"
     (t (:inverse-video t)))
   "Face to use for note messages."
   :group 'ciao-highlighting-faces-messages)
@@ -703,9 +672,9 @@ strings, commnds, etc.)."
     (((class grayscale) (background light)) (:foreground "LightGray"))
     (((class grayscale) (background dark)) (:foreground "DimGray"))
     (((class color) (background light)) 
-     (:foreground "brown" :family "helv"))
+     (:foreground "brown")) ; :family "helv"
     (((class color) (background dark)) 
-     (:foreground "brown" :family "helv"))
+     (:foreground "brown")) ; :family "helv"
     (t (:inverse-video t)))
   "Face to use for other messages."
   :group 'ciao-highlighting-faces-messages)

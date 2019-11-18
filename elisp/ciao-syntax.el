@@ -35,27 +35,42 @@
 (if ciao-mode-syntax-table
     ()
   (let ((table (make-syntax-table)))
-
     (modify-syntax-entry ?_ "w" table) ; word constituent
     (modify-syntax-entry ?\\ "." table) ; punctuation
-    (modify-syntax-entry ?/ ". 14" table)
-    (modify-syntax-entry ?* ". 23" table)
 ;;  1 means CHAR is the start of a two-char comment start sequence.
 ;;  2 means CHAR is the second character of such a sequence.
 ;;  3 means CHAR is the start of a two-char comment end sequence.
 ;;  4 means CHAR is the second character of such a sequence.
-    (modify-syntax-entry ?/ "." table) ; punctuation
-    (modify-syntax-entry ?* "." table) ; punctuation
     (modify-syntax-entry ?+ "." table) ; punctuation
     (modify-syntax-entry ?- "." table) ; punctuation
     (modify-syntax-entry ?= "." table) ; punctuation
     (modify-syntax-entry ?% "<" table) ; comment starter
-    (modify-syntax-entry ?\n ">" table); comment ender
-    (modify-syntax-entry ?\^m ">" table); ; comment ender
+    (modify-syntax-entry ?\n ">" table) ; comment ender
+    (modify-syntax-entry ?\^m ">" table) ; comment ender
+    (modify-syntax-entry ?* ". 23b" table)
+    (modify-syntax-entry ?/ ". 14" table)
     (modify-syntax-entry ?< "." table) ; punctuation
     (modify-syntax-entry ?> "." table) ; punctuation
     (modify-syntax-entry ?\' "\"" table) ; escape
     (setq ciao-mode-syntax-table table)))
+
+;; (borrowed from prolog.el) --JF
+(defconst ciao-syntax-propertize-function
+  (when (fboundp 'syntax-propertize-rules)
+    (syntax-propertize-rules
+     ;; GNU Prolog only accepts 0'\' rather than 0'', but the only
+     ;; possible meaning of 0'' is rather clear.
+     ("\\<0\\(''?\\)"
+      (1 (unless (save-excursion (nth 8 (syntax-ppss (match-beginning 0))))
+           (string-to-syntax "_"))))
+     ;; We could check that we're not inside an atom, but I don't think
+     ;; that 'foo 8'z could be a valid syntax anyway, so why bother?
+     ("\\<[1-9][0-9]*\\('\\)[0-9a-zA-Z]" (1 "_"))
+     ;; Supposedly, ISO-Prolog wants \NNN\ for octal and \xNNN\ for hexadecimal
+     ;; escape sequences in atoms, so be careful not to let the terminating \
+     ;; escape a subsequent quote.
+     ("\\\\[x0-7][[:xdigit:]]*\\(\\\\\\)" (1 "_"))
+     )))
 
 (defvar ciao-mode-abbrev-table nil)
 (define-abbrev-table 'ciao-mode-abbrev-table ())
@@ -70,11 +85,16 @@
   (setq-local paragraph-ignore-fill-prefix t)
   (setq-local indent-line-function 'ciao-indent-line)
   (setq-local comment-start "%")
-  (setq-local comment-start-skip "%+ *")
+  (setq-local comment-end "")
+  (setq-local comment-add 1)
+  (setq-local comment-start-skip "\\(?:/\\*+ *\\|%+ *\\)")
+;  (setq-local comment-start "%")
+;  (setq-local comment-start-skip "%+ *")
   (setq-local comment-column 48)
 ;; Obsolete since before 19.5
 ;;   (setq-local comment-indent-hook 'ciao-comment-indent)
   (setq-local comment-indent-function 'ciao-comment-indent)
+  (setq-local syntax-propertize-function ciao-syntax-propertize-function)
   )
 
 ;;------------------------------------------------------------
