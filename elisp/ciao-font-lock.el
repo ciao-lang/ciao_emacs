@@ -399,8 +399,10 @@ affect other syntax highlighting."
       (and (looking-at-p "\"")
            (progn
              (skip-chars-backward " \t\n")
-             (backward-char)
-             (looking-at-p "#"))))
+             (and (> (point) 1)
+                  (progn
+                    (backward-char)
+                    (looking-at-p "#"))))))
     'ciao-face-lpdoc-comment)
    ;; Strings as lpdoc comments (:- doc(, "..."))
    ((save-excursion
@@ -424,7 +426,7 @@ affect other syntax highlighting."
    ;; doccomments (preceding is a doccomment too)
    ((save-excursion
       (goto-char (nth 8 state))
-      (previous-line)
+      (forward-line -1)
       (beginning-of-line)
       (and (looking-at-p "%")
            (eq (get-text-property (point) 'face)
@@ -433,8 +435,10 @@ affect other syntax highlighting."
    ;; Special case for 0'%
    ((save-excursion
       (goto-char (nth 8 state))
-      (forward-char -2)
-      (looking-at-p "0'%"))
+      (and (> (point) 2)
+           (progn
+             (forward-char -2)
+             (looking-at-p "0'%"))))
     nil)
    (t 'ciao-face-comment))) ;; TODO: use font-lock-comment-face?
 
