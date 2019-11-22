@@ -266,8 +266,8 @@ affect other syntax highlighting."
     ("!" . ciao-face-cut)
     ;; Unrecognized directive (mark as warning)
     ("^[ \t]*:-" . ciao-face-lpdoc-bug-comment)
-    ;; Necks
-    ("\\(:-\\|-->\\|:=\\)" . ciao-face-prompt)
+    ;; Necks and control
+    ("\\(:-\\|-->\\|:=\\|=>\\|->\\)" . ciao-face-prompt)
     ;; TODO: Other major connectors? they can be distracting --JF
 ;    ("\\(|\\|?\\|->\\|~\\)" . ciao-face-quoted-atom) ;; operators
 ;    ("[^'a-zA-Z0-9,()_ \t\n]" . ciao-face-quoted-atom) ;; all symbols
