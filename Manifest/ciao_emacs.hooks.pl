@@ -317,3 +317,29 @@ add_prefix([L|Ls], Preffix,  [R|Rs]) :-
 '$builder_hook'(item_nested(dot_emacs)).
 :- include(.('dot_emacs.hooks')).
 
+% ===========================================================================
+:- doc(section, "Tests and Benchmarks").
+
+:- use_module(library(process), [process_call/3]).
+:- use_module(library(emacs/emacs_batch), [emacs_path/1]).
+
+'$builder_hook'(test) :- !,
+    do_emacs_mode_tests.
+
+run_emacs(Dir, Args) :-
+    % Environment variables unset for this call
+    NoEnv = ['SHELL', 'EMACSLOADPATH', 'EMACSDOC'],
+    process_call(~emacs_path, ['-batch'|Args],
+        [cwd(Dir),
+         noenv(NoEnv),
+         status(_)]).
+
+do_emacs_mode_tests :-
+    TestDir = ~bundle_path(ciao_emacs, 'tests'),
+    CiaoMode = ~path_concat(~emacsmode_elisp_dir, 'ciao-site-file.el'),
+    run_emacs(TestDir,
+      [%'--eval', '(setq load-path (cons "." load-path))',
+       '-l', CiaoMode,
+       '-l', 'run-indent-test.el',
+       '-f', 'ciao-test-indent-check']).
+

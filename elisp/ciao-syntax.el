@@ -1,6 +1,10 @@
 ;;; ciao-syntax.el --- Syntax definitions for Ciao language
+
 ;; Copyright (C) 1986-2012 Free Software Foundation, Inc. and
 ;; M. Hermenegildo and others (herme@fi.upm.es, UPM-CLIP, Spain).
+;;
+;; Authors: 2019 Jose F. Morales <jfmcjf@gmail.com>
+;;               (rewrite indentation code)
 
 ;; This file is not part of GNU Emacs.
 
@@ -58,17 +62,10 @@
 (defconst ciao-syntax-propertize-function
   (when (fboundp 'syntax-propertize-rules)
     (syntax-propertize-rules
-     ;; GNU Prolog only accepts 0'\' rather than 0'', but the only
-     ;; possible meaning of 0'' is rather clear.
      ("\\<0\\(''?\\)"
       (1 (unless (save-excursion (nth 8 (syntax-ppss (match-beginning 0))))
            (string-to-syntax "_"))))
-     ;; We could check that we're not inside an atom, but I don't think
-     ;; that 'foo 8'z could be a valid syntax anyway, so why bother?
      ("\\<[1-9][0-9]*\\('\\)[0-9a-zA-Z]" (1 "_"))
-     ;; Supposedly, ISO-Prolog wants \NNN\ for octal and \xNNN\ for hexadecimal
-     ;; escape sequences in atoms, so be careful not to let the terminating \
-     ;; escape a subsequent quote.
      ("\\\\[x0-7][[:xdigit:]]*\\(\\\\\\)" (1 "_"))
      )))
 
@@ -101,13 +98,8 @@
 ;; Indentation
 ;;------------------------------------------------------------
 
-(defcustom ciao-first-indent-width 4 ;; it was 8
-  "First level indentation for a new goal."
-  :group 'ciaolang
-  :type 'integer) ;; it was 'tab-width' before
-
 (defcustom ciao-indent-width 4
-  "Indentation for a new goal."
+  "Indentation level."
   :group 'ciaolang
   :type 'integer)
 
@@ -116,90 +108,177 @@
 With argument, indent any additional lines of the same clause
 rigidly along with this one."
   (interactive "p")
-  (let ((indent (ciao-indent-level))
-	(pos (- (point-max) (point))) beg)
+  (if (ciao-do-not-indent)
+      nil ; avoid indentation in this case
+    (let ((indent (ciao-indent-level))
+          (pos (- (point-max) (point))) beg)
+      (beginning-of-line)
+      (setq beg (point))
+      (skip-chars-forward " \t")
+      ;;
+      (if (zerop (- indent (current-column)))
+          nil
+        (delete-region beg (point))
+        (indent-to indent))
+      ;;
+      (if (> (- (point-max) pos) (point))
+          (goto-char (- (point-max) pos))))))
+
+(defun ciao-do-not-indent ()
+  (save-excursion
     (beginning-of-line)
-    (setq beg (point))
-    (skip-chars-forward " \t")
+    (let ((ppss (syntax-ppss)))
+      (or (nth 3 ppss) (nth 4 ppss))))) ;; at string or comment
 
-    (if (zerop (- indent (current-column)))
-	nil
-      (delete-region beg (point))
-      (indent-to indent))
-
-    (if (> (- (point-max) pos) (point))
-	(goto-char (- (point-max) pos)))))
-
-;; JA 890605
 (defun ciao-indent-level ()
   "Compute Ciao indentation level."
   (save-excursion
-    (beginning-of-line)
+    (let ((closing nil)
+          (lparen nil)
+          (basecol 0)
+          (innercol 0))
+      ;; 0) Move to first nonblank in the line
+      (beginning-of-line)
       (skip-chars-forward " \t")
+      ;; 1) Detect if the line begins with a closing symbol
       (cond
-       ((bobp) 0)                            ;Beginning of buffer
-       ((looking-at "\n")                    ;a new fresh line
-        (ciao-indent-for-new-clause))
-       (t                                    ;indent existing clause
-        (forward-line -1)
-	(ciao-indent-for-new-clause)))))
+       ((looking-at "[\]})]") (setq closing 'paren)) ; closing parenthesis
+       ((looking-at "[;|]") (setq closing 'bar))) ; closing bar
+      ;; 2) Search backward the indentation context
+      (setq lparen (ciao-scan-token-backwards closing))
+      ;; 3) Compute basecol and innercol
+      (if (eq lparen 'base)
+          (current-column)
+        ;; lparen paren or bar
+        (if (and
+             (or (eq lparen 'paren) (eq lparen 'bar))
+             (save-excursion
+               ;; and last non-blank is not an open parenthesis
+               (ciao-move-end-of-line) ;; Go to last 
+               (forward-char -1) ;; previous
+               (or
+                (nth 3 (syntax-ppss)) ;; a string
+                (not (or (looking-at "[\[{(]")
+                         (looking-at "[;|]"))))))
+            ;; argument indentation mode
+            (progn
+              (setq basecol (current-column)) ;; basecol in paren or bar
+              (forward-char 1)
+              (skip-chars-forward " \t")
+              (setq innercol (current-column))) ;; inner in next nonblank
+          ;; block indentation mode
+          ;;
+          ;; compute basecol: search backwards the first nonblank
+          ;;   balanced char in the line (it may skip newlines)
+          (if (> (current-column) 0)
+              (progn
+                (forward-char -1)
+                (ciao-scan-token-backwards 'blockbase)
+                (beginning-of-line) ;; TODO: simplify?
+                (skip-chars-forward " \t")))
+          (setq basecol (current-column))
+          ;; compute innercol
+          (if (and (eq lparen 'neck) (looking-at ":-")) ;; ':-' directive
+              ;; TODO: same condition as early stop for prev='period?
+              (progn
+                (forward-char 2)
+                (skip-chars-forward " \t")
+                (setq innercol (current-column))) ;; TODO: width=3 instead?
+            ;; default block indentation
+            (setq innercol (+ ciao-indent-width basecol))))
+        ;; 4) Use basecol or innercol
+        (cond
+         ((eq closing 'paren) basecol)
+         ((and (eq closing 'bar) (not (eq lparen 'neck))) basecol)
+         (t innercol))))))
 
-;; JA 890601
-(defun ciao-search-for-prev-goal ()
-  "Search for the most recent Ciao symbol (in head or in body)."
-  (while (and (not (bobp)) (or (looking-at "%") (looking-at "\n")))
+(defun ciao-skip-string-or-comments-backwards ()
+  (let ((ppss0 (syntax-ppss))) ;; TODO: syntax-ppss can be very slow
+    (if (or (nth 3 ppss0) (nth 4 ppss0)) ;; at string or comment
+        (goto-char (1- (nth 8 ppss0)))))) ;; note: safe w.r.t. bobp
+
+(defun ciao-scan-token-backwards (closing)
+  ;; Scan backwards the previous lines until a stop point is
+  ;; found. Stop points can be:
+  ;;  - `paren' if unbalanced left parenthesis
+  ;;  - `bar' a bar (skip if balance is not 0)
+  ;;  - `neck' if neck (skip if balance is not 0)
+  ;;  - `arrow' if arrow (skip if balance is not 0)
+  ;;  - `base' if found some conservative point for base indentation
+  (let ((pbal 0) ;; unbalanced parenthesis
+        (prev nil)
+        (lparen nil))
+    (if (eq closing 'blockbase)
+        (setq prev 'period) ;; same as period but do not look at clausehead
+      (ciao-backward-nonblank) ;; Search backward nonblank, skipping comments
+      (if (bobp) (setq lparen 'base) ;; Nothing above, stop
+        ;; else detect prev
+        (setq prev
+              (cond ((eq (preceding-char) ?.) 'period) ;; assume new clause
+                    ((eq (preceding-char) ?,) 'comma) ;; assume new arg
+                    (t 'other)))))
+    (while (not lparen)
+      (cond
+       ((looking-at "[\]})]") (setq pbal (1+ pbal)))
+       ((looking-at "[\[{(]") (setq pbal (1- pbal)) (if (< pbal 0) (setq lparen 'paren)))
+       ((eq pbal 0)
+        (setq lparen
+              (if (eq prev 'period)
+                  nil ;; it was nil before
+                (cond ((looking-at "\\(:-\\|:=\\|-->\\)") 'neck)
+                      ((looking-at "\\(->\\)") 'arrow) ;; TODO: some trouble with '?', '=>'
+                      ((looking-at "[;|]") 'bar)
+                      (t nil)))))) ;; it was nil before
+      ;; stop if needed
+      (if (not lparen)
+          (setq lparen
+                (if (bobp) 'base0 ;; nothing else, stop
+                  (if (and (eq pbal 0) (eq (current-column) 0))
+                      ;; try early stop checks at column 0 (assume that the code above is indented)
+                      (cond
+                       ((and (eq prev 'period) ;; clause head?
+                             (not closing)
+                             (ciao--at-clause-head))
+                        'base0)
+                       ((eq prev 'comma) 'base0) ;; new arg?
+                       ((eq closing 'blockbase) 'base0) ;; stop early for blockbase
+                       (t nil))
+                    nil))))
+      ;; continue, move to previous non-word and non-blank symbol
+      (if (not lparen)
+          (progn
+            (skip-syntax-backward "w-" (1+ (line-beginning-position)))
+            (forward-char -1)
+            (ciao-skip-string-or-comments-backwards))))
+    (if (eq lparen 'base0)
+        (progn (skip-chars-forward " \t") 'base)
+      lparen)))
+
+(defun ciao--at-clause-head ()
+  (save-excursion 
+    (ciao-backward-nonblank)
+    (member (preceding-char) '(?. ?{))))
+
+(defun ciao-backward-nonblank ()
+  ;; Move just after the most recent nonblank in previous line(s),
+  ;; skipping comments
+  (beginning-of-line) ;; Move to beginning of line
+  (if (bobp)
+      t ;; Beggining of buffer, cannot move any further
+    ;; Skip blanks and comments
     (forward-line -1)
-    (skip-chars-forward " \t")))
+    (while (and (not (bobp))
+                (progn
+                  (skip-chars-forward " \t")
+                  (or (looking-at "\n")
+                      (looking-at "%")
+                      (looking-at "/\\*")
+                      (nth 4 (syntax-ppss))))) ;; we are in a comment
+      (forward-line -1))
+    (ciao-move-end-of-line)))
 
-;; JA 890601
-(defun ciao-indent-for-new-clause ()
-  "Find column for a new goal."
-  (skip-chars-forward " \t")
-  (ciao-search-for-prev-goal)
-  (let ((prevcol (current-column)))
-    (ciao-end-of-clause)
-    (forward-char -1)
-    (cond ((bobp) 0)
-	  ((looking-at "[.]") 0)
-	  ((zerop prevcol) ciao-first-indent-width)
-	  ((looking-at "[\[{(;]")
-	   (max ciao-first-indent-width (+ ciao-indent-width (ciao-column-of-um-lparen))))
-;	  ((looking-at "[,>]") (ciao-column-of-prev-term))
-	  ((looking-at "[>]")
-           (+ (ciao-column-of-prev-term) 2))
-	  ((looking-at "[,]") (ciao-column-of-prev-term))
-	  (t (ciao-column-of-um-lparen)))))
-
-;; JA 890601
-(defun ciao-column-of-prev-term ()
-  (beginning-of-line)
-  (skip-chars-forward " \t\[{(;")
-  (current-column))
-
-;; JA 890601
-(defun ciao-column-of-um-lparen ()
-  (let ((pbal 0))
-    (while (and (>= pbal 0)
-		(or (> (current-column) 0)
-		    (looking-at "[ \t]")))
-      (cond ((looking-at "[\]})]")
-	     (setq pbal (1+ pbal))
-	     (forward-char -1))
-	    ((looking-at "[\[{(]")
-	     (setq pbal (1- pbal))
-	     (forward-char -1))
-	    ((looking-at "'")
-	     (search-backward "'" nil t)
-	     (forward-char -1))
-	    ((looking-at "\"")
-	     (search-backward "\"" nil t)
-	     (forward-char -1))
-	    (t (forward-char -1)))))
-  (forward-char 1)  ;; Reset buffer pointer to prev column
-  (current-column))
-
-(defun ciao-end-of-clause ()
-  "Go to end of clause in this line."
+(defun ciao-move-end-of-line ()
+  "Last nonblank char in the line (which is not in a comment)."
   (beginning-of-line)
   (let* ((eolpos (save-excursion (end-of-line) (point))))
     (if (re-search-forward comment-start-skip eolpos 'move)
