@@ -121,12 +121,10 @@
 (defun ciao-xc-setup-tool-bar () 
   (interactive)
   (make-local-variable 'tool-bar-map) 
-  (if (boundp 'xemacs-logo)
-      (setq ciao-xemacs-tool-bar-tmp nil)
-    (setq tool-bar-map (make-sparse-keymap)))
+  (setq tool-bar-map (make-sparse-keymap))
   ;; General stuff (from standard tool bar); added only in FSF emacs.
   (ciao-general-toolbar tool-bar-map)
-  ;; Xc/CiaoPP-specific stuff - added in both FSF and xemacs
+  ;; Xc/CiaoPP-specific stuff
   ;; Stuff that is not in menus will not work.
   (ciao-tool-bar-local-item-from-menu 
    'ciao-analyze-buffer "icons/ciaoanalysis" tool-bar-map xc-mode-map)
@@ -153,8 +151,7 @@
    "icons/preferences" tool-bar-map xc-mode-map
    :help "Edit (customize) preferences for Ciao, CiaoPP, LPdoc")
   (ciao-tool-bar-local-item-from-menu 
-   'ciao-fontify-buffer "icons/ciaorehighlight" tool-bar-map xc-mode-map)
-  (ciao-xemacs-toolbar-postprocess ciao-xemacs-tool-bar-tmp))
+   'ciao-fontify-buffer "icons/ciaorehighlight" tool-bar-map xc-mode-map))
 
 ; ---------------------------------------------------------------------------
 

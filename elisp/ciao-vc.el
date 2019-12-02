@@ -681,7 +681,6 @@ which type and add code to the buffer to set it up."
 ;; Kludge to fix old version maintenance entries...
 ;;------------------------------------------------------------
 
-; Probably does not work in xemacs...
 ;;;###autoload
 (defun ciao-fix-old-version-maintenance ()
   (interactive)

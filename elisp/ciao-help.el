@@ -94,19 +94,6 @@
 (defvar ciao-info-dir (ciao-get-config :builddoc-dir)
   "Where the actual Ciao (LPdoc) info directory is.")
 
-;; (previous code)
-;; ;(if (boundp 'xemacs-logo)
-;;     (progn
-;;       (load-library "info")             ; Info creates Info-directory-list
-;;       ;; (require 'info)
-;;       (if (null Info-directory-list)    ; but it is not initialized there
-;;           (setq Info-default-directory-list ; Will be initialized from here
-;;                 (cons ciao-info-dir Info-default-directory-list))
-;;         (setq Info-directory-list (cons ciao-info-dir Info-directory-list))
-;;         )
-;;       ) 
-;; ;  )
-
 ;;;###autoload
 (defun ciao-update-info-dir ()
   "Update the info directory list to include Ciao manuals"
@@ -191,11 +178,7 @@ requirements as for finding help for the symbol."
 (defun ciao-goto-particular-manual (manual) 
   "Go to a particular manual."
   (ciao-locate-manual-in-info-dir manual)
-  (if (not (boundp 'xemacs-logo))
-      (Info-follow-nearest-node)
-    (backward-char 3)
-    (Info-follow-nearest-node (point))
-    ))
+  (Info-follow-nearest-node))
 
 ;;;###autoload
 (defun ciao-describe-mode () 

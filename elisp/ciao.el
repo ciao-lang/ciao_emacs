@@ -102,11 +102,6 @@
 ;; (require 'calendar)
 (require 'etags)
 
-;; We use FSF Emacs overlays. XEmacs uses extents instead, but comes
-;; with a package to emulate overlays.
-(if (boundp 'xemacs-logo)
-  (require 'overlay))
-
 ;; ---------------------------------------------------------------------------
 ;; The actual major and inferior modes
 ;; ---------------------------------------------------------------------------

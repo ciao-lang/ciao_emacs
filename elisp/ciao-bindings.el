@@ -35,22 +35,6 @@
 		       ; ciao-set-ciao-system-args,
 		       ; ciao-set-ciaopp-system,
 		       ; ciao-set-ciaopp-system-args
-(require 'ciao-aux) ; ciao-find-icon
-
-;; This is to avoid warnigns in fsf from xemacs vars and functions.
-(eval-when-compile
-  (if (boundp 'xemacs-logo)
-      ()
-    ;; fsf
-    (defconst default-toolbar nil)
-    (defconst right-toolbar-visible-p nil)
-    (defconst right-toolbar-width nil)
-    (defconst right-toolbar nil)
-    (defun toolbar-make-button-list (&rest foo))
-    (defun console-on-window-system-p (&rest foo))
-    (defun set-specifier (&rest foo))
-    (defun specifier-specs (&rest foo))
-    ))
 
 ;;------------------------------------------------------------
 ;; TODO: move somewhere else (ciao-common.el?)
@@ -72,15 +56,15 @@
   (message (concat "Ciao mode version: " ciao-mode-version)))
 
 (defconst ciao-mode-emacs-version 
-
   "This mode is currently being developed using @apl{GNU emacs}
-version 25.2. It should also (hopefully) work with all other
-24.XX. 23.XX, 22.XX, 21.XX, 20.XX, and later 19.XX versions. We
-also try our best to keep things working under @apl{xemacs} and
-under some emacs native ports for the mac."
+version 26.3. It should also (hopefully) work with 25.XX and
+older versions."
 
   "This is a comment describing for which emacs version this Ciao
    emacs mode has been developed.")
+
+;; all other 24.XX. 23.XX, 22.XX, 21.XX, 20.XX, and later 19.XX
+;; versions.
 
 ;;---------------------------------------------------------------------------
 ;; The interactive commands that will be accessed from keyboard
@@ -651,64 +635,37 @@ how things are set up in your @tt{.emacs} file).")
   (list "CiaoSys"
 ;;      "----"
 ;;      "TOP-LEVEL/COMPILER"
-     ["(Re)Start Ciao top level"                 run-ciao-toplevel t]
-     ["(Re)Load buffer into top level"           ciao-load-buffer  t]
-     ["Check assertions and (re)load into top level" 
-                                                 ciao-load-and-check-buffer t]
-     ["(Re)Load main and related modules"        ciao-load-from-main-module t]
-     ["Make executable from buffer as main"      ciao-make-exec t]
+     ["(Re)Start Ciao top level"                 run-ciao-toplevel
+      :help "Starts the Ciao interactive top level."]
+     ["(Re)Load buffer into top level"           ciao-load-buffer
+      :help "Load code in current open file (+ all dependent files) into Ciao."]
+     ["Check assertions and (re)load into top level" ciao-load-and-check-buffer
+      :help "Checks assertions in current open file and loads into Ciao."]
+     ["(Re)Load main and related modules"        ciao-load-from-main-module
+      :help "Loads file declared as main + all dependent files into Ciao."]
+     ["Make executable from buffer as main"      ciao-make-exec
+      :help "Compile an executable with code in current open file + all dependent files."]
      "----"
-     ["Go to (next) preproc/compiler error msg"  ciao-find-last-run-errors t]
-     ["Remove error (and dbg) marks in buffers"  ciao-unmark-last-run-errors t]
+     ["Go to (next) preproc/compiler error msg"  ciao-find-last-run-errors
+      :help "Locate (next) error reported in the last run or the compiler, preprocessor, or documenter."]
+     ["Remove error (and dbg) marks in buffers"  ciao-unmark-last-run-errors
+      :help "Clear any error highlighting marks left in different buffers."]
      "----"
-     ["(Un)Set main module"                      ciao-set-main-filename t]
+     ["(Un)Set main module"                      ciao-set-main-filename
+      :help "Define or undefine the main module of the current project (from which compilation will start)."]
      "----"
-     ["Check buffer syntax (incl. assertions)"   ciao-check-buffer-syntax t]
+     ["Check buffer syntax (incl. assertions)"   ciao-check-buffer-syntax
+      :help "Just check file syntax, including assertions, without loading."]
      "----"
-     ["Update syntax-based coloring"             ciao-fontify-buffer t]
-     ["Format source code"                       ciao-format-file t]
-     ["Insert script header"                     ciao-insert-script-header t]
+     ["Update syntax-based coloring"             ciao-fontify-buffer
+      :help "Refresh the syntax-based coloring (useful for complex code or if syntax-based coloring gets out of sync)."]
+     ["Format source code"                       ciao-format-file
+      :help "(Re)format the curreny source using the ciaofmt tool."]
+     ["Insert script header"                     ciao-insert-script-header
+      :help "Insert appropriate header so that this file is treated as a script (so that it can be run directly without compilation)."]
      "----"
-     ["Make object file (.po) from buffer"       ciao-make-po t]
-;;
-;; These versions with nice comments do not work yet in xemacs --need to port.
-;; 
-;;      ["(Re)Start Ciao top level"                 run-ciao-toplevel
-;;       :help "Starts the Ciao interactive top level."]
-;;      ["(Re)Load into top level"                  ciao-load-buffer
-;;       :help "Load code in current open file (+ all dependent files) into Ciao."]
-;;      ["Check assertions and (re)load into top level" ciao-load-and-check-buffer
-;;       :help "Checks assertions in current open file and loads into Ciao."]
-;;      ["(Re)Load main and related modules"        ciao-load-from-main-module
-;;       :help "Loads file declared as main + all dependent files into Ciao."]
-;;      ["Make executable from buffer as main"      ciao-make-exec
-;;       :help "Compile an executable with code in current open file + all dependent files."]
-;;      "----"
-;;      ["Go to (next) preproc/compiler/lpdoc error msg"  ciao-find-last-run-errors
-;;       :help "Locate (next) error reported in the last run or the compiler, preprocessor, or documenter."]
-;;      ["Remove error (and dbg) marks in buffers"  ciao-unmark-last-run-errors
-;;       :help "Clear any error highlighting marks left in different buffers."]
-;;      "----"
-;;      (list "Query and main file"
-;; 	   ["(Un)Set main module"                ciao-set-main-filename
-;;       :help "Define or undefine the main module of the current project (from which compilation will start)."]
-;; 	   ["Set default query"                  ciao-set-query
-;;             :help "Define a default query which be called automatically on load."]
-;; 	   ["Call default query"                 ciao-load-query
-;;             :help "Call the default query defined above."]            
-;; 	   ["Clear default query"                ciao-clear-query
-;;             :help "Clear the default query so that it is not called on load."]
-;; 	   )
-;;      ["Check buffer syntax (incl. assertions)"   ciao-check-buffer-syntax
-;;       :help "Just check file syntax, including assertions, without loading."]
-;;      "----"
-;;      ["Update syntax-based coloring"        ciao-fontify-buffer
-;;       :help "Refresh the syntax-based coloring (useful for complex code or if syntax-based coloring gets out of sync)."]
-;;      ["Insert script header"                     ciao-insert-script-header
-;;       :help "Insert appropriate header so that this file is treated as a script (so that it can be run directly without compilation)."]
-;;      "----"
-;;      ["Make object file (.po) from buffer"       ciao-make-po
-;;       :help "Force compilation of a relocatable object file for this file (normally done automatically by the compiler when needed). "]
+     ["Make object file (.po) from buffer"       ciao-make-po
+      :help "Force compilation of a relocatable object file for this file (normally done automatically by the compiler when needed). "]
 ;; 
 ;; Deprecated and not recommended:
 ;;      "----"
@@ -874,7 +831,7 @@ how things are set up in your @tt{.emacs} file).")
 (defun ciao-setup-menu-bar ()
   "Define the menus for the Ciao major mode"
 
-  ;; This weird ordering results in same layout in emacs and xemacs...
+  ;; TODO: weird due to emacs and xemacs compatibility; needed?
   (easy-menu-define ciao-menu-help ciao-mode-map 
     "Ciao Mode Help Menus" ciao-mode-menus-help)
   (easy-menu-define ciao-menu-customize ciao-mode-map 
@@ -1034,85 +991,31 @@ how things are set up in your @tt{.emacs} file).")
 ;; 	 "preferences" tool-bar-map ciao-mode-map
 ;; 	 :help "Edit (customize) preferences for Ciao")
 ;; 	)))
-;; 
-;; 
-;; - This part is for setting tool bars in both FSF and xemacs.
-;; Menu bar accummulator for xemacs version
-(defvar ciao-xemacs-tool-bar-tmp nil)
 
 ;; Portable tool-bar-add-item-from-menu function, adds to accumulators.
 (defun ciao-tool-bar-local-item-from-menu 
        (def icon to-map &optional from-map &rest props)
-  (if (boundp 'xemacs-logo)
-      ;; xemacs
-      ;; *** Still need to fish out help strings from menus and pass
-      ;;     them to tooltip below
-      (progn 
-	(setq ciao-xemacs-tool-bar-tmp
-	      (cons 
-	       `[,(toolbar-make-button-list ;; icon
-		   (ciao-find-icon (concat icon "-bg.xpm")))
-		 ,def ;; the actual callback
-		 t  ;; enabled
-		 "" ;; tooltip
-		 ] 
-	       ciao-xemacs-tool-bar-tmp))
-	ciao-xemacs-tool-bar-tmp)
-    ;; FSF emacs
-    (if (> emacs-major-version 21)
-	(tool-bar-local-item-from-menu def icon to-map from-map props)
-      (unless from-map
-	(setq from-map global-map))
-      (tool-bar-add-item-from-menu def icon from-map props))
-    ))
-
-;; Special case for xemacs
-(defun ciao-tool-bar-local-item-from-menu-xemacs
-  (def icon)
-  (progn
-    (set-specifier 
-     default-toolbar 
-     (cons 
-      (current-buffer) 
-      (append
-       (specifier-specs default-toolbar 'global)
-       ;; '([:style 2d :size 30])
-       '(nil) ;; separator (flush right)
-       `([,(toolbar-make-button-list ;; icon
-	    (ciao-find-icon (concat icon "-bg.xpm")))
-	  ,def ;; the actual callback
-	  t  ;; enabled
-	  "" ;; tooltip
-	  ])
-       )))))
+  (if (> emacs-major-version 21)
+      (tool-bar-local-item-from-menu def icon to-map from-map props)
+    (unless from-map
+      (setq from-map global-map))
+    (tool-bar-add-item-from-menu def icon from-map props))
+  )
 
 (defun ciao-setup-tool-bar () 
   (if (and (not ciao-inhibit-toolbar) ;; ????
-	   (or 
-	    ;; xemacs case 
-	    (and (boundp 'xemacs-logo)
-		 (featurep 'toolbar)
-		 (console-on-window-system-p))
-	    ;; FSF emacs case 
-	    (and (fboundp 'tool-bar-mode)
-		 (display-graphic-p))
-	   ))
+           (fboundp 'tool-bar-mode)
+           (display-graphic-p))
       (ciao-do-setup-tool-bar)))
 
 (defun ciao-do-setup-tool-bar () 
   (make-local-variable 'tool-bar-map) 
-  (if (boundp 'xemacs-logo)
-      (setq ciao-xemacs-tool-bar-tmp nil)
-    (setq tool-bar-map (make-sparse-keymap)))
-  ;; General stuff (from standard tool bar); added only in FSF emacs.
+  (setq tool-bar-map (make-sparse-keymap))
+  ;; General stuff (from standard tool bar)
   (ciao-general-toolbar tool-bar-map)
-  ;; Ciao-specific stuff - added in both FSF and xemacs
-  ;; Ciao logo is a special case
-  (if (boundp 'xemacs-logo)
-      (ciao-tool-bar-local-item-from-menu-xemacs
-       'run-ciao-toplevel "icons/ciao")
-    (ciao-tool-bar-local-item-from-menu 
-     'run-ciao-toplevel "icons/ciao" tool-bar-map ciao-mode-map))
+  ;; Ciao-specific stuff
+  (ciao-tool-bar-local-item-from-menu 
+   'run-ciao-toplevel "icons/ciao" tool-bar-map ciao-mode-map)
   (ciao-tool-bar-local-item-from-menu  
    'ciao-fontify-buffer "icons/ciaorehighlight"
    tool-bar-map ciao-mode-map)
@@ -1175,100 +1078,68 @@ how things are set up in your @tt{.emacs} file).")
   (ciao-tool-bar-local-item-from-menu 
    'ciao-customize-all
    "icons/preferences" tool-bar-map ciao-mode-map
-   :help "Edit (customize) preferences for Ciao")
-  (ciao-xemacs-toolbar-postprocess ciao-xemacs-tool-bar-tmp))
+   :help "Edit (customize) preferences for Ciao"))
 
 (defun ciao-general-toolbar (tool-bar-map)
-  (if (not (boundp 'xemacs-logo))
-      (progn
-	;; *** Comment does not show up...
-	(ciao-tool-bar-local-item-from-menu 'find-file "new" ;; "icons/ciaopl"
-              tool-bar-map  global-map :help "Open or create a (Ciao) file")
-	(ciao-tool-bar-local-item-from-menu 
-	 'dired (if (> emacs-major-version 21) "diropen" "open") 
-	 tool-bar-map)
-	(ciao-tool-bar-local-item-from-menu 'kill-this-buffer "close"
-                                            tool-bar-map) 
-	(ciao-tool-bar-local-item-from-menu 'save-buffer "save"
-         tool-bar-map global-map  :visible '(or buffer-file-name
-						 (not (eq 'special
-							  (get major-mode
-							       'mode-class)))))
-	(ciao-tool-bar-local-item-from-menu 'write-file "saveas" 
-	 tool-bar-map global-map :visible '(or buffer-file-name
-						(not (eq 'special
-							 (get major-mode
-							      'mode-class)))))
-	(ciao-tool-bar-local-item-from-menu 'undo "undo" tool-bar-map  
-         global-map :visible '(not (eq 'special (get major-mode 'mode-class))))
-	(ciao-tool-bar-local-item-from-menu 
-	 (lookup-key menu-bar-edit-menu [cut]) ;; 'kill-region 
-	 "cut" tool-bar-map global-map 
-	 :visible '(not (eq 'special (get major-mode 'mode-class))))
-	(ciao-tool-bar-local-item-from-menu 
-	 (lookup-key menu-bar-edit-menu [copy]) ;; 'menu-bar-kill-ring-save
-	 "copy" tool-bar-map)
-	(ciao-tool-bar-local-item-from-menu 
-	 (lookup-key menu-bar-edit-menu [paste]) ;; 'yank 
-	 "paste" tool-bar-map global-map 
-	 :visible '(not (eq 'special (get major-mode 'mode-class))))
-	(ciao-tool-bar-local-item-from-menu 
-	 'nonincremental-search-forward "search" tool-bar-map)
-	(ciao-tool-bar-local-item-from-menu 'print-buffer "print" tool-bar-map)
-	)))
-
-(defun ciao-xemacs-toolbar-postprocess (ciao-xemacs-tool-bar-tmp)
-  (if (boundp 'xemacs-logo)
-      (progn
-;; 	(set-default-toolbar-position 'left)
-	(set-specifier right-toolbar-visible-p t)
-	;; (set-specifier right-toolbar-width 60)
-	(set-specifier right-toolbar-width 35)
-	(set-specifier 
-	 ;; default-toolbar 
-	 ;; left-toolbar
-	 right-toolbar
-	 (cons 
-	  (current-buffer) 
-	  (append
-	   ;; For adding the default stuff
-	   ;; (specifier-specs default-toolbar 'global)
-	   ;; Separator
-	   ;; '([:style 3d :size 30])
-	   (reverse ciao-xemacs-tool-bar-tmp)
-	   ))))))
+  ;; *** Comment does not show up...
+  (ciao-tool-bar-local-item-from-menu
+   'find-file "new" ;; "icons/ciaopl"
+   tool-bar-map  global-map :help "Open or create a (Ciao) file")
+  (ciao-tool-bar-local-item-from-menu 
+   'dired (if (> emacs-major-version 21) "diropen" "open") 
+   tool-bar-map)
+  (ciao-tool-bar-local-item-from-menu 
+   'kill-this-buffer "close"
+   tool-bar-map) 
+  (ciao-tool-bar-local-item-from-menu
+   'save-buffer "save"
+   tool-bar-map global-map  :visible '(or buffer-file-name
+                                          (not (eq 'special
+                                                   (get major-mode
+                                                        'mode-class)))))
+  (ciao-tool-bar-local-item-from-menu
+   'write-file "saveas" 
+   tool-bar-map global-map :visible '(or buffer-file-name
+                                         (not (eq 'special
+                                                  (get major-mode
+                                                       'mode-class)))))
+  (ciao-tool-bar-local-item-from-menu
+   'undo "undo" tool-bar-map  
+   global-map :visible '(not (eq 'special (get major-mode 'mode-class))))
+  (ciao-tool-bar-local-item-from-menu 
+   (lookup-key menu-bar-edit-menu [cut]) ;; 'kill-region 
+   "cut" tool-bar-map global-map 
+   :visible '(not (eq 'special (get major-mode 'mode-class))))
+  (ciao-tool-bar-local-item-from-menu 
+   (lookup-key menu-bar-edit-menu [copy]) ;; 'menu-bar-kill-ring-save
+   "copy" tool-bar-map)
+  (ciao-tool-bar-local-item-from-menu 
+   (lookup-key menu-bar-edit-menu [paste]) ;; 'yank 
+   "paste" tool-bar-map global-map 
+   :visible '(not (eq 'special (get major-mode 'mode-class))))
+  (ciao-tool-bar-local-item-from-menu 
+   'nonincremental-search-forward "search" tool-bar-map)
+  (ciao-tool-bar-local-item-from-menu
+   'print-buffer "print" tool-bar-map))
 
 (defun ciao-setup-inferior-tool-bar () 
   (if (and (not ciao-inhibit-toolbar) ;; ????
-	   (or 
-	    ;; xemacs case 
-	    (and (boundp 'xemacs-logo)
-		 (featurep 'toolbar)
-		 (console-on-window-system-p))
-	    ;; FSF emacs case 
-	    (and (fboundp 'tool-bar-mode)
-		 (display-graphic-p))
-	   ))
+           (fboundp 'tool-bar-mode)
+           (display-graphic-p))
       (ciao-do-setup-inferior-tool-bar)))
 
 (defun ciao-do-setup-inferior-tool-bar () 
   (make-local-variable 'tool-bar-map)
-  (if (boundp 'xemacs-logo)
-      (setq ciao-xemacs-tool-bar-tmp nil)
-    (setq tool-bar-map (make-sparse-keymap)))
+  (setq tool-bar-map (make-sparse-keymap))
   ;; General stuff (from standard tool bar); added only in FSF emacs.
   (ciao-general-toolbar tool-bar-map)
-  ;; Ciao-specific stuff - added in both FSF and xemacs
-  ;; Ciao logo is a special case
-  (if (boundp 'xemacs-logo)
-      (ciao-tool-bar-local-item-from-menu-xemacs
-       'run-ciao-toplevel "icons/ciao")
-    (ciao-tool-bar-local-item-from-menu
-     'run-ciao-toplevel "icons/ciao" tool-bar-map ciao-inferior-mode-map))
+  ;; Ciao-specific stuff
+  (ciao-tool-bar-local-item-from-menu
+   'run-ciao-toplevel "icons/ciao" tool-bar-map ciao-inferior-mode-map)
   (ciao-tool-bar-local-item-from-menu  
    'ciao-fontify-buffer "icons/ciaorehighlight" 
    tool-bar-map ciao-inferior-mode-map)
-  (if (or (> emacs-major-version 21) (boundp 'xemacs-logo))
+  (if (> emacs-major-version 21)
       (ciao-tool-bar-local-item-from-menu
        'comint-interrupt-subjob  
        "icons/stop" tool-bar-map comint-mode-map
@@ -1288,12 +1159,12 @@ how things are set up in your @tt{.emacs} file).")
   (ciao-tool-bar-local-item-from-menu  
    'ciao-clear-query "icons/ciaoclearquery" 
    tool-bar-map ciao-inferior-mode-map) 
-  (if (or (> emacs-major-version 21) (boundp 'xemacs-logo))
+  (if (> emacs-major-version 21)
       (ciao-tool-bar-local-item-from-menu
        'comint-previous-input
        "icons/left-arrow" tool-bar-map comint-mode-map 
        :help "Insert previous inputs at prompt"))
-  (if (or (> emacs-major-version 21) (boundp 'xemacs-logo))
+  (if (> emacs-major-version 21)
       (ciao-tool-bar-local-item-from-menu
        'comint-next-input
        "icons/right-arrow" tool-bar-map comint-mode-map
@@ -1311,8 +1182,7 @@ how things are set up in your @tt{.emacs} file).")
   (ciao-tool-bar-local-item-from-menu 
    'ciao-customize-all
    "icons/preferences" tool-bar-map ciao-inferior-mode-map
-   :help "Edit (customize) preferences for Ciao")
-  (ciao-xemacs-toolbar-postprocess ciao-xemacs-tool-bar-tmp))
+   :help "Edit (customize) preferences for Ciao"))
 
 ;;===========================================================================
 ;; Functions to set all bindings 
@@ -1320,17 +1190,13 @@ how things are set up in your @tt{.emacs} file).")
 
 (defun ciao-emacs-can-do-tool-bar-p ()
   "Tool bars are supported."
-  (or (fboundp 'tool-bar-mode) (boundp 'xemacs-logo)))
+  (fboundp 'tool-bar-mode))
 
 ;(public)
 (defun ciao-setup-bindings ()
   "Setup the local mode variables for setting the menu bar and
 the tool bar for the major Ciao mode."
   ;; Keybindings
-  ;; MR added to avoid errors in xemacs
-  (if (boundp 'xemacs-logo)
-      (define-key ciao-mode-map 'backspace 'delete-backward-char))
-  ;;
   (use-local-map ciao-mode-map)
   ;; TODO: correct? why? (it was previously added to ciao-mode-hook)
   (define-key ciao-mode-map "\C-x\C-s" 'ciao-save-buffer)

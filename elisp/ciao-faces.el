@@ -23,10 +23,6 @@
 ;;----------------------------------------------------------------------------
 ;; Font-lock support - (customizable) face definitions
 ;;----------------------------------------------------------------------------
-;;  Used to have conceptual faces and then actual faces, but it was a
-;;  nightmare to keep compatible between emacs and xemacs. For now,
-;;  'key' definitions (the conceptual ones) made actual faces until we
-;;  work out a portable fix.
 
 ;; Reminder of tty colors:
 ;; black, red, green, yellow, blue, magenta, cyan, white
@@ -130,7 +126,7 @@
   "Ciao faces for miscellanous language features."
   :tag "Ciao Misc Faces" :group 'ciao-highlighting-faces)
 
-;; resolve an emacs / xemacs incompatibility
+;; TODO: why? ;; resolve an emacs / xemacs incompatibility
 (defvar ciao-face-script-header 'ciao-face-script-header)
 (defface ciao-face-script-header ;; ciao-face-forestgreen
   '((((type tty) (class color)) (:foreground "green" :weight light))
@@ -692,57 +688,21 @@ strings, commnds, etc.)."
    the code area that an error message refers to)."
   :group 'ciao-highlighting-faces-messages)
 
-;; ;; Just for testing -- but does not work after startup :-(
-;; (defun ciao-dark-background ()
-;;   (interactive)
-;;   "Just for testing how Ciao faces show with dark background. Not
-;; meant to be used normally."
-;;   (if (boundp 'xemacs-logo)
-;;       (progn
-;; 	(set-face-background 'default "Black")
-;; 	(set-face-foreground 'default "White"))
-;;     (set-background-color "Black")
-;;     (set-foreground-color "White")))
-;; 
-;; (defun ciao-light-background ()
-;;   (interactive)
-;;   "Just for testing how Ciao faces show with light background. Not
-;; meant to be used normally."
-;;   (if (boundp 'xemacs-logo)
-;;       (progn
-;; 	(set-face-background 'default "White")
-;; 	(set-face-foreground 'default "Black"))
-;;     (set-background-color "White")
-;;     (set-foreground-color "Black")))
-
-;; The definitions of the title faces were originally taken from
-;; font-latex.el (Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002,
-;; 2003, 2004, 2005, 2006, 2007, 2008 Free Software Foundation.)  and
-;; adapted to the needs to ciao.el --JFMC
+;; Definitions of title faces adapted from font-latex.el --JFMC
 
 (defconst ciao-face-sectioning-max 5
   "Highest number for ciao-face-sectioning-N-face")
 (defvar ciao-face-sectioning-5-face 'ciao-face-sectioning-5-face)
 (defface ciao-face-sectioning-5-face
-  (if (featurep 'xemacs)
-      '((((type tty pc) (class color) (background light))
-	 (:foreground "blue4" :bold t))
-	(((type tty pc) (class color) (background dark))
-	 (:foreground "yellow" :bold t))
-	(((class color) (background light))
-	 (:bold t :foreground "blue4" :family "helvetica"))
-	(((class color) (background dark))
-	 (:bold t :foreground "yellow" :family "helvetica"))
-	(t (:bold t :family "helvetica")))
-    '((((type tty pc) (class color) (background light))
-       (:foreground "blue4" :weight bold))
-      (((type tty pc) (class color) (background dark))
-       (:foreground "yellow" :weight bold))
-      (((class color) (background light))
-       (:weight bold :inherit variable-pitch :foreground "NavyBlue"))
-      (((class color) (background dark))
-       (:weight bold :inherit variable-pitch :foreground "LightGoldenrod1")) ;; CornflowerBlue
-      (t (:weight bold :inherit variable-pitch))))
+  '((((type tty pc) (class color) (background light))
+     (:foreground "blue4" :weight bold))
+    (((type tty pc) (class color) (background dark))
+     (:foreground "yellow" :weight bold))
+    (((class color) (background light))
+     (:weight bold :inherit variable-pitch :foreground "NavyBlue"))
+    (((class color) (background dark))
+     (:weight bold :inherit variable-pitch :foreground "LightGoldenrod1")) ;; CornflowerBlue
+    (t (:weight bold :inherit variable-pitch)))
   "Face for sectioning commands at level 5."
   :group 'ciao-highlighting-faces-lpdoc)
 
@@ -762,7 +722,6 @@ this variable directly does not take effect unless you call
 Switching from `color' to a number or vice versa does not take
 effect unless you call \\[font-lock-fontify-buffer] or restart
 Emacs."
-  ;; Possibly add some words about XEmacs here. :-(
   :type '(choice (number :tag "Scale factor")
                  (const color))
   :initialize 'custom-initialize-default
@@ -781,23 +740,10 @@ Emacs."
   (unless max
     (setq max ciao-face-sectioning-max))
   (dotimes (num max)
-    (let* (;; reverse for XEmacs:
-	   (num (- max (1+ num)))
+    (let* ((num (- max (1+ num)))
 	   (face-name (intern (format "ciao-face-sectioning-%s-face" num))))
       (unless (get face-name 'saved-face) ; Do not touch customized faces.
-	(if (featurep 'xemacs)
-	    (let ((size
-		   ;; Multiply with .9 because `face-height' returns a value
-		   ;; slightly larger than the actual font size.
-		   ;; `make-face-size' takes numeric points according to Aidan
-		   ;; Kehoe in <16989.15536.613916.678965@parhasard.net> (not
-		   ;; documented).
-		   (round (* 0.9
-			     (face-height 'default)
-			     (expt height-scale (- max 1 num))))))
-	      ;; (message "%s - %s" face-name size)
-	      (make-face-size face-name size))
-	  (set-face-attribute face-name nil :height  height-scale))))))
+        (set-face-attribute face-name nil :height  height-scale)))))
 
 (defun ciao-face-make-sectioning-faces (max &optional height-scale)
   "Build the faces used to fontify sectioning commands."
@@ -807,31 +753,18 @@ Emacs."
 			   ciao-face-fontify-sectioning
 			 1.1)))
   (dotimes (num max)
-    (let* (;; reverse for XEmacs:
-	   (num (- max (1+ num)))
+    (let* ((num (- max (1+ num)))
 	   (face-name (intern (format "ciao-face-sectioning-%s-face" num)))
-	   (f-inherit (intern (format "ciao-face-sectioning-%s-face" (1+ num))))
-	   (size (when (featurep 'xemacs)
-		   (round (* 0.9 (face-height 'default)
-			     (expt height-scale (- max 1 num)))))))
+	   (f-inherit (intern (format "ciao-face-sectioning-%s-face" (1+ num)))))
       (eval
        `(defface ,face-name
-	  (if (featurep 'xemacs)
-	      '((t (:size ,(format "%spt" size))))
-	    '((t (:height ,height-scale :inherit ,f-inherit))))
+          '((t (:height ,height-scale :inherit ,f-inherit)))
 	  (format "Face for sectioning commands at level %s.
 
 Probably you don't want to customize this face directly.  Better
 change the base face `ciao-face-sectioning-5-face' or customize the
 variable `ciao-face-fontify-sectioning'." num)
-	  :group 'ciao-faces))
-      (when (and (featurep 'xemacs)
-		 ;; Do not touch customized  faces.
-		 (not (get face-name 'saved-face)))
-	(set-face-parent face-name f-inherit)
-	;; Explicitely set the size again to code around the bug that
-	;; `set-face-parent' overwrites the original face size.
-	(make-face-size face-name size)))))
+	  :group 'ciao-faces)))))
 
 (ciao-face-make-sectioning-faces ciao-face-sectioning-max)
 

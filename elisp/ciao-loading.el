@@ -143,9 +143,6 @@ execution on the toplevel."
 	      "use_package(objects).\n")
 	    "use_class('"
 	    )))
-;; 	     (if (boundp 'xemacs-logo)
-;; 		 (replace-in-string filename "\\\\" "\\\\" t)
-;; 	       (replace-regexp-in-string "\\\\" "\\\\" filename t t))
        (ciao-replace-regexp-in-string "\\\\" "\\\\" filename t t)
        "')."))))
 

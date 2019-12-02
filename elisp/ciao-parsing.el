@@ -28,7 +28,7 @@
 ;; cursor position.
 ;; ==========================================================================
 
-(require 'ciao-aux) ; ciao-what-line, ciao-replace-regexp-in-string,
+(require 'ciao-aux) ; ciao-replace-regexp-in-string,
 		    ; fix-cygwin-drive-letter,
 		    ; match-string-no-properties
 (require 'ciao-syntax) ; ciao-os-shell-prompt-pattern,
@@ -123,7 +123,7 @@ class, or normal module)."
     ;; Find the beginning of the predicate boundary
     (save-excursion
       (search-backward-regexp "^[^ \t]" 1 t)
-      (setq start (ciao-what-line)))
+      (setq start (line-number-at-pos (point))))
     ;; Find the end of the predicate boundary
     (save-excursion 
       ;; Search line to line to establish limits
@@ -148,7 +148,7 @@ class, or normal module)."
 	  (end-of-line)
 	  (setq bound (point))
 	  (goto-char begin)))	  
-      (cons start (ciao-what-line)))))
+      (cons start (line-number-at-pos (point))))))
 
 ;; -------------------------------------------------------------
 ;; Locating errors in inferior processes (just parsing)
@@ -343,7 +343,7 @@ class, or normal module)."
 	    )
 	  ;; Beginning of ERROR/WARNING/... line
 	  (move-to-column 0)
-	  (setq infline (ciao-what-line))
+	  (setq infline (line-number-at-pos (point)))
 	  
 	  ;; Try to find opening "{" by inserting a "}"
 	  (insert "}")

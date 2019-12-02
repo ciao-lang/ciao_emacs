@@ -21,17 +21,6 @@
 
 (require 'ciao-faces)
 
-;; This is to avoid warnigns in fsf from xemacs vars and functions.
-(eval-when-compile
-  (if (boundp 'xemacs-logo)
-      ()
-    ;; fsf
-    (defun make-glyph (&rest foo))
-    (defun extent-at (&rest foo))
-    (defun make-extent (&rest foo))
-    (defun set-extent-property (&rest foo))
-    ))
-
 ;;===========================================================================
 ;; Auxiliary
 ;;===========================================================================
@@ -41,15 +30,6 @@
 ;;---------------------------------------------------------------------------
 
 (require 'ciao-config) ; ciao-get-config
-
-;; TODO: useful for finding in several locations?
-; look at installation or source directories
-(defun ciao-find-icon (icon)
-  "Icon with absolute path (for xemacs)"
-  (let (bundledir-ciao-emacs icon-ins icon-src)
-    (setq bundledir-ciao-emacs (ciao-get-config :bundledir-ciao-emacs))
-    (setq icon-src (expand-file-name icon bundledir-ciao-emacs))
-    (cond ((file-exists-p icon-src) icon-src))))
 
 ;;---------------------------------------------------------------------------
 ;; Ciao's own windows abstraction
@@ -125,14 +105,6 @@ OVER."
 ;;------------------------------------------------------------
 ;; Miscellaneous
 ;;------------------------------------------------------------
-
-;; TODO: use native what-line if possible? (probably that is more efficient)
-(defun ciao-what-line ()
-  "Return the line number. This function is a fix for the fact that in
-xemacs the function what-line does not behave as in emacs."
-  (save-excursion
-    (beginning-of-line)
-    (1+ (count-lines 1 (point)))))
 	 
 ;; Local version of replace-regexp-in-string, since it is not 
 ;; present in older versions of emacsen
@@ -195,57 +167,24 @@ and replace a sub-expression, e.g.
       (apply #'concat (nreverse matches)))))
 
 (defun ciao-insert-image (type image default)
-  "Portable image insertion (emacs, xemacs). Third argument is text to
+  "Portable image insertion. Third argument is text to
 be used if images not supported (e.g., in text mode)"
-  (let
-      (imagefile imagefile-fullpath first-char)
+  (let (imagefile first-char)
     (setq first-char (substring image 0 1))
     (if (or (string= first-char "/")              ;; /foo 
 	    (string= first-char ".")              ;; ./foo
 	    (string= first-char "\\")             ;; \foo
 	    (string= (substring image 1 2) ":"))  ;; C:foo
 	;; Path given: keep in all cases
-	(progn
-	  (setq imagefile image)
-	  (setq imagefile-fullpath image))
+        (setq imagefile image)
       ;; Probably no path: look under icons for emacs, 
-      (setq imagefile (concat "icons/" image))
-      ;; put full lib path for xemacs
-      (setq imagefile-fullpath 
-	    (ciao-find-icon (concat "icons/" image))))
+      (setq imagefile (concat "icons/" image)))
     (cond 
      ((and (fboundp 'tool-bar-mode) window-system);; emacs, graphical
       (insert-image 
        (find-image (list (list :type type :file imagefile )))))
-     ((and (boundp 'xemacs-logo) window-system);; xemacs, graphical
-      (ciao-xemacs-insert-glyph ;; xemacs needs full path
-       (make-glyph (vector type :file imagefile-fullpath ))))
      (t ;; text mode
       (insert default)))))
-
-(defun ciao-xemacs-insert-glyph (gl)
-  "Insert a glyph at the left edge of point."
-  (let ((prop 'ciaoimage)        ;; ciaoimage is an arbitrary name
-	extent)
-    ;; First, check to see if one of our extents already exists at
-    ;; point.  For ease-of-programming, we are creating and using our
-    ;; own extents (multiple extents are allowed to exist/overlap at the
-    ;; same point, and it's quite possible for other applications to
-    ;; embed extents in the current buffer without your knowledge).
-    ;; Basically, if an extent, with the property stored in "prop",
-    ;; exists at point, we assume that it is one of ours, and we re-use
-    ;; it (this is why it is important for the property stored in "prop"
-    ;; to be unique, and only used by us).
-    (if (not (setq extent (extent-at (point) (current-buffer) prop)))
-	(progn
-	  ;; If an extent does not already exist, create a zero-length
-	  ;; extent, and give it our special property.
-	  (setq extent (make-extent (point) (point) (current-buffer)))
-	  (set-extent-property extent prop t)
-	  ))
-    ;; Display the glyph by storing it as the extent's "begin-glyph".
-    (set-extent-property extent 'begin-glyph gl)
-    ))
 
 ;; MH cygdrive Fixed for newer version of cygwin
 ;; MH //c/ and also /cygdrive/
@@ -256,13 +195,6 @@ be used if images not supported (e.g., in text mode)"
 	(concat (substring filename 10 11) ":" (substring filename 11))
       filename
     )))
-
-;; Define match-string-no-properties, if not defined (i.e., in xemacs)
-(or (fboundp 'match-string-no-properties)
-    (defun match-string-no-properties (number)
-      "Return string of text matched by last search."
-      (buffer-substring-no-properties (match-beginning number)
-                                      (match-end number))))
 
 ;;------------------------------------------------------------
 ;; Region handling

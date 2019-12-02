@@ -23,7 +23,7 @@
 (require 'ciao-faces)
 (require 'ciao-parsing) ; ciao-module-name,
 			; ciao-debug-predicate-boundaries
-(require 'ciao-aux) ; ciao-color, ciao-uncolor, ciao-what-line,
+(require 'ciao-aux) ; ciao-color, ciao-uncolor,
 		    ; fix-cygwin-drive-letter,
 		    ; match-string-no-properties
 (require 'ciao-process) ; ciao-proc-enqueue-nw,
@@ -129,11 +129,7 @@ traditional debug."
 	   (setq string "Module selected for source debug. ")
 	   (setq default "N")))
     (setq string (concat string "Select debug mode (N/S/D)? "))
-    (setq option
- 	  (read-string string default nil))
-    (if (string= option "") (setq option default))
-    ;; Was simply:  (but xemacs does not support the last argument)
-    ;;	  (read-string string default nil default))
+    (setq option (read-string string default nil default))
     ;; Send the appropiate command to Ciao
     (cond ((and (or (string= actually "N")
 		    (string= actually "S"))
@@ -311,8 +307,8 @@ symbol of the literal}. Breakpoints are only useful when using source-level
 debugging."
   (interactive)
   (ciao-debug-maybe-escape)
-  (ciao-color (ciao-what-line)
-	      (ciao-what-line)
+  (ciao-color (line-number-at-pos (point))
+	      (line-number-at-pos (point))
 	      ciao-face-debug-breakpoint
 	      'ciao-break)
   (ciao-send-command 'ciaosh-cproc
@@ -325,8 +321,8 @@ at any time (while debugging or not). The cursor must be @em{on the predicate
 symbol of the literal}."
   (interactive)
   (ciao-debug-maybe-escape)
-  (ciao-uncolor (ciao-what-line)
-		(ciao-what-line)
+  (ciao-uncolor (line-number-at-pos (point))
+		(line-number-at-pos (point))
 		'ciao-break)
   (ciao-send-command 'ciaosh-cproc
 		     (concat "nobreakpt(" (ciao-debug-breakparams (point)) ").")
@@ -358,7 +354,7 @@ or not)."
 			 (int-to-string begin-line) "," 
 			 (int-to-string end-line) "," 
 			 (int-to-string number) "," 
-			 (int-to-string (ciao-what-line)))))
+			 (int-to-string (line-number-at-pos (point))))))
 
 (defun ciao-debug-uncolor-all-breakpt ()
   "Remove breakpoint coloring in all Ciao files."
@@ -418,8 +414,8 @@ in the source files and the Ciao toplevel are synchronized."
                 (goto-char (point-min)) (forward-line (1- l0))
                 ;; To change when considering comments in clause
                 (search-forward pred nil t numpred)
-                (ciao-color (ciao-what-line)
-                            (ciao-what-line)
+                (ciao-color (line-number-at-pos (point))
+                            (line-number-at-pos (point))
                             ciao-face-debug-breakpoint
                             'ciao-break))))))
     (switch-to-buffer buffer)))
@@ -481,7 +477,7 @@ in the source files and the Ciao toplevel are synchronized."
  	      (while (and test (not (eq count numpred)))
  		(while (and test (not (search-forward pred finish t)))
  		  (forward-line)
-		  (if (or (< end (ciao-what-line))
+		  (if (or (< end (line-number-at-pos (point)))
 			  (and (eq init (point)) (eq (point) finish)))
 		      (setq test nil))
  		  (end-of-line)
@@ -504,24 +500,24 @@ in the source files and the Ciao toplevel are synchronized."
                     (goto-char (point-min)) (forward-line (1- end))
 		    (end-of-line)
 		    (re-search-backward "^[a-z']" (point-min) t)
-		    (ciao-color (ciao-what-line)
+		    (ciao-color (line-number-at-pos (point))
 				end
 				ciao-face-debug-expansion
 				'ciao-debug)
 		    ;; Save information for uncoloring the last line
 		    (setq ciao-debug-last-line
 			  (cons (current-buffer)
-				(ciao-what-line)))
+				(line-number-at-pos (point))))
 
 		    )
 		;; Save information for uncoloring the last line
 		(setq ciao-debug-last-line
 		      (cons (current-buffer)
-			    (ciao-what-line)))
+			    (line-number-at-pos (point))))
 		
 		;; Color line
-		(ciao-color (ciao-what-line)
-			    (ciao-what-line)
+		(ciao-color (line-number-at-pos (point))
+			    (line-number-at-pos (point))
 			    (ciao-debug-obtain-color port)
 			    'ciao-debug)
 		(setq overlay-arrow-string (ciao-debug-transform-port port))

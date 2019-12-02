@@ -320,7 +320,7 @@ used as basis for more complex inferior modes."
   (setq comint-prompt-regexp (ciao-proc-any-prompt-pattern cproc)))
 
 (defun ciao-input-filter (str)
-  ;; putting "[ \t]*" instead of " *" breaks in xemacs...
+  ;; TODO: remove xemacs compatibility here? ;; putting "[ \t]*" instead of " *" breaks in xemacs
   (cond ((string-match "\\`\\s *\\'" str) nil) ;whitespace
 	((not (eq major-mode 'ciao-inferior-mode)) t)
 	((= (length str) 1) nil)	;one character
