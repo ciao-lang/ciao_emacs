@@ -42,12 +42,9 @@
 ;; This super-kludge of adding the unnecessary defvar is needed to 
 (defvar ciao-face-debug-call 'ciao-face-debug-call)
 (defface ciao-face-debug-call ;; ciao-face-blueish-block
-  '((((type tty) (class color))
-     (:background "blue" :foreground "white"))
-    (((class color) (background dark))
-     (:background "blue3"))
-    (((class color) (background light))
-     (:background "slate blue" :foreground "white"))
+  '(;;(((type tty) (class color)) (:background "blue" :foreground "white"))
+    (((class color) (background dark)) (:background "blue3"))
+    (((class color) (background light)) (:background "slate blue" :foreground "white"))
     (((class grayscale) (background light)) (:foreground "DimGray" :italic t))
     (((class grayscale) (background dark)) (:foreground "LightGray" :italic t))
     (t (:background "gray")))
@@ -56,12 +53,9 @@
 
 (defvar ciao-face-debug-exit 'ciao-face-debug-exit)
 (defface ciao-face-debug-exit ;; ciao-face-greenish-block
-  '((((type tty) (class color))
-     (:background "green"))
-    (((class color) (background light))
-     (:background "green"))
-    (((class color) (background dark))
-     (:background "darkolivegreen"))
+  '(;;(((type tty) (class color)) (:background "green"))
+    (((class color) (background light)) (:background "green"))
+    (((class color) (background dark)) (:background "darkolivegreen"))
     (((class grayscale) (background light)) (:foreground "DimGray" :italic t))
     (((class grayscale) (background dark)) (:foreground "LightGray" :italic t))
     (t (:inverse-video t)))
@@ -70,12 +64,9 @@
 
 (defvar ciao-face-debug-fail 'ciao-face-debug-fail)
 (defface ciao-face-debug-fail ;; ciao-face-reddish-block
-  '((((type tty) (class color))
-     (:background "red" :foreground "black"))
-    (((class color) (background light))
-     (:background "Firebrick" :foreground "White"))
-    (((class color) (background dark))
-     (:background "Firebrick" :foreground "White"))
+  '(;;(((type tty) (class color)) (:background "red" :foreground "black"))
+    (((class color) (background light)) (:background "Firebrick" :foreground "White"))
+    (((class color) (background dark)) (:background "Firebrick" :foreground "White"))
     (((class grayscale) (background light)) (:foreground "DimGray" :italic t))
     (((class grayscale) (background dark)) (:foreground "LightGray" :italic t))
     (t (:inverse-video t)))
@@ -84,12 +75,9 @@
 
 (defvar ciao-face-debug-redo 'ciao-face-debug-redo)
 (defface ciao-face-debug-redo ;; ciao-face-orangy-block
-  '((((type tty) (class color))
-     (:background "magenta" :foreground "black"))
-    (((class color) (background light))
-     (:background "orange"))
-    (((class color) (background dark))
-     (:background "orange" :foreground "black"))
+  '(;;(((type tty) (class color)) (:background "magenta" :foreground "black"))
+    (((class color) (background light)) (:background "orange"))
+    (((class color) (background dark)) (:background "orange" :foreground "black"))
     (((class grayscale) (background light)) (:foreground "DimGray" :italic t))
     (((class grayscale) (background dark)) (:foreground "LightGray" :italic t))
     (t (:inverse-video t)))
@@ -98,12 +86,9 @@
 
 (defvar ciao-face-debug-expansion 'ciao-face-debug-expansion)
 (defface ciao-face-debug-expansion ;; ciao-face-yellowish-block
-  '((((type tty) (class color)) 
-     (:background "yellow" :foreground "black"))
-    (((class color) (background light))
-     (:background "yellow" :foreground "black"))
-    (((class color) (background dark))
-     (:background "yellow" :foreground "black"))
+  '(;;(((type tty) (class color)) (:background "yellow" :foreground "black"))
+    (((class color) (background light)) (:background "yellow" :foreground "black"))
+    (((class color) (background dark)) (:background "yellow" :foreground "black"))
     (((class grayscale) (background light)) (:foreground "DimGray" :italic t))
     (((class grayscale) (background dark)) (:foreground "LightGray" :italic t))
     (t (:inverse-video t)))
@@ -112,7 +97,7 @@
 
 (defvar ciao-face-debug-breakpoint 'ciao-face-debug-breakpoint)
 (defface ciao-face-debug-breakpoint ;; ciao-face-warning
-  '((((type tty) (class color)) (:foreground "red"))
+  '(;;(((type tty) (class color)) (:foreground "red"))
     (((class color) (background light)) (:foreground "Red" :weight bold))
     (((class color) (background dark)) (:foreground "Red" :weight bold))
     (((class grayscale) (background light)) (:foreground "DimGray" :italic t))
@@ -129,7 +114,7 @@
 ;; TODO: why? ;; resolve an emacs / xemacs incompatibility
 (defvar ciao-face-script-header 'ciao-face-script-header)
 (defface ciao-face-script-header ;; ciao-face-forestgreen
-  '((((type tty) (class color)) (:foreground "green" :weight light))
+  '(;;(((type tty) (class color)) (:foreground "green" :weight light))
     (((class grayscale) (background light)) (:foreground "LightGray"))
     (((class grayscale) (background dark)) (:foreground "DimGray"))
     (((class color) (background light)) (:foreground "ForestGreen"))
@@ -140,7 +125,7 @@
 
 (defvar ciao-face-quoted-atom 'ciao-face-quoted-atom)
 (defface ciao-face-quoted-atom ;; ciao-face-quoted-atom
-  '((((type tty) (class color)) (:foreground "magenta"))
+  '(;;(((type tty) (class color)) (:foreground "magenta"))
     (((class grayscale) (background light)) (:foreground "DimGray" :italic t))
     (((class grayscale) (background dark)) (:foreground "LightGray" :italic t))
 ;    (((class color) (background light)) (:foreground "brown"))
@@ -152,7 +137,7 @@
 
 (defvar ciao-face-funexp-atom 'ciao-face-funexp-atom)
 (defface ciao-face-funexp-atom ;; ciao-face-funexp-atom
-  '((((type tty) (class color)) (:foreground "magenta"))
+  '(;;(((type tty) (class color)) (:foreground "magenta"))
     (((class grayscale) (background light)) (:foreground "DimGray" :italic t))
     (((class grayscale) (background dark)) (:foreground "LightGray" :italic t))
     (((class color) (background light)) (:foreground "OliveDrab"))
@@ -163,7 +148,7 @@
 
 (defvar ciao-face-variable 'ciao-face-variable)
 (defface ciao-face-variable ;; ciao-face-variable
-  '((((type tty) (class color)) (:foreground "magenta" :weight bold))
+  '(;;(((type tty) (class color)) (:foreground "magenta" :weight bold))
     (((class grayscale) (background light)) (:foreground "DimGray" :italic t))
     (((class grayscale) (background dark)) (:foreground "LightGray" :italic t))
     (((class color) (background light)) (:foreground "sienna"))
@@ -174,7 +159,7 @@
 
 (defvar ciao-face-string 'ciao-face-string)
 (defface ciao-face-string ;; ciao-face-string
-  '((((type tty) (class color)) (:foreground "magenta"))
+  '(;;(((type tty) (class color)) (:foreground "magenta"))
     (((class grayscale) (background light)) (:foreground "DimGray" :italic t))
     (((class grayscale) (background dark)) (:foreground "LightGray" :italic t))
     (((class color) (background light)) (:foreground "RosyBrown"))
@@ -185,11 +170,9 @@
 
 (defvar ciao-face-comment 'ciao-face-comment)
 (defface ciao-face-comment ;; ciao-face-comment
-  '((((type tty) (class color)) (:foreground "red"))
-    (((class grayscale) (background light))
-     (:foreground "DimGray" :weight bold :italic t))
-    (((class grayscale) (background dark))
-     (:foreground "LightGray" :weight bold :italic t))
+  '(;;(((type tty) (class color)) (:foreground "red"))
+    (((class grayscale) (background light)) (:foreground "DimGray" :weight bold :italic t))
+    (((class grayscale) (background dark)) (:foreground "LightGray" :weight bold :italic t))
     (((class color) (background light)) (:foreground "Firebrick"))
     (((class color) (background dark)) (:foreground "SlateGray4")) ;; chocolate1
     (t (:weight bold :italic t)))
@@ -198,7 +181,7 @@
 
 (defvar ciao-face-clauseheadname 'ciao-face-clauseheadname)
 (defface ciao-face-clauseheadname ;; ciao-face-blue
-  '((((type tty) (class color)) (:foreground "blue" :weight light))
+  '(;;(((type tty) (class color)) (:foreground "blue" :weight light))
     (((class grayscale) (background light)) (:foreground "LightGray"))
     (((class grayscale) (background dark)) (:foreground "DimGray"))
     (((class color) (background light)) (:foreground "Blue"))
@@ -209,7 +192,7 @@
 
 (defvar ciao-face-concurrency-op 'ciao-face-concurrency-op)
 (defface ciao-face-concurrency-op ;; ciao-face-coral-bold
-  '((((type tty) (class color)) (:foreground "magenta" :weight bold))
+  '(;;(((type tty) (class color)) (:foreground "magenta" :weight bold))
     (((class grayscale) (background light)) (:foreground "LightGray" :weight bold))
     (((class grayscale) (background dark)) (:foreground "DimGray" :weight bold))
     (((class color) (background light)) (:foreground "Coral" :weight bold))
@@ -220,7 +203,7 @@
 
 (defvar ciao-face-cut 'ciao-face-cut)
 (defface ciao-face-cut ;; ciao-face-royalblue
-  '((((type tty) (class color)) (:foreground "blue" :weight light))
+  '(;;(((type tty) (class color)) (:foreground "blue" :weight light))
     (((class grayscale) (background light)) (:foreground "LightGray"))
     (((class grayscale) (background dark)) (:foreground "DimGray"))
     (((class color) (background light)) (:foreground "RoyalBlue"))
@@ -237,7 +220,7 @@ strings, commnds, etc.)."
 
 (defvar ciao-face-lpdoc-bug-comment 'ciao-face-lpdoc-bug-comment)
 (defface ciao-face-lpdoc-bug-comment ;; ciao-face-warning
-  '((((type tty) (class color)) (:foreground "red"))
+  '(;;(((type tty) (class color)) (:foreground "red"))
     (((class color) (background light)) (:foreground "Red" :weight bold))
     (((class color) (background dark)) (:foreground "Red" :weight bold))
     (t (:inverse-video t :weight bold)))
@@ -246,7 +229,7 @@ strings, commnds, etc.)."
 
 (defvar ciao-face-lpdoc-bug-comment 'ciao-face-lpdoc-bug-comment)
 (defface ciao-face-lpdoc-bug-comment ;; ciao-face-warning
-  '((((type tty) (class color)) (:foreground "red"))
+  '(;;(((type tty) (class color)) (:foreground "red"))
     (((class color) (background light)) (:foreground "Red" :weight bold))
     (((class color) (background dark)) (:foreground "Red" :weight bold))
     (t (:inverse-video t :weight bold)))
@@ -255,7 +238,7 @@ strings, commnds, etc.)."
 
 ; (defvar ciao-face-lpdoc-version-comment 'ciao-face-lpdoc-version-comment)
 ; (defface ciao-face-lpdoc-version-comment ;; ciao-face-comment
-;   '((((type tty) (class color)) (:foreground "red"))
+;   '(;;(((type tty) (class color)) (:foreground "red"))
 ;     (((class grayscale) (background light))
 ;      (:foreground "DimGray" :weight bold :italic t))
 ;     (((class grayscale) (background dark))
@@ -268,7 +251,7 @@ strings, commnds, etc.)."
 
 (defvar ciao-face-lpdoc-comment 'ciao-face-lpdoc-comment)
 (defface ciao-face-lpdoc-comment ;; ciao-face-navyblue
-  '((((type tty) (class color)) (:foreground "blue" :weight light))
+  '(;;(((type tty) (class color)) (:foreground "blue" :weight light))
     (((class grayscale) (background light)) (:foreground "LightGray"))
     (((class grayscale) (background dark)) (:foreground "DimGray"))
     (((class color) (background light)) (:foreground "NavyBlue"))
@@ -279,7 +262,7 @@ strings, commnds, etc.)."
 
 (defvar ciao-face-lpdoc-verbatim 'ciao-face-lpdoc-verbatim)
 (defface ciao-face-lpdoc-verbatim ;; ciao-face-navyblue-bold
-  '((((type tty) (class color)) (:foreground "blue" :weight bold))
+  '(;;(((type tty) (class color)) (:foreground "blue" :weight bold))
     (((class grayscale) (background light)) (:foreground "LightGray" :weight bold))
     (((class grayscale) (background dark)) (:foreground "DimGray" :weight bold))
     (((class color) (background light)) (:foreground "NavyBlue" :weight bold))
@@ -290,7 +273,7 @@ strings, commnds, etc.)."
 
 ; (defvar ciao-face-lpdoc-include 'ciao-face-lpdoc-include)
 ; (defface ciao-face-lpdoc-include ;; ciao-face-navyblue-bold
-;   '((((type tty) (class color)) (:foreground "blue" :weight bold))
+;   '(;;(((type tty) (class color)) (:foreground "blue" :weight bold))
 ;     (((class grayscale) (background light)) (:foreground "LightGray" :weight bold))
 ;     (((class grayscale) (background dark)) (:foreground "DimGray" :weight bold))
 ;     (((class color) (background light)) (:foreground "NavyBlue" :weight bold))
@@ -301,7 +284,7 @@ strings, commnds, etc.)."
 
 ; (defvar ciao-face-lpdoc-crossref 'ciao-face-lpdoc-crossref)
 ; (defface ciao-face-lpdoc-crossref ;; ciao-face-golden
-;   '((((type tty) (class color)) (:foreground "blue" :weight light))
+;   '(;;(((type tty) (class color)) (:foreground "blue" :weight light))
 ;     (((class grayscale) (background light))
 ;      (:foreground "Gray90" :weight bold :italic t))
 ;     (((class grayscale) (background dark))
@@ -314,7 +297,7 @@ strings, commnds, etc.)."
 
 (defvar ciao-face-lpdoc-command 'ciao-face-lpdoc-command)
 (defface ciao-face-lpdoc-command ;; ciao-face-royalblue
-  '((((type tty) (class color)) (:foreground "blue" :weight light))
+  '(;;(((type tty) (class color)) (:foreground "blue" :weight light))
     (((class grayscale) (background light)) (:foreground "LightGray"))
     (((class grayscale) (background dark)) (:foreground "DimGray"))
     (((class color) (background light)) (:foreground "RoyalBlue"))
@@ -330,7 +313,7 @@ strings, commnds, etc.)."
 
 (defvar ciao-face-builtin-directive 'ciao-face-builtin-directive)
 (defface ciao-face-builtin-directive ;; ciao-face-blue-bold
-  '((((type tty) (class color)) (:foreground "blue" :weight bold))
+  '(;;(((type tty) (class color)) (:foreground "blue" :weight bold))
     (((class grayscale) (background light)) (:foreground "LightGray" :weight bold))
     (((class grayscale) (background dark)) (:foreground "DimGray" :weight bold))
     (((class color) (background light)) (:foreground "Blue" :weight bold))
@@ -341,7 +324,7 @@ strings, commnds, etc.)."
 
 (defvar ciao-face-predicate-directive 'ciao-face-predicate-directive)
 (defface ciao-face-predicate-directive ;; ciao-face-royalblue
-  '((((type tty) (class color)) (:foreground "blue" :weight light))
+  '(;;(((type tty) (class color)) (:foreground "blue" :weight light))
     (((class grayscale) (background light)) (:foreground "LightGray"))
     (((class grayscale) (background dark)) (:foreground "DimGray"))
     (((class color) (background light)) (:foreground "RoyalBlue"))
@@ -352,7 +335,7 @@ strings, commnds, etc.)."
 
 (defvar ciao-face-module-directive 'ciao-face-module-directive)
 (defface ciao-face-module-directive ;; ciao-face-navyblue-bold
-  '((((type tty) (class color)) (:foreground "blue" :weight bold))
+  '(;;(((type tty) (class color)) (:foreground "blue" :weight bold))
     (((class grayscale) (background light)) (:foreground "LightGray" :weight bold))
     (((class grayscale) (background dark)) (:foreground "DimGray" :weight bold))
     (((class color) (background light)) (:foreground "Purple3" :weight bold))
@@ -364,7 +347,7 @@ strings, commnds, etc.)."
 
 (defvar ciao-face-condcode-directive 'ciao-face-condcode-directive)
 (defface ciao-face-condcode-directive ;; ciao-face-navyblue-bold
-  '((((type tty) (class color)) (:foreground "blue" :weight light))
+  '(;;(((type tty) (class color)) (:foreground "blue" :weight light))
     (((class grayscale) (background light)) (:foreground "LightGray" :weight bold))
     (((class grayscale) (background dark)) (:foreground "DimGray" :weight bold))
     (((class color) (background light)) (:foreground "NavyBlue" :weight bold))
@@ -376,7 +359,7 @@ strings, commnds, etc.)."
 
 (defvar ciao-face-library-directive 'ciao-face-library-directive)
 (defface ciao-face-library-directive ;; ciao-face-navyblue-bold
-  '((((type tty) (class color)) (:foreground "blue" :weight bold))
+  '(;;(((type tty) (class color)) (:foreground "blue" :weight bold))
     (((class grayscale) (background light)) (:foreground "LightGray" :weight bold))
     (((class grayscale) (background dark)) (:foreground "DimGray" :weight bold))
     (((class color) (background light)) (:foreground "NavyBlue" :weight bold))
@@ -387,7 +370,7 @@ strings, commnds, etc.)."
 
 (defvar ciao-face-user-directive 'ciao-face-user-directive)
 (defface ciao-face-user-directive ;; ciao-face-navyblue
-  '((((type tty) (class color)) (:foreground "blue" :weight light))
+  '(;;(((type tty) (class color)) (:foreground "blue" :weight light))
     (((class grayscale) (background light)) (:foreground "LightGray"))
     (((class grayscale) (background dark)) (:foreground "DimGray"))
     (((class color) (background light)) (:foreground "NavyBlue"))
@@ -404,7 +387,7 @@ strings, commnds, etc.)."
 
 (defvar ciao-face-checked-assrt 'ciao-face-checked-assrt)
 (defface ciao-face-checked-assrt ;; ciao-face-darkgreen-bold
-  '((((type tty) (class color)) (:foreground "green" :weight bold))
+  '(;;(((type tty) (class color)) (:foreground "green" :weight bold))
     (((class grayscale) (background light)) (:foreground "LightGray" :weight bold))
     (((class grayscale) (background dark)) (:foreground "DimGray" :weight bold))
     (((class color) (background light)) (:foreground "DarkGreen" :weight bold))
@@ -415,7 +398,7 @@ strings, commnds, etc.)."
 
 (defvar ciao-face-true-assrt 'ciao-face-true-assrt)
 (defface ciao-face-true-assrt ;; ciao-face-forestgreen-bold
-  '((((type tty) (class color)) (:foreground "green" :weight bold))
+  '(;;(((type tty) (class color)) (:foreground "green" :weight bold))
     (((class grayscale) (background light)) (:foreground "LightGray" :weight bold))
     (((class grayscale) (background dark)) (:foreground "DimGray" :weight bold))
     (((class color) (background light)) (:foreground "ForestGreen" :weight bold))
@@ -426,7 +409,7 @@ strings, commnds, etc.)."
 
 (defvar ciao-face-false-assrt 'ciao-face-false-assrt)
 (defface ciao-face-false-assrt ;; ciao-face-warning
-  '((((type tty) (class color)) (:foreground "red"))
+  '(;;(((type tty) (class color)) (:foreground "red"))
     (((class color) (background light)) (:foreground "Red" :weight bold))
     (((class color) (background dark)) (:foreground "Red" :weight bold))
     (t (:inverse-video t :weight bold)))
@@ -435,7 +418,7 @@ strings, commnds, etc.)."
 
 (defvar ciao-face-trust-assrt 'ciao-face-trust-assrt)
 (defface ciao-face-trust-assrt ;; ciao-face-coral-bold
-  '((((type tty) (class color)) (:foreground "magenta" :weight bold))
+  '(;;(((type tty) (class color)) (:foreground "magenta" :weight bold))
     (((class grayscale) (background light)) (:foreground "LightGray" :weight bold))
     (((class grayscale) (background dark)) (:foreground "DimGray" :weight bold))
     (((class color) (background light)) (:foreground "Coral" :weight bold))
@@ -446,7 +429,7 @@ strings, commnds, etc.)."
 
 (defvar ciao-face-entry-assrt 'ciao-face-entry-assrt)
 (defface ciao-face-entry-assrt ;; ciao-face-brown-bold
-  '((((type tty) (class color)) (:foreground "magenta" :weight bold))
+  '(;;(((type tty) (class color)) (:foreground "magenta" :weight bold))
     (((class grayscale) (background light)) (:foreground "LightGray" :weight bold))
     (((class grayscale) (background dark)) (:foreground "DimGray" :weight bold))
     (((class color) (background light)) (:foreground "Brown" :weight bold))
@@ -457,7 +440,7 @@ strings, commnds, etc.)."
 
 (defvar ciao-face-check-assrt 'ciao-face-check-assrt)
 (defface ciao-face-check-assrt ;; ciao-face-navyblue-bold
-  '((((type tty) (class color)) (:foreground "blue" :weight bold))
+  '(;;(((type tty) (class color)) (:foreground "blue" :weight bold))
     (((class grayscale) (background light)) (:foreground "LightGray" :weight bold))
     (((class grayscale) (background dark)) (:foreground "DimGray" :weight bold))
     (((class color) (background light)) (:foreground "NavyBlue" :weight bold))
@@ -468,7 +451,7 @@ strings, commnds, etc.)."
 
 (defvar ciao-face-prop-assrt 'ciao-face-prop-assrt)
 (defface ciao-face-prop-assrt ;; ciao-face-blue-bold
-  '((((type tty) (class color)) (:foreground "blue" :weight bold))
+  '(;;(((type tty) (class color)) (:foreground "blue" :weight bold))
     (((class grayscale) (background light)) (:foreground "LightGray" :weight bold))
     (((class grayscale) (background dark)) (:foreground "DimGray" :weight bold))
     (((class color) (background light)) (:foreground "Blue" :weight bold))
@@ -479,7 +462,7 @@ strings, commnds, etc.)."
 
 (defvar ciao-face-test-assrt 'ciao-face-test-assrt)
 (defface ciao-face-test-assrt ;; ciao-face-blue-bold
-  '((((type tty) (class color)) (:foreground "green" :weight bold))
+  '(;;(((type tty) (class color)) (:foreground "green" :weight bold))
     (((class grayscale) (background light)) (:foreground "LightGray" :weight bold))
     (((class grayscale) (background dark)) (:foreground "DimGray" :weight bold))
     (((class color) (background light)) (:foreground "GreenYellow" :weight bold))
@@ -490,7 +473,7 @@ strings, commnds, etc.)."
 
 (defvar ciao-face-texec-assrt 'ciao-face-texec-assrt)
 (defface ciao-face-texec-assrt ;; ciao-face-blue-bold
-  '((((type tty) (class color)) (:foreground "green" :weight bold))
+  '(;;(((type tty) (class color)) (:foreground "green" :weight bold))
     (((class grayscale) (background light)) (:foreground "LightGray" :weight bold))
     (((class grayscale) (background dark)) (:foreground "DimGray" :weight bold))
     (((class color) (background light)) (:foreground "GreenYellow" :weight bold))
@@ -501,7 +484,7 @@ strings, commnds, etc.)."
 
 (defvar ciao-face-type-assrt 'ciao-face-type-assrt)
 (defface ciao-face-type-assrt ;; ciao-face-mediumblue-bold
-  '((((type tty) (class color)) (:foreground "blue" :weight bold))
+  '(;;(((type tty) (class color)) (:foreground "blue" :weight bold))
     (((class grayscale) (background light)) (:foreground "LightGray" :weight bold))
     (((class grayscale) (background dark)) (:foreground "DimGray" :weight bold))
     (((class color) (background light)) (:foreground "MediumBlue" :weight bold))
@@ -512,7 +495,7 @@ strings, commnds, etc.)."
 
 (defvar ciao-face-modedef-assrt 'ciao-face-modedef-assrt)
 (defface ciao-face-modedef-assrt ;; ciao-face-forestgreen-bold
-  '((((type tty) (class color)) (:foreground "green" :weight bold))
+  '(;;(((type tty) (class color)) (:foreground "green" :weight bold))
     (((class grayscale) (background light)) (:foreground "LightGray" :weight bold))
     (((class grayscale) (background dark)) (:foreground "DimGray" :weight bold))
     (((class color) (background light)) (:foreground "ForestGreen" :weight bold))
@@ -528,7 +511,7 @@ strings, commnds, etc.)."
 
 (defvar ciao-face-prompt 'ciao-face-prompt)
 (defface ciao-face-prompt ;; ciao-face-coral-bold
-  '((((type tty) (class color)) (:foreground "magenta" :weight bold))
+  '(;;(((type tty) (class color)) (:foreground "magenta" :weight bold))
     (((class grayscale) (background light)) (:foreground "LightGray" :weight bold))
     (((class grayscale) (background dark)) (:foreground "DimGray" :weight bold))
     (((class color) (background light)) (:foreground "Coral" :weight bold))
@@ -539,7 +522,7 @@ strings, commnds, etc.)."
 
 (defvar ciao-face-answer-var 'ciao-face-answer-var)
 (defface ciao-face-answer-var ;; ciao-face-purple
-  '((((type tty) (class color)) (:foreground "cyan" :weight bold))
+  '(;;(((type tty) (class color)) (:foreground "cyan" :weight bold))
     (((class grayscale) (background light)) (:foreground "LightGray" :weight bold))
     (((class grayscale) (background dark)) (:foreground "DimGray" :weight bold))
     (((class color) (background light)) (:foreground "Purple"))
@@ -550,7 +533,7 @@ strings, commnds, etc.)."
 
 (defvar ciao-face-answer-val 'ciao-face-answer-val)
 (defface ciao-face-answer-val ;; ciao-face-blue-bold
-  '((((type tty) (class color)) (:foreground "blue" :weight bold))
+  '(;;(((type tty) (class color)) (:foreground "blue" :weight bold))
     (((class grayscale) (background light)) (:foreground "LightGray" :weight bold))
     (((class grayscale) (background dark)) (:foreground "DimGray" :weight bold))
     (((class color) (background light)) (:foreground "Blue" :weight bold))
@@ -561,7 +544,7 @@ strings, commnds, etc.)."
 
 (defvar ciao-face-yes-answer 'ciao-face-yes-answer)
 (defface ciao-face-yes-answer ;; ciao-face-forestgreen-bold
-  '((((type tty) (class color)) (:foreground "green" :weight bold))
+  '(;;(((type tty) (class color)) (:foreground "green" :weight bold))
     (((class grayscale) (background light)) (:foreground "LightGray" :weight bold))
     (((class grayscale) (background dark)) (:foreground "DimGray" :weight bold))
     (((class color) (background light)) (:foreground "ForestGreen" :weight bold))
@@ -572,11 +555,9 @@ strings, commnds, etc.)."
 
 (defvar ciao-face-no-answer 'ciao-face-no-answer)
 (defface ciao-face-no-answer ;; ciao-face-golden-bold
-  '((((type tty) (class color)) (:foreground "red" :weight light))
-    (((class grayscale) (background light))
-     (:foreground "Gray90" :weight bold :italic t))
-    (((class grayscale) (background dark))
-     (:foreground "DimGray" :weight bold :italic t))
+  '(;;(((type tty) (class color)) (:foreground "red" :weight light))
+    (((class grayscale) (background light)) (:foreground "Gray90" :weight bold :italic t))
+    (((class grayscale) (background dark)) (:foreground "DimGray" :weight bold :italic t))
     (((class color) (background light)) (:foreground "DarkGoldenrod" :weight bold))
     (((class color) (background dark)) (:foreground "LightGoldenrod" :weight bold))
     (t (:weight bold :italic t)))
@@ -585,7 +566,7 @@ strings, commnds, etc.)."
 
 (defvar ciao-face-ciaopp-option 'ciao-face-ciaopp-option)
 (defface ciao-face-ciaopp-option ;; ciao-face-forestgreen-bold
-  '((((type tty) (class color)) (:foreground "green" :weight bold))
+  '(;;(((type tty) (class color)) (:foreground "green" :weight bold))
     (((class grayscale) (background light)) (:foreground "LightGray" :weight bold))
     (((class grayscale) (background dark)) (:foreground "DimGray" :weight bold))
     (((class color) (background light)) (:foreground "ForestGreen" :weight bold))
@@ -596,13 +577,11 @@ strings, commnds, etc.)."
 
 (defvar ciao-face-startup-message 'ciao-face-startup-message)
 (defface ciao-face-startup-message ;; ciao-face-forestgreen-bold
-  '((((type tty) (class color)) (:foreground "blue" :weight light))
+  '(;;(((type tty) (class color)) (:foreground "blue" :weight light))
     (((class grayscale) (background light)) (:foreground "LightGray" :weight bold))
     (((class grayscale) (background dark)) (:foreground "DimGray" :weight bold))
-    (((class color) (background light)) 
-     (:foreground "DodgerBlue4" :weight bold :height 1.1)) ; :family "helv" 
-    (((class color) (background dark)) 
-     (:foreground "LightBlue2" :height 1.1)) ; :family "helv" 
+    (((class color) (background light)) (:foreground "DodgerBlue4" :weight bold :height 1.1)) ; :family "helv" 
+    (((class color) (background dark)) (:foreground "LightBlue2" :height 1.1)) ; :family "helv" 
     (t (:inverse-video t :weight bold)))
   "Face to use for system splash message."
   :group 'ciao-highlighting-faces-toplevels)
@@ -614,75 +593,62 @@ strings, commnds, etc.)."
 
 (defvar ciao-face-debug-mess 'ciao-face-debug-mess)
 (defface ciao-face-debug-mess ;; ciao-face-forestgreen-bold
-  '((((type tty) (class color)) (:foreground "green" :weight bold))
+  '(;;(((type tty) (class color)) (:foreground "green" :weight bold))
     (((class grayscale) (background light)) (:foreground "LightGray" :weight bold))
     (((class grayscale) (background dark)) (:foreground "DimGray" :weight bold))
-    (((class color) (background light)) 
-     (:foreground "ForestGreen" :weight bold)) ; :family "helv"
-    (((class color) (background dark)) 
-     (:foreground "lime green" :weight bold)) ; :family "helv"
+    (((class color) (background light)) (:foreground "ForestGreen" :weight bold)) ; :family "helv"
+    (((class color) (background dark)) (:foreground "lime green" :weight bold)) ; :family "helv"
     (t (:inverse-video t :weight bold)))
   "Face to use for debug messages."
   :group 'ciao-highlighting-faces-messages)
 
 (defvar ciao-face-error-mess 'ciao-face-error-mess)
 (defface ciao-face-error-mess ;; ciao-face-warning
-  '((((type tty) (class color)) (:foreground "red"))
-    (((class color) (background light)) 
-     (:foreground "Red" :weight bold)) ; :family "helv"
-    (((class color) (background dark)) 
-     (:foreground "Red" :weight bold)) ; :family "helv"
+  '(;;(((type tty) (class color)) (:foreground "red"))
+    (((class color) (background light)) (:foreground "Red" :weight bold)) ; :family "helv"
+    (((class color) (background dark)) (:foreground "Red" :weight bold)) ; :family "helv"
     (t (:inverse-video t :weight bold)))
   "Face to use for error messages."
   :group 'ciao-highlighting-faces-messages)
 
 (defvar ciao-face-warning-mess 'ciao-face-warning-mess)
 (defface ciao-face-warning-mess ;; ciao-face-brown-bold
-  '((((type tty) (class color)) (:foreground "magenta" :weight bold))
+  '(;;(((type tty) (class color)) (:foreground "magenta" :weight bold))
     (((class grayscale) (background light)) (:foreground "LightGray" :weight bold))
     (((class grayscale) (background dark)) (:foreground "DimGray" :weight bold))
-    (((class color) (background light)) 
-     (:foreground "Brown" :weight bold)) ; :family "helv"
-    (((class color) (background dark)) 
-     (:foreground "Brown" :weight bold)) ; :family "helv"
+    (((class color) (background light)) (:foreground "Brown" :weight bold)) ; :family "helv"
+    (((class color) (background dark)) (:foreground "Brown" :weight bold)) ; :family "helv"
     (t (:inverse-video t :weight bold)))
   "Face to use for warning messages."
   :group 'ciao-highlighting-faces-messages)
 
 (defvar ciao-face-note-mess 'ciao-face-note-mess)
 (defface ciao-face-note-mess ;; ciao-face-brown
-  '((((type tty) (class color)) (:foreground "cyan" :weight light))
+  '(;;(((type tty) (class color)) (:foreground "cyan" :weight light))
     (((class grayscale) (background light)) (:foreground "LightGray"))
     (((class grayscale) (background dark)) (:foreground "DimGray"))
-    (((class color) (background light)) 
-     (:foreground "brown")) ; :family "helv"
-    (((class color) (background dark)) 
-     (:foreground "brown")) ; :family "helv"
+    (((class color) (background light)) (:foreground "brown")) ; :family "helv"
+    (((class color) (background dark)) (:foreground "brown")) ; :family "helv"
     (t (:inverse-video t)))
   "Face to use for note messages."
   :group 'ciao-highlighting-faces-messages)
 
 (defvar ciao-face-other-mess 'ciao-face-other-mess)
 (defface ciao-face-other-mess ;; ciao-face-brown
-  '((((type tty) (class color)) (:foreground "cyan" :weight light))
+  '(;;(((type tty) (class color)) (:foreground "cyan" :weight light))
     (((class grayscale) (background light)) (:foreground "LightGray"))
     (((class grayscale) (background dark)) (:foreground "DimGray"))
-    (((class color) (background light)) 
-     (:foreground "brown")) ; :family "helv"
-    (((class color) (background dark)) 
-     (:foreground "brown")) ; :family "helv"
+    (((class color) (background light)) (:foreground "brown")) ; :family "helv"
+    (((class color) (background dark)) (:foreground "brown")) ; :family "helv"
     (t (:inverse-video t)))
   "Face to use for other messages."
   :group 'ciao-highlighting-faces-messages)
 
 (defvar ciao-face-highlight-code 'ciao-face-highlight-code)
 (defface ciao-face-highlight-code ;; ciao-face-yellowish-block
-  '((((type tty) (class color)) 
-     (:background "yellow" :foreground "black"))
-    (((class color) (background light))
-     (:background "yellow" :foreground "black"))
-    (((class color) (background dark))
-     (:background "yellow" :foreground "black"))
+  '(;;(((type tty) (class color)) (:background "yellow" :foreground "black"))
+    (((class color) (background light)) (:background "yellow" :foreground "black"))
+    (((class color) (background dark)) (:background "yellow" :foreground "black"))
     (t (:inverse-video t)))
   "Face to use for highlighting code areas (e.g., when locating 
    the code area that an error message refers to)."
@@ -694,14 +660,10 @@ strings, commnds, etc.)."
   "Highest number for ciao-face-sectioning-N-face")
 (defvar ciao-face-sectioning-5-face 'ciao-face-sectioning-5-face)
 (defface ciao-face-sectioning-5-face
-  '((((type tty pc) (class color) (background light))
-     (:foreground "blue4" :weight bold))
-    (((type tty pc) (class color) (background dark))
-     (:foreground "yellow" :weight bold))
-    (((class color) (background light))
-     (:weight bold :inherit variable-pitch :foreground "NavyBlue"))
-    (((class color) (background dark))
-     (:weight bold :inherit variable-pitch :foreground "LightGoldenrod1")) ;; CornflowerBlue
+  '(;;(((type tty pc) (class color) (background light)) (:foreground "blue4" :weight bold))
+    ;;(((type tty pc) (class color) (background dark)) (:foreground "yellow" :weight bold))
+    (((class color) (background light)) (:weight bold :inherit variable-pitch :foreground "NavyBlue"))
+    (((class color) (background dark)) (:weight bold :inherit variable-pitch :foreground "LightGoldenrod1")) ;; CornflowerBlue
     (t (:weight bold :inherit variable-pitch)))
   "Face for sectioning commands at level 5."
   :group 'ciao-highlighting-faces-lpdoc)
