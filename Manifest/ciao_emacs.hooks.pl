@@ -67,10 +67,9 @@ find_emacs(File) :- find_executable('emacs', File).
 :- use_module(library(emacs/emacs_batch), [
     emacs_style_path/2,
     emacs_type/1,
-    emacs_batch_call/3,
-    emacs_batch_byte_compile/3,
-    emacs_update_autoloads/3,
-    emacs_clean_log/2]).
+    emacs_batch_call/2,
+    emacs_batch_byte_compile/2,
+    emacs_update_autoloads/2]).
 
 enabled := ~get_bundle_flag(ciao_emacs:enabled).
 
@@ -122,10 +121,10 @@ build_emacs_mode :-
     % Generate autoloads automatically with 'batch-update-autoloads'
     Dir = ~emacsmode_elisp_dir,
     Init = ~path_concat(Dir, 'ciao-site-file.el'),
-    emacs_update_autoloads(Dir, 'emacs_mode3', Init),
+    emacs_update_autoloads(Dir, Init),
     % Compile to elisp bytecode the .el files
     EL = ~ciao_mode_el_files,
-    emacs_batch_byte_compile(Dir, 'emacs_mode', EL).
+    emacs_batch_byte_compile(Dir, EL).
 
 % TODO: make it relocatable (from the elisp side)
 get_dir_elisp(Dir, EmacsDir) :-
@@ -226,10 +225,11 @@ elisp_string_list_([]) --> [].
 % `CiaoMode.lpdoc` has changed.
 prepare_build_docs_emacs_mode :-
     EmacsModeDir = ~emacsmode_elisp_dir,
-    emacs_batch_call(EmacsModeDir, 'emacs_mode2', % TODO: right log name?
-      ['--eval', '(setq load-path (cons "." load-path))',
-       '-l', 'ciao-documentation.el',
-       '-f', 'ciao-mode-documentation']),
+    emacs_batch_call(
+        ['--eval', '(setq load-path (cons "." load-path))',
+         '-l', 'ciao-documentation.el',
+         '-f', 'ciao-mode-documentation'],
+        [cwd(EmacsModeDir), status(_)]),
     %
     ( move_if_diff(~path_concat(EmacsModeDir, 'CiaoMode.new.lpdoc'),
                    ~path_concat(EmacsModeDir, 'CiaoMode.lpdoc'), new) ->
@@ -295,11 +295,6 @@ clean_emacs_mode :-
     clean_tree(EmacsModeDir),
     % TODO: necessary? repeated?
     del_file_nofail(~path_concat(EmacsModeDir, 'ciao-site-file.el')),
-    % clean log files
-    emacs_clean_log(EmacsModeDir, 'emacs_mode'),
-    emacs_clean_log(EmacsModeDir, 'emacs_mode2'),
-    emacs_clean_log(EmacsModeDir, 'emacs_mode3'),
-    %
     % (automatically generated files)
     del_file_nofail(~path_concat(EmacsModeDir, 'CiaoMode.lpdoc')),
     del_file_nofail(~path_concat(EmacsModeDir, 'ciao-config.el')),
@@ -320,26 +315,16 @@ add_prefix([L|Ls], Preffix,  [R|Rs]) :-
 % ===========================================================================
 :- doc(section, "Tests and Benchmarks").
 
-:- use_module(library(process), [process_call/3]).
-:- use_module(library(emacs/emacs_batch), [emacs_path/1]).
-
 '$builder_hook'(test) :- !,
     do_emacs_mode_tests.
-
-run_emacs(Dir, Args) :-
-    % Environment variables unset for this call
-    NoEnv = ['SHELL', 'EMACSLOADPATH', 'EMACSDOC'],
-    process_call(~emacs_path, ['-batch'|Args],
-        [cwd(Dir),
-         noenv(NoEnv),
-         status(_)]).
 
 do_emacs_mode_tests :-
     TestDir = ~bundle_path(ciao_emacs, 'tests'),
     CiaoMode = ~path_concat(~emacsmode_elisp_dir, 'ciao-site-file.el'),
-    run_emacs(TestDir,
+    emacs_batch_call(
       [%'--eval', '(setq load-path (cons "." load-path))',
        '-l', CiaoMode,
        '-l', 'run-indent-test.el',
-       '-f', 'ciao-test-indent-check']).
+       '-f', 'ciao-test-indent-check'],
+      [cwd(TestDir), status(_)]).
 
