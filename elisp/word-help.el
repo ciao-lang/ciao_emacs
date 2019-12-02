@@ -314,13 +314,13 @@ You may specify an argument list ARGS which will be passed on."
        ,(concat "Wrapper for " (symbol-name function) " returning t.")
        (interactive)
        (let ((prefix-arg current-prefix-arg))
-	 (if (interactive-p)
+	 (if (called-interactively-p 'interactive)
 	     (call-interactively ',function)
 	   (,function ,@args)
 	   t)))))
 
-(word-help-t-wrapper lisp-complete-symbol)
-(word-help-t-wrapper makefile-complete "make-mode")
+(word-help-t-wrapper completion-at-point)
+;;(word-help-t-wrapper makefile-complete "make-mode")
 (word-help-t-wrapper ispell-complete-word "ispell")
 (word-help-t-wrapper complete-tag)
 
@@ -621,7 +621,7 @@ this mode, by using the `word-help-complete-list' variable."
        ;; Use backend?
        ((symbolp this-match)
 	(setq completed
-	      (if (interactive-p)
+	      (if (called-interactively-p 'interactive)
 		  (call-interactively this-match)
 		(eval (list this-match)))))
        (this-match
@@ -872,20 +872,20 @@ If no help could be found for the HELP-MODE passed, nil is returned."
      ;; Try to build it ourselves
      ((word-help-info-files help-mode)
       (setq index-ob (make-vector 307 0))
-      (mapcar (lambda (file-node-list)
-		(let ((file (car file-node-list))
-		      (nodes (cdr file-node-list)))
-		  ;; First do the indexes in the file itself
-		  (mapcar (lambda (node)
-			    (word-help-extract-index index-ob file node ignore-case index-map))
-			  nodes)
-		  ;; Then the user-supplied indexes
-		  (mapcar (lambda (name-node)
-			    (word-help-keyword-insert index-ob (car name-node) file
-						      nil (car (cdr name-node))
-						      ignore-case))
-			  (cdr (assoc file word-help-info-extra-alist)))))
-		(word-help-info-files help-mode))
+      (mapc (lambda (file-node-list)
+              (let ((file (car file-node-list))
+                    (nodes (cdr file-node-list)))
+                ;; First do the indexes in the file itself
+                (mapc (lambda (node)
+                        (word-help-extract-index index-ob file node ignore-case index-map))
+                      nodes)
+                ;; Then the user-supplied indexes
+                (mapc (lambda (name-node)
+                        (word-help-keyword-insert index-ob (car name-node) file
+                                                  nil (car (cdr name-node))
+                                                  ignore-case))
+                      (cdr (assoc file word-help-info-extra-alist)))))
+            (word-help-info-files help-mode))
       ;; Update the cache
       (setq word-help-index-alist
 	    (cons (list help-mode index-ob)
@@ -1064,12 +1064,12 @@ This is a lowlevel routine, please use `word-help' instead."
   "Filters atoms from FROM-OB through the regexps in RE-LIST.
 The atoms that matched are returned in a new obarray."
   (let ((dest-ob (make-vector 47 0)))
-    (mapcar (lambda (re)
-	      (let ((regexp (car re)))
-		(mapatoms (lambda (x)
-			    (if (or (not regexp) (string-match regexp (symbol-name x)))
-				(intern (symbol-name x) dest-ob)))
-			  from-ob)))
+    (mapc (lambda (re)
+            (let ((regexp (car re)))
+              (mapatoms (lambda (x)
+                          (if (or (not regexp) (string-match regexp (symbol-name x)))
+                              (intern (symbol-name x) dest-ob)))
+                        from-ob)))
     re-list)
     dest-ob))
 

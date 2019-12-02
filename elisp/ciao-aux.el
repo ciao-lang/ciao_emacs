@@ -99,9 +99,9 @@ new one otherwise."
 OVER."
   (let (start end overlay)
     (save-excursion
-      (goto-line startline)
+      (goto-char (point-min)) (forward-line (1- startline))
       (setq start (point))
-      (goto-line endline)
+      (goto-char (point-min)) (forward-line (1- endline))
       (end-of-line)
       (if (or (eq over 'ciao-error) (eq over 'ciao-debug))
 	  (setq end (+ (point) 1))
@@ -115,7 +115,7 @@ OVER."
 OVER."
   (let (start)
     (save-excursion
-      (goto-line startline)
+      (goto-char (point-min)) (forward-line (1- startline))
       (setq start (point)))
     (mapcar (function (lambda (ovr)
 			(and (overlay-get ovr over) 

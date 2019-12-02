@@ -254,7 +254,7 @@ the debug mode for each of them (same as doing \\<ciao-mode-map>
 	 module)
 
     (if (not ciao-buffers)
-	(mapcar ciao-select-ciao-buffers (buffer-list)))
+	(mapc ciao-select-ciao-buffers (buffer-list)))
     
     (setq module (car ciao-buffers))
     (setq ciao-buffers (cdr ciao-buffers))
@@ -266,28 +266,28 @@ the debug mode for each of them (same as doing \\<ciao-mode-map>
   "Return a pair containning buffers selected for traditional debug and
 buffers selected for source debug."
   (let (buffers-debug end)
-    (save-excursion
-      (set-buffer (ciao-proc-get-buffer 'ciaosh-cproc))
-      (search-backward "display_debugged.")
-      ;; Match all tradicional debugged modules
-      (forward-line)
-      (end-of-line)
-      (setq end (point))
-      ;; (beginning-of-line)
-      (move-to-column 0)
-      (if (search-forward-regexp "\\[\\(.*\\)\\]" end t)
-	  (setq buffers-debug (match-string-no-properties 1))
-	(setq buffers-debug ""))
-      ;; Match all source debug modules
-      (forward-line)
-      (end-of-line)
-      (setq end (point))
-      ;; (beginning-of-line)
-      (move-to-column 0)
-      (if (search-forward-regexp "\\[\\(.*\\)\\]" end t)
-	  (setq buffers-debug (cons buffers-debug 
-				    (match-string-no-properties 1)))
-	(setq buffers-debug (cons buffers-debug ""))))))
+    (with-current-buffer (ciao-proc-get-buffer 'ciaosh-cproc)
+      (save-excursion
+        (search-backward "display_debugged.")
+        ;; Match all tradicional debugged modules
+        (forward-line)
+        (end-of-line)
+        (setq end (point))
+        ;; (beginning-of-line)
+        (move-to-column 0)
+        (if (search-forward-regexp "\\[\\(.*\\)\\]" end t)
+            (setq buffers-debug (match-string-no-properties 1))
+          (setq buffers-debug ""))
+        ;; Match all source debug modules
+        (forward-line)
+        (end-of-line)
+        (setq end (point))
+        ;; (beginning-of-line)
+        (move-to-column 0)
+        (if (search-forward-regexp "\\[\\(.*\\)\\]" end t)
+            (setq buffers-debug (cons buffers-debug 
+                                      (match-string-no-properties 1)))
+          (setq buffers-debug (cons buffers-debug "")))))))
 
 ;; TODO: Detection of a debugging session is based on the comparison
 ;;   the column number with 6. This is a fragile method.
@@ -296,9 +296,9 @@ buffers selected for source debug."
    normal process."
   (if (ciao-proc-alive 'ciaosh-cproc)
       (let ((column))
-	(save-excursion
-	  (set-buffer (ciao-proc-get-buffer 'ciaosh-cproc))
-	  (setq column (current-column)))
+	(with-current-buffer (ciao-proc-get-buffer 'ciaosh-cproc)
+          (save-excursion
+            (setq column (current-column))))
 	(if (< column 6) ;; TODO: kludge?
 	    t
 	  (ciao-send-command 'ciaosh-cproc "@" t)
@@ -349,7 +349,7 @@ or not)."
 	(number 0)
 	string)
     (save-excursion
-      (goto-line begin-line)
+      (goto-char (point-min)) (forward-line (1- begin-line))
       (while (< (point) point)
 	(if (re-search-forward
 	     (concat "\\<" (regexp-quote pred-name) "\\>") nil nil)
@@ -413,15 +413,15 @@ in the source files and the Ciao toplevel are synchronized."
 						       (match-end 4))
 		  numpred (string-to-number (buffer-substring-no-properties 
 					  (match-beginning 5) (match-end 5))))
-	    (save-excursion
-	      (set-buffer (get-file-buffer file))
-	      (goto-line l0)
-	      ;; To change when considering comments in clause
-	      (search-forward pred nil t numpred)
-	      (ciao-color (ciao-what-line)
-			  (ciao-what-line)
-			  ciao-face-debug-breakpoint
-			  'ciao-break)))))
+	    (with-current-buffer (get-file-buffer file)
+              (save-excursion
+                (goto-char (point-min)) (forward-line (1- l0))
+                ;; To change when considering comments in clause
+                (search-forward pred nil t numpred)
+                (ciao-color (ciao-what-line)
+                            (ciao-what-line)
+                            ciao-face-debug-breakpoint
+                            'ciao-break))))))
     (switch-to-buffer buffer)))
 
 ;;------------------------------------------------------------
@@ -459,16 +459,15 @@ in the source files and the Ciao toplevel are synchronized."
     (ciao-debug-uncolor-line)
 
     (if buffer
-	(progn
+	(with-current-buffer buffer
 	  (save-excursion
-	    (set-buffer buffer)
 	    (save-restriction
 	      (widen)
 	      ;; (goto-line start)
 	      ;; Due to impression in detecting the start line of a clause
 	      ;; we move to the end and clause and then search backward
 	      ;; until find the beginning of the clause.
-	      (goto-line end)
+              (goto-char (point-min)) (forward-line (1- end))
 	      (end-of-line)
 	      (re-search-backward "^[a-z']" (point-min) t)
 
@@ -502,7 +501,7 @@ in the source files and the Ciao toplevel are synchronized."
 		  ;; Not found pred, overlay the whole region
 		  (progn
 		    (setq overlay-arrow-string "")
-		    (goto-line end)
+                    (goto-char (point-min)) (forward-line (1- end))
 		    (end-of-line)
 		    (re-search-backward "^[a-z']" (point-min) t)
 		    (ciao-color (ciao-what-line)
@@ -555,15 +554,18 @@ in the source files and the Ciao toplevel are synchronized."
 (defun ciao-debug-uncolor-line ()
   (if (and ciao-debug-last-line
 	   (buffer-name (car ciao-debug-last-line))) ;; And buffer not killed
-      (save-excursion
-	(set-buffer (car ciao-debug-last-line))
-	(ciao-uncolor (cdr ciao-debug-last-line)
-		      (cdr ciao-debug-last-line)
-		      'ciao-debug))))
+      (with-current-buffer (car ciao-debug-last-line)
+        (save-excursion
+          (ciao-uncolor (cdr ciao-debug-last-line)
+                        (cdr ciao-debug-last-line)
+                        'ciao-debug)))))
   
 (defun ciao-debug-remove-marks ()
   (ciao-debug-uncolor-line)
   (setq overlay-arrow-position nil))
+
+(defun ciao-debug-filter-reset ()
+  (setq ciao-debug-filter-pending-text ""))
 
 ;; TODO: This includes two filters indeed:
 ;;   - debug events

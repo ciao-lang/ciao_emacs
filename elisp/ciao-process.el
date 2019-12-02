@@ -240,6 +240,7 @@ is no such buffer."
 (autoload 'ciao-reset-loading-state "ciao-loading")
 (autoload 'ciao-reset-error-state "ciao-parsing")
 (autoload 'ciao-debug-remove-marks "ciao-debugger")
+(autoload 'ciao-debug-filter-reset "ciao-debugger")
 
 (require 'ciao-aux) ; ciao-queue-clear, ciao-queue-empty,
 		    ; ciao-queue-enqueue, ciao-queue-dequeue
@@ -300,6 +301,8 @@ is no such buffer."
   (let (origbuff (current-buffer))
     (ciao-switch-other-window procbuff)
     (ciao-switch-other-window origbuff)))
+
+(defvar comint-highlight-prompt) ;; declare to prevent warnings
 
 (defun ciao-proc-mode (cproc)
   "Simple initialization of a Ciao inferior mode (just
@@ -424,7 +427,7 @@ on the Ciao toplevel side before executing the next command."
   ;; Need to reload certain things if needed.
   (ciao-reset-loading-state)
   (ciao-reset-error-state)
-  (setq ciao-debug-filter-pending-text "")
+  (ciao-debug-filter-reset)
 
   ;; Stop displaying an arrow in a source file.
   (ciao-debug-remove-marks)
@@ -571,11 +574,11 @@ finish message)."
 	(goto-char (point-max))
 	(if (re-search-backward
 	     "^Ciao Listener finished" (point-min) t)
-	    (next-line 1) ; where last listener finished
+	    (forward-line 1) ; where last listener finished
 	  (goto-char (point-min))) ; beginning of buffer
 	;; Show the logo.
 	(open-line 2) ; (open-line 3)
-	(next-line 1)
+	(forward-line 1)
 	(ciao-insert-image 'png (ciao-proc-logo cproc) "Ciao")
 	))
   ;; Move to the last point

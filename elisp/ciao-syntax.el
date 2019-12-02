@@ -304,17 +304,16 @@ rigidly along with this one."
 (defun ciao-format-file ()
   "Format a Ciao program using `ciaofmt'."
   (interactive)
-  (setq tmp_file_1 (concat (buffer-file-name) ".1.tmp"))
-  (setq current-point (point))
-  (setq current-start (window-start))
-  (setq source-buffer (current-buffer))
-  (with-temp-file tmp_file_1
-    (insert-buffer source-buffer))
-  (shell-command (concat (ciao-get-config :ciaofmt-bin) " " tmp_file_1) source-buffer)
-  (delete-file tmp_file_1)
-  (set-window-start (selected-window) current-start)
-  (goto-char current-point)
-  )
+  (let* ((tmp_file_1 (concat (buffer-file-name) ".1.tmp"))
+         (current-point (point))
+         (current-start (window-start))
+         (source-buffer (current-buffer)))
+    (with-temp-file tmp_file_1
+      (insert-buffer-substring source-buffer))
+    (shell-command (concat (ciao-get-config :ciaofmt-bin) " " tmp_file_1) source-buffer)
+    (delete-file tmp_file_1)
+    (set-window-start (selected-window) current-start)
+    (goto-char current-point)))
 
 ;;------------------------------------------------------------
 ;; Some aid for inserting program elements (very limited for now)

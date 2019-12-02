@@ -746,6 +746,32 @@ strings, commnds, etc.)."
   "Face for sectioning commands at level 5."
   :group 'ciao-highlighting-faces-lpdoc)
 
+(defcustom ciao-face-fontify-sectioning 1.1
+  "Whether to fontify sectioning macros with varying height or a color face.
+
+If it is a number, use varying height faces.  The number is used
+for scaling starting from `ciao-face-sectioning-5-face'.  Typically
+values from 1.05 to 1.3 give best results, depending on your font
+setup.  If it is the symbol `color', use `font-lock-type-face'.
+
+Caveats: Customizing the scaling factor applies to all sectioning
+faces unless those face have been saved by customize.  Setting
+this variable directly does not take effect unless you call
+`ciao-face-update-sectioning-faces' or restart Emacs.
+
+Switching from `color' to a number or vice versa does not take
+effect unless you call \\[font-lock-fontify-buffer] or restart
+Emacs."
+  ;; Possibly add some words about XEmacs here. :-(
+  :type '(choice (number :tag "Scale factor")
+                 (const color))
+  :initialize 'custom-initialize-default
+  :set (lambda (symbol value)
+	 (set-default symbol value)
+	 (unless (eq value 'color)
+	   (ciao-face-update-sectioning-faces ciao-face-sectioning-max value)))
+  :group 'ciao-faces)
+
 (defun ciao-face-update-sectioning-faces (&optional max height-scale)
   "Update sectioning commands faces."
   (unless height-scale
@@ -772,32 +798,6 @@ strings, commnds, etc.)."
 	      ;; (message "%s - %s" face-name size)
 	      (make-face-size face-name size))
 	  (set-face-attribute face-name nil :height  height-scale))))))
-
-(defcustom ciao-face-fontify-sectioning 1.1
-  "Whether to fontify sectioning macros with varying height or a color face.
-
-If it is a number, use varying height faces.  The number is used
-for scaling starting from `ciao-face-sectioning-5-face'.  Typically
-values from 1.05 to 1.3 give best results, depending on your font
-setup.  If it is the symbol `color', use `font-lock-type-face'.
-
-Caveats: Customizing the scaling factor applies to all sectioning
-faces unless those face have been saved by customize.  Setting
-this variable directly does not take effect unless you call
-`ciao-face-update-sectioning-faces' or restart Emacs.
-
-Switching from `color' to a number or vice versa does not take
-effect unless you call \\[font-lock-fontify-buffer] or restart
-Emacs."
-  ;; Possibly add some words about XEmacs here. :-(
-  :type '(choice (number :tag "Scale factor")
-                 (const color))
-  :initialize 'custom-initialize-default
-  :set (lambda (symbol value)
-	 (set-default symbol value)
-	 (unless (eq value 'color)
-	   (ciao-face-update-sectioning-faces ciao-face-sectioning-max value)))
-  :group 'ciao-faces)
 
 (defun ciao-face-make-sectioning-faces (max &optional height-scale)
   "Build the faces used to fontify sectioning commands."

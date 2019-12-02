@@ -45,18 +45,9 @@
 ;;;###autoload(add-hook 'java-mode-hook 'load-java-ciaopp-mode)
 
 ; ---------------------------------------------------------------------------
-
-(defun java-ciaopp-setup ()
-  (interactive)
-  ;; option in the menu
-  (easy-menu-define ciao-java-menu-ciaopp java-mode-map 
-    "CiaoPP Mode Menus" ciao-mode-menus-java)
-  (easy-menu-add ciao-java-menu-ciaopp)
-  ;; toolbar
-  (ciao-java-setup-tool-bar))
-
-; ---------------------------------------------------------------------------
 ; Key bindings
+
+(defvar java-mode-map)
 
 (define-key java-mode-map "\C-cM"    'java-browse-preprocessor-options)
 (define-key java-mode-map "\C-cA"    'ciao-analyze-buffer)
@@ -110,6 +101,17 @@
      ["Ciao environment (mode) version" ciao-report-mode-version t]
      )
   "Menus for CiaoPP mode.")
+
+; ---------------------------------------------------------------------------
+
+(defun java-ciaopp-setup ()
+  (interactive)
+  ;; option in the menu
+  (easy-menu-define ciao-java-menu-ciaopp java-mode-map 
+    "CiaoPP Mode Menus" ciao-mode-menus-java)
+  (easy-menu-add ciao-java-menu-ciaopp)
+  ;; toolbar
+  (ciao-java-setup-tool-bar))
 
 ; ---------------------------------------------------------------------------
 ; Tool bar

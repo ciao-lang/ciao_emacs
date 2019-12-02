@@ -122,11 +122,6 @@ execution on the toplevel."
 ;; Loading
 ;;------------------------------------------------------------
 
-;; TODO: this should be local to the inferior buffer
-(defvar ciao-objects-lib-loaded nil
-  "Stores whether objects library has been loaded or not (see
-ciao-load-command).")
-
 ;; TODO: use with-current-buffer, etc.?
 (defun ciao-load-command (filename)
   "Determines the loading command necessary for `filename'"
@@ -142,7 +137,7 @@ ciao-load-command).")
 	   (concat
 	    ;; Use objects package if necessary
 	    ;; TODO: this is a kludge...
-	    (if ciao-objects-lib-loaded
+	    (if ciao-objects-lib-loaded ;; if lib loaded
 		""
 	      (setq ciao-objects-lib-loaded t)
 	      "use_package(objects).\n")
@@ -194,10 +189,10 @@ called."
       (ciao-real-load-buffer-current-or-main main)
     ;; Abort while debugging and then continue the normal process
     (let ((column
-           (save-excursion
-             (set-buffer (ciao-proc-get-buffer 'ciaosh-cproc))
-             (goto-char (point-max))
-             (current-column))))
+           (with-current-buffer (ciao-proc-get-buffer 'ciaosh-cproc)
+             (save-excursion
+               (goto-char (point-max))
+               (current-column)))))
       (if (< column 10)
 	  (ciao-real-load-buffer-current-or-main main)
 	(ciao-proc-enqueue-w 'ciaosh-cproc 'ciao-enable-trace)
@@ -226,6 +221,7 @@ defined it asks the user if this query should be called."
   (ciao-proc-enqueue-w 'ciaosh-cproc 'ciao-errors-or-load-query))
 
 (autoload 'ciao-get-query "ciao-testing") ;; TODO: this should be a hook
+(autoload 'ciao-load-query "ciao-testing") ;; TODO: this should be a hook
 
 (defun ciao-errors-or-load-query ()
   (if ciao-locate-errors-after-run
@@ -313,13 +309,32 @@ this command always loads the predicate in debugging mode (interpreted)."
   (ciao-find-last-run-errors))
 
 ;;------------------------------------------------------------
-;; Assertions and syntax cheking
+;; Module and package loading state (for extensions)
 ;;------------------------------------------------------------
 
 ;; TODO: This should be local to the inferior process
 (defvar ciao-assrt-lib-loaded nil
   "Stores whether assertion library has been loaded or not (see
 ciao-check-buffer-syntax).")
+
+;; TODO: This should be local to the inferior process
+(defvar ciao-testing-lib-loaded nil
+  "Stores whether testing library has been loaded or not (see
+ciao-send-testing-command-on-buffer).")
+
+;; TODO: this should be local to the inferior buffer
+(defvar ciao-objects-lib-loaded nil
+  "Stores whether objects library has been loaded or not (see
+ciao-load-command).")
+
+(defun ciao-reset-loading-state ()
+  (setq ciao-objects-lib-loaded nil)
+  (setq ciao-assrt-lib-loaded nil)
+  (setq ciao-testing-lib-loaded nil))
+
+;;------------------------------------------------------------
+;; Assertions and syntax cheking
+;;------------------------------------------------------------
 
 ;; TODO: ciao-assrt-lib-loaded must be associated to the process
 ;; TODO: Simplify this code with a process queue
@@ -483,7 +498,7 @@ is not loaded."
 	(progn
 	  (set-buffer procbuffer)
 	  ;; Move the cursor and recenter the buffer
-	  (goto-line infline)
+          (goto-char (point-min)) (forward-line (1- infline))
 	  (recenter 1))))
   ;; Go to the current error in the source buffer (if known)
   ;; Keep that window selected.
@@ -510,9 +525,9 @@ is not loaded."
 	    (message "Error within this file."))
 	;; Go to the right point in opened file...
 	(push-mark (point) t)
-	(goto-line beginline)
+        (goto-char (point-min)) (forward-line (1- beginline))
 	(recenter 0)
-	(goto-line (+ endline 1))
+        (goto-char (point-min)) (forward-line (1- (1+ endline)))
 	(backward-char 1)
 	t ;; (message "Mark set")
 	))))
@@ -585,13 +600,6 @@ points. Returns nil if it is not opened in any buffer."
       (process-send-string (ciao-proc-name 'ciaosh-cproc) "halt.")
       (sleep-for 2))
     ))
-
-;;===========================================================================
-
-(defun ciao-reset-loading-state ()
-  (setq ciao-objects-lib-loaded nil)
-  (setq ciao-assrt-lib-loaded nil)
-  (setq ciao-testing-lib-loaded nil))
 
 ;;===========================================================================
 

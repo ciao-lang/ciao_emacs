@@ -269,9 +269,9 @@ corresponding toolbar buttons."
 			    (replace-regexp-in-string "customize(all)." "" line-str)))
 
 (defun ciao-ciaopp-process-graphical-menu (line-str-orig)
-  (setq line-str (ugly-filter line-str-orig))
   ;; (message "*** After filter: " line-str)
-  (let* ( (new-line (concat ciao-widget-str-list line-str))
+  (let* ( (line-str (ugly-filter line-str-orig))
+          (new-line (concat ciao-widget-str-list line-str))
 	  widget-mark
 	  default_opt)
     
@@ -323,8 +323,8 @@ corresponding toolbar buttons."
 	    (comint-send-input)))))
 
 (defun ciao-ciaopp-process-gmenu-just-write-answers (line-str-orig)
-  (setq line-str (ugly-filter line-str-orig))
-  (let* ((new-line       (concat ciao-widget-str-list line-str))
+  (let* ((line-str (ugly-filter line-str-orig))
+         (new-line (concat ciao-widget-str-list line-str))
 	 widget-mark
 	 default_opt)
 

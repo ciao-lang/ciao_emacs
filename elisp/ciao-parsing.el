@@ -274,7 +274,7 @@ class, or normal module)."
       (if ciao-current-error
 	  ;; Move to the previous error found in the inferior buffer
 	  (let ((infline (ciao-error-get ciao-current-error 'infln)))
-	    (goto-line infline))
+            (goto-char (point-min)) (forward-line (1- infline)))
 	;; Or to the beginning of the errors
 	(goto-char (marker-position ciao-error-session-marker)))
       ;; From 21.1 on , this does not go over the prompt. Using column instead:
@@ -348,19 +348,19 @@ class, or normal module)."
 	  ;; Try to find opening "{" by inserting a "}"
 	  (insert "}")
 	  ;; Change syntax of parenthesis
-	  (modify-syntax-entry ?( "_")
-			       (modify-syntax-entry ?) "_")
-	  (modify-syntax-entry ?[ "_")
-			       (modify-syntax-entry ?] "_")
+	  (modify-syntax-entry ?\( "_")
+			       (modify-syntax-entry ?\) "_")
+	  (modify-syntax-entry ?\[ "_")
+			       (modify-syntax-entry ?\] "_")
 	  ;; Scan to "{"
 	  (condition-case nil
 	      (setq openpoint (scan-sexps (point) -1))
 	    (error (setq openpoint 0)))
 	  ;; Return syntax of parenthesis
-	  (modify-syntax-entry ?( "()")
-			       (modify-syntax-entry ?) ")(")
-	  (modify-syntax-entry ?[ "(]")
-			       (modify-syntax-entry ?] ")[")      
+	  (modify-syntax-entry ?\( "()")
+			       (modify-syntax-entry ?\) ")(")
+	  (modify-syntax-entry ?\[ "(]")
+			       (modify-syntax-entry ?\] ")[")      
 	  ;; Delete the "}" inserted
 	  (delete-char -1)
 	  (if (= openpoint 0)

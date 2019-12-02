@@ -63,7 +63,7 @@ simply select \\[ciao-set-query] on a line that contains only the
 system prompt."
 
   (interactive)
-  (let (beg query)
+  (let (query)
     (cond ((and (eq major-mode 'ciao-inferior-mode)
 		(string= (current-buffer) (ciao-proc-get-buffer 'ciaosh-cproc)))
 	   (setq ciao-query (ciao-get-last-query)))
@@ -85,9 +85,9 @@ buffer."
 	      (ciao-proc-prompt-pattern 'ciaosh-cproc) nil t))
 	"" ;; no query found
       (goto-char (match-end 0))
-      (setq beg (point))
-      (end-of-line)
-      (buffer-substring-no-properties beg (point)))))
+      (let (beg (point))
+        (end-of-line)
+        (buffer-substring-no-properties beg (point))))))
 
 (defun ciao-clear-query ()
   "Clear the default query."
@@ -121,11 +121,6 @@ buffer."
 (defvar ciao-testing-library-command "use_module(library(unittest))."
   "Command to load library that is needed in order to run tests
   from the top level.")
-
-;; TODO: This should be local to the inferior process
-(defvar ciao-testing-lib-loaded nil
-  "Stores whether testing library has been loaded or not (see
-ciao-send-testing-command-on-buffer).")
 
 (defvar ciao-testing-command-passed nil
   "Stores the next command passed during testing.")
@@ -170,6 +165,8 @@ This is an aid towards ensuring that all exported predicates have tests."
 ;;   (ciao-send-compiler-command
 ;;    (concat predname "('" (buffer-file-name) "')."))
 
+(defvar ciao-testing-lib-loaded) ;; TODO: generalize for more libs
+
 (defun ciao-send-testing-command-on-buffer () 
   ;; TODO: do not use current-buffer here... (use orig-buffer at least?)
   (setq ciao-last-source-buffer-used (current-buffer))
@@ -183,7 +180,7 @@ This is an aid towards ensuring that all exported predicates have tests."
 	(ciao-proc-enqueue-w 'ciaosh-cproc 'ciao-do-send-testing-command))
     ;; Ciao process is alive
     (ciao-show-inferior-process (ciao-proc-get-buffer 'ciaosh-cproc))
-    (if ciao-testing-lib-loaded ;; if lib not loaded
+    (if ciao-testing-lib-loaded ;; if lib loaded
 	(ciao-do-send-testing-command)
       (ciao-load-testing-lib)
       (ciao-proc-enqueue-w 'ciaosh-cproc 'ciao-do-send-testing-command))))
