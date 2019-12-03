@@ -40,7 +40,7 @@
     ()
   (let ((table (make-syntax-table)))
     (modify-syntax-entry ?_ "w" table) ; word constituent
-    (modify-syntax-entry ?\\ "." table) ; punctuation
+;;    (modify-syntax-entry ?\\ "." table) ; punctuation
 ;;  1 means CHAR is the start of a two-char comment start sequence.
 ;;  2 means CHAR is the second character of such a sequence.
 ;;  3 means CHAR is the start of a two-char comment end sequence.
