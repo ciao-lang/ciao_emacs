@@ -37,6 +37,8 @@ modern emacses, and also in ascii mode with emacs>= 21.1)."
 
 ;;----------------------------------------------------------------------------
 
+;; TODO: this should not be needed nowadays
+
 ;; Just a bridge (for documentation and setting local binding)
 ;; but better than font-lock-fontify-buffer
 (defun ciao-fontify-buffer ()

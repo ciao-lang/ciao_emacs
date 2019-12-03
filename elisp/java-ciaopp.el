@@ -57,7 +57,7 @@
 (define-key java-mode-map "\C-c`"    'ciao-find-last-run-errors)
 (define-key java-mode-map "\C-ce"    'ciao-unmark-last-run-errors)
 (define-key java-mode-map "\C-c\C-r" 'run-ciao-preprocessor)
-(define-key java-mode-map "\C-ch"    'ciao-fontify-buffer)
+;; (define-key java-mode-map "\C-ch"    'ciao-fontify-buffer)
 (define-key java-mode-map "\C-c\C-i" 'ciao-help-on-current-symbol)
 (define-key java-mode-map "\C-c/"    'ciao-complete-current-symbol)
 (define-key java-mode-map "\C-c\C-m" 'ciao-goto-manuals)
@@ -87,7 +87,7 @@
 ;;      ["Preprocess buffer (w/previous options) and show output"  
 ;;                                 ciao-preprocess-buffer-and-show-output t]
      ["(Re)Start Ciao preprocessor"              run-ciao-preprocessor t]
-     ["Update syntax-based coloring"             ciao-fontify-buffer t]
+;;      ["Update syntax-based coloring"             ciao-fontify-buffer t]
      "----"
      ["Go to manual page for symbol under cursor" ciao-help-on-current-symbol]
      ["Complete symbol under cursor"        ciao-complete-current-symbol t]
@@ -148,8 +148,9 @@
    'ciao-customize-all
    "icons/preferences" tool-bar-map java-mode-map
    :help "Edit (customize) preferences for Ciao, CiaoPP, LPdoc")
-  (ciao-tool-bar-local-item-from-menu 
-   'ciao-fontify-buffer "icons/ciaorehighlight" tool-bar-map java-mode-map))
+;;   (ciao-tool-bar-local-item-from-menu 
+;;    'ciao-fontify-buffer "icons/ciaorehighlight" tool-bar-map java-mode-map)
+  )
 
 ; ---------------------------------------------------------------------------
 

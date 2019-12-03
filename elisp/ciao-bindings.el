@@ -75,8 +75,7 @@ older versions."
 (require 'ciao-splash) ; ciao-startup
 (require 'ciao-syntax) ; ciao-indent-line, ciao-format-file,
 		       ; ciao-insert-script-header
-(require 'ciao-font-lock) ; ciao-fontify-buffer,
-			  ; ciao-font-lock-defaults-create,
+(require 'ciao-font-lock) ; ciao-font-lock-defaults-create,
 			  ; ciao-inferior-font-lock-defaults-create
 (require 'ciao-loading) ; run-ciao-toplevel, ciao-set-main-filename,
 			; ciao-check-buffer-syntax, ciao-load-buffer,
@@ -228,7 +227,7 @@ output produced by these tools.
 Commands:
   ")
 
-  (ciao-define-key map "\C-ch" 'ciao-fontify-buffer)
+;;   (ciao-define-key map "\C-ch" 'ciao-fontify-buffer)
   (ciao-define-key map "\t" 'ciao-indent-line)
 
   (ciao-documentation-section 
@@ -657,8 +656,8 @@ how things are set up in your @tt{.emacs} file).")
      ["Check buffer syntax (incl. assertions)"   ciao-check-buffer-syntax
       :help "Just check file syntax, including assertions, without loading."]
      "----"
-     ["Update syntax-based coloring"             ciao-fontify-buffer
-      :help "Refresh the syntax-based coloring (useful for complex code or if syntax-based coloring gets out of sync)."]
+;;     ["Update syntax-based coloring"             ciao-fontify-buffer
+;;      :help "Refresh the syntax-based coloring (useful for complex code or if syntax-based coloring gets out of sync)."]
      ["Format source code"                       ciao-format-file
       :help "(Re)format the curreny source using the ciaofmt tool."]
      ["Insert script header"                     ciao-insert-script-header
@@ -810,8 +809,8 @@ how things are set up in your @tt{.emacs} file).")
 (defconst ciao-inferior-mode-menus
 ;;  (list "Ciao"
   (list "Ciao"
-     ["Update syntax-based coloring"        ciao-fontify-buffer t]
-     "----"
+;;     ["Update syntax-based coloring"        ciao-fontify-buffer t]
+;;     "----"
 ;;     "ERRORS"
      ["Locate (next) preproc/compiler error msg" ciao-find-last-run-errors t]
      ["Remove error marks in buffers"            ciao-unmark-last-run-errors t]
@@ -1016,9 +1015,9 @@ how things are set up in your @tt{.emacs} file).")
   ;; Ciao-specific stuff
   (ciao-tool-bar-local-item-from-menu 
    'run-ciao-toplevel "icons/ciao" tool-bar-map ciao-mode-map)
-  (ciao-tool-bar-local-item-from-menu  
-   'ciao-fontify-buffer "icons/ciaorehighlight"
-   tool-bar-map ciao-mode-map)
+;;   (ciao-tool-bar-local-item-from-menu  
+;;    'ciao-fontify-buffer "icons/ciaorehighlight"
+;;    tool-bar-map ciao-mode-map)
   (ciao-tool-bar-local-item-from-menu  
    'ciao-load-buffer "icons/ciaoload" tool-bar-map ciao-mode-map)
   (ciao-tool-bar-local-item-from-menu  
@@ -1136,9 +1135,9 @@ how things are set up in your @tt{.emacs} file).")
   ;; Ciao-specific stuff
   (ciao-tool-bar-local-item-from-menu
    'run-ciao-toplevel "icons/ciao" tool-bar-map ciao-inferior-mode-map)
-  (ciao-tool-bar-local-item-from-menu  
-   'ciao-fontify-buffer "icons/ciaorehighlight" 
-   tool-bar-map ciao-inferior-mode-map)
+;;   (ciao-tool-bar-local-item-from-menu  
+;;    'ciao-fontify-buffer "icons/ciaorehighlight" 
+;;    tool-bar-map ciao-inferior-mode-map)
   (if (> emacs-major-version 21)
       (ciao-tool-bar-local-item-from-menu
        'comint-interrupt-subjob  
