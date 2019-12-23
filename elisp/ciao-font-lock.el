@@ -415,6 +415,16 @@ affect other syntax highlighting."
              (beginning-of-line)
              (looking-at-p (ciao-doc-regexp "")))))
     'ciao-face-lpdoc-comment)
+   ;; Strings followed by lpdoc comment strings (trick to colour escaped "foo""bar")
+   ((save-excursion
+      (goto-char (nth 8 state))
+      (and (> (point) 1)
+           (progn
+             (backward-char)
+             (looking-at-p "\""))
+           (eq (get-text-property (point) 'face)
+               'ciao-face-lpdoc-comment)))
+    'ciao-face-lpdoc-comment)
    ;; Strings
    ((save-excursion
       (goto-char (nth 8 state))

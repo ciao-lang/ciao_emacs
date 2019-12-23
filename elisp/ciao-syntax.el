@@ -62,7 +62,7 @@
 (defconst ciao-syntax-propertize-function
   (when (fboundp 'syntax-propertize-rules)
     (syntax-propertize-rules
-     ("\\<0\\(''?\\)"
+     ("\\<0\\('\"\\|''?\\)" ; 0'', 0'", or just 0'
       (1 (unless (save-excursion (nth 8 (syntax-ppss (match-beginning 0))))
            (string-to-syntax "_"))))
      ("\\<[1-9][0-9]*\\('\\)[0-9a-zA-Z]" (1 "_"))
