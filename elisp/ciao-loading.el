@@ -479,6 +479,14 @@ source buffer)."
   ;; *** (delete-other-windows) ***
   (setq ciao-error-session-orig-buffer nil))
 
+(defun ciao-unmark-last-run-errors-and-quit ()
+  "Same as keyboard-quit (i.e., the normal Emacs quit, typically
+bound to C-g) but also clears the error markings from the last
+Ciao-related inferior process run."
+  (interactive)
+  (ciao-unmark-last-run-errors)
+  (keyboard-quit))
+
 ;;------------------------------------------------------------
 ;; Moving to errors in source and inferior process
 ;;------------------------------------------------------------
