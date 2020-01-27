@@ -85,6 +85,7 @@ older versions."
 			; ciao-consult-predicate,
 			; ciao-find-last-run-errors,
 			; ciao-unmark-last-run-errors,
+			; ciao-unmark-last-run-errors-and-quit,
 			; ciao-recenter-last-ciao-buffer
 (require 'ciao-compile) ; ciao-make-exec, ciao-make-po,
 			; ciao-compile-buffer,
@@ -288,6 +289,7 @@ include:
   (ciao-define-key inferior-map "\C-c/"    'ciao-complete-current-symbol)
   (ciao-define-key inferior-map "\C-c`"    'ciao-find-last-run-errors)
   (ciao-define-key inferior-map "\C-ce" 'ciao-unmark-last-run-errors)
+  (ciao-define-key inferior-map "\C-g"  'ciao-unmark-last-run-errors-and-quit)
   (ciao-define-key inferior-map "\C-cq" 'ciao-set-query)
 ;; (ciao-define-key map "???" 'ciao-clear-query)
   (ciao-define-key inferior-map "\C-cQ" 'ciao-load-query)
@@ -349,9 +351,10 @@ well as performing several syntactic checks of assertions:
 @cindex{locating errors} 
    ")
 
-  (ciao-define-key map "\C-c`"    'ciao-find-last-run-errors)
+  (ciao-define-key map "\C-c`"  'ciao-find-last-run-errors)
   (ciao-define-key map "\C-ce" 'ciao-unmark-last-run-errors)
-  (ciao-define-key map "\C-cE"    'ciao-check-buffer-syntax)
+  (ciao-define-key map "\C-g"  'ciao-unmark-last-run-errors-and-quit)
+  (ciao-define-key map "\C-cE"  'ciao-check-buffer-syntax)
 
   (ciao-documentation-section 
    "Commands which help typing in programs" 
@@ -647,8 +650,10 @@ how things are set up in your @tt{.emacs} file).")
      "----"
      ["Go to (next) preproc/compiler error msg"  ciao-find-last-run-errors
       :help "Locate (next) error reported in the last run or the compiler, preprocessor, or documenter."]
-     ["Remove error (and dbg) marks in buffers"  ciao-unmark-last-run-errors
+     ["Remove error/debug marks in buffers"  ciao-unmark-last-run-errors
       :help "Clear any error highlighting marks left in different buffers."]
+     ["Quit (C-g) and remove error/debbug marks"  ciao-unmark-last-run-errors-and-quit
+      :help "Emacs quit (C-g) + clear any error highlighting marks left in different buffers."]
      "----"
      ["(Un)Set main module"                      ciao-set-main-filename
       :help "Define or undefine the main module of the current project (from which compilation will start)."]
@@ -773,8 +778,12 @@ how things are set up in your @tt{.emacs} file).")
                                            ciao-browse-preprocessor-options t]
      ["Toggle graphical/textual menu" ciao-toggle-ciaopp-use-graphical-menu t]
      "----"
-     ["Go to (next) preproc/compiler error msg" ciao-find-last-run-errors t]
-     ["Remove error (and dbg) marks in buffers"  ciao-unmark-last-run-errors t]
+     ["Go to (next) preproc/compiler error msg" ciao-find-last-run-errors 
+      :help "Locate (next) error reported in the last run or the compiler, preprocessor, or documenter."]
+     ["Remove error/debug marks in buffers"  ciao-unmark-last-run-errors
+      :help "Clear any error highlighting marks left in different buffers."]
+     ["Quit (C-g) and remove error/debug marks"  ciao-unmark-last-run-errors-and-quit
+      :help "Emacs quit (C-g) + clear any error highlighting marks left in different buffers."]
      ["Show last preprocessor output file"     ciao-show-preprocessor-output t]
 ;;      ["Preprocess buffer (w/previous options) and show output"  
 ;;                                       ciao-preprocess-buffer-and-show-output t]
@@ -793,8 +802,14 @@ how things are set up in your @tt{.emacs} file).")
      ["Generate documentation for buffer"        ciao-gen-buffer-doc t]
      ["View documentation in selected format"    ciao-start-viewer t]
      ["Change default doc format/visualizer"     ciao-set-lpdoc-docformat t]
-     ["Goto (next) preproc/compiler error msg"   ciao-find-last-run-errors t]
-     ["Remove error (and dbg) marks in buffers"  ciao-unmark-last-run-errors t]
+     "----"
+     ["Go to (next) preproc/compiler error msg" ciao-find-last-run-errors 
+      :help "Locate (next) error reported in the last run or the compiler, preprocessor, or documenter."]
+     ["Remove error/debug marks in buffers"  ciao-unmark-last-run-errors
+      :help "Clear any error highlighting marks left in different buffers."]
+     ["Quit (C-g) and remove error/dbg marks"  ciao-unmark-last-run-errors-and-quit
+      :help "Emacs quit (C-g) + clear any error highlighting marks left in different buffers."]
+     "----"
      ["Visit(/create) SETTINGS.pl file"        ciao-visit-lpdoc-settings t]
      ["Generate documentation"                   ciao-gen-doc t]
      "----"
