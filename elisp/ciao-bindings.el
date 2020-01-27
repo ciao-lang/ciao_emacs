@@ -652,7 +652,7 @@ how things are set up in your @tt{.emacs} file).")
       :help "Locate (next) error reported in the last run or the compiler, preprocessor, or documenter."]
      ["Remove error/debug marks in buffers"  ciao-unmark-last-run-errors
       :help "Clear any error highlighting marks left in different buffers."]
-     ["Quit (C-g) and remove error/debbug marks"  ciao-unmark-last-run-errors-and-quit
+     ["Quit (C-g) and remove error/debug marks"  ciao-unmark-last-run-errors-and-quit
       :help "Emacs quit (C-g) + clear any error highlighting marks left in different buffers."]
      "----"
      ["(Un)Set main module"                      ciao-set-main-filename
