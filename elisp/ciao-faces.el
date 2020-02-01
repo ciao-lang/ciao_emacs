@@ -648,7 +648,7 @@ strings, commnds, etc.)."
 (defface ciao-face-highlight-code ;; ciao-face-yellowish-block
   '(;;(((type tty) (class color)) (:background "yellow" :foreground "black"))
     (((class color) (background light)) (:background "yellow" :foreground "black"))
-    (((class color) (background dark)) (:background "yellow" :foreground "black"))
+    (((class color) (background dark)) (:background "SlateGray2" :foreground "black"))
     (t (:inverse-video t)))
   "Face to use for highlighting code areas (e.g., when locating 
    the code area that an error message refers to)."
