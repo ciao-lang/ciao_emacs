@@ -485,6 +485,7 @@ affect other syntax highlighting."
          . ciao-face-prompt)                    ;; Prompts
 	("^yes$" . ciao-face-yes-answer)        ;; Answer
 	("^no$" . ciao-face-no-answer)          ;; Answer
+	("^aborted$" . ciao-face-error-mess)     ;; Answer
 ;;	("^Select[^:]*:" . ciao-face-ciaopp-option) ;; Preproc prompt
 	("\\([A-Z][a-zA-Z \\-]*:\\) *\\(\\[[a-zA-Z0-9, _\t\n]*\\]\\)[ \t\n]*\\(([^)]*)\\)[ \t\n]*\\(\\?\\)"
          (1 ciao-face-ciaopp-option)            ;; Option message
