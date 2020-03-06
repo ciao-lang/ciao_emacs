@@ -73,9 +73,9 @@ is defined. @cindex{lpdoc command args, setting}
 (defvar ciao-lpdoc-docformats
   '(;; "dvi"
     ;; "ps"
-    "pdf"
     "html"
     "info"
+    "pdf"
     "manl"
     "ascii"))
 
