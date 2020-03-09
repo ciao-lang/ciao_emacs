@@ -227,15 +227,6 @@ strings, commnds, etc.)."
   "Face to use for LPdoc bug comments."
   :group 'ciao-highlighting-faces-lpdoc)
 
-(defvar ciao-face-lpdoc-bug-comment 'ciao-face-lpdoc-bug-comment)
-(defface ciao-face-lpdoc-bug-comment ;; ciao-face-warning
-  '(;;(((type tty) (class color)) (:foreground "red"))
-    (((class color) (background light)) (:foreground "Red" :weight bold))
-    (((class color) (background dark)) (:foreground "Red" :weight bold))
-    (t (:inverse-video t :weight bold)))
-  "Face to use for LPdoc bug comments."
-  :group 'ciao-highlighting-faces-lpdoc)
-
 ; (defvar ciao-face-lpdoc-version-comment 'ciao-face-lpdoc-version-comment)
 ; (defface ciao-face-lpdoc-version-comment ;; ciao-face-comment
 ;   '(;;(((type tty) (class color)) (:foreground "red"))
@@ -677,7 +668,7 @@ values from 1.05 to 1.3 give best results, depending on your font
 setup.  If it is the symbol `color', use `font-lock-type-face'.
 
 Caveats: Customizing the scaling factor applies to all sectioning
-faces unless those face have been saved by customize.  Setting
+faces unless those faces have been saved by customize.  Setting
 this variable directly does not take effect unless you call
 `ciao-face-update-sectioning-faces' or restart Emacs.
 

@@ -63,11 +63,11 @@
 ;;                    treatment of mainfile
 ;;   ciao-compile.el: compiling modules (based on ciao-process)
 ;;   ciao-debugger.el: debuging modules (based on ciao-process)
-;;   ciao-testing.el: tesging modulescommands for testing modules
+;;   ciao-testing.el: commands for testing modules and
 ;;                    treatment of default query
 ;;   ciao-ciaopp.el: preprocessing modules (based on ciao-process)
 ;;   ciao-lpdoc.el: documenting modules (based on ciao-process)
-;;   ciao-help.el: (info) manual search (based on word-help.el)
+;;   ciao-lpdoc-info.el: coloring for LPdoc info manuals
 ;;   ciao-vc.el: support for version control comments
 ;;
 ;; Level 5 -- All user interaction stuff

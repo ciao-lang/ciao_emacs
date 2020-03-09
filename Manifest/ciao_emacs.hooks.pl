@@ -266,6 +266,7 @@ ciao_mode_lisp_files := [
     'ciao-testing',
     'ciao-debugger',
     'ciao-lpdoc',
+    'ciao-lpdoc-info',
     'ciao-ciaopp',
     'java-ciaopp',
     'ciao-builder',
