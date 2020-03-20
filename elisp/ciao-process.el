@@ -195,7 +195,7 @@ this buffer name."
 (defun ciao-proc-prompt-pattern (cproc)
   (cond ((eq cproc 'ciaosh-cproc) ciao-ciaosh-prompt-pattern)
 	((eq cproc 'ciaopp-cproc) ciao-ciaopp-prompt-pattern)
-	((eq cproc 'lpdoc-cproc) (ciao-lpdoc-prompt-pattern))
+	((eq cproc 'lpdoc-cproc) ciao-lpdoc-prompt-pattern)
 	(t (error "Unknown Ciao process %s" cproc))))
 
 ;; TODO: merge with the previous one
