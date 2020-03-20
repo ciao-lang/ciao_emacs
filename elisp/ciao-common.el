@@ -174,6 +174,48 @@ is defined. @cindex{toplevel command args, setting}"
   :type 'string) 
 
 ;; ---------------------------------------------------------------------------
+;; LPdoc variables
+;; ---------------------------------------------------------------------------
+
+(defcustom ciao-lpdoc-system (or (getenv "LPDOC") (ciao-get-config :lpdoc-bin))
+  "Name of LPdoc auto-documenter executable."
+  :group 'lpdoc
+  :type 'string)
+
+;;;###autoload
+(defun ciao-set-lpdoc-system () 
+  "Change the executable used to run the LPdoc auto-documenter. It is
+set by default to @tt{lpdoc} or to the environment  
+variable @tt{LPDOC} if it is defined. @cindex{lpdoc command, setting}
+@cindex{auto-documenter command, setting}"
+  (interactive)
+  (setq ciao-lpdoc-system
+	(read-file-name "Change Ciao LPdoc auto-documenter executable? "
+   		        ciao-lpdoc-system ciao-lpdoc-system))) 
+
+(defun ciao-lpdoc-system-args-interactive ()
+  ;;(if (string= system-type "windows-nt") "-T -i" "-T"))
+  "-T")
+
+(defcustom ciao-lpdoc-system-args 
+  (or (getenv "LPDOCARGS") 
+      (ciao-lpdoc-system-args-interactive))
+  "Arguments passed to LPdoc executable."
+  :group 'lpdoc
+  :type 'string)
+
+;;;###autoload
+(defun ciao-set-lpdoc-system-args () 
+  "Change the arguments passed to the LPdoc auto-documenter. They are
+set by default to none or to the environment variable @tt{LPDOCARGS} if it
+is defined. @cindex{lpdoc command args, setting}
+@cindex{auto-documenter command args, setting}" 
+  (interactive)
+  (setq ciao-lpdoc-system-args
+	(read-string "Change args passed to LPdoc auto documenter executable? " 
+		     ciao-lpdoc-system-args nil)))
+
+;; ---------------------------------------------------------------------------
 ;; CiaoPP variables
 ;; ---------------------------------------------------------------------------
 

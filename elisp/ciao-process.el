@@ -30,7 +30,6 @@
 		       ; ciao-ciaopp-buffer-name,
 		       ; ciao-lpdoc-buffer-name,
 		       ; ciao-ciaopp-gmenu-buffer-name
-(require 'ciao-syntax) ; ciao-any-prompt-pattern
 (require 'ciao-aux) ; ciao-switch-other-window
 
 ;; ==========================================================================
@@ -64,20 +63,14 @@
   "Matching the Ciao prompt")
 (defvar ciao-ciaopp-prompt-pattern "\nciaopp \\?- " 
   "Matching the CiaoPP prompt")
-;; Set to ciao-os-shell-prompt-pattern:
-(defun ciao-lpdoc-prompt-pattern ()
-  "Matching the lpdoc prompt"
-  (ciao-any-prompt-pattern))
-;; *** For future lpdoc versions (with top level):
-;; (defun ciao-lpdoc-prompt-pattern ()
-;;   "Matching the lpdoc prompt"
-;;   "\n\\lpdoc ?- ")
+(defvar ciao-lpdoc-prompt-pattern "\nlpdoc \\?- "
+  "Matching the LPdoc prompt")
 
 ; (private)
 ;; TODO: merge with the previous one
 (defvar ciao-any-ciaosh-prompt-pattern "^\\(\\(\\|[0-9]+ \\)\\?-\\)")
 (defvar ciao-any-ciaopp-prompt-pattern "^\\(ciaopp \\?-\\)")
-(defvar ciao-any-lpdoc-prompt-pattern "^\\(lpdoc \\?-\\|.*\\$ \\)")
+(defvar ciao-any-lpdoc-prompt-pattern "^\\(lpdoc \\?-\\)")
 
 ;; ---------------------------------------------------------------------------
 ;; State for communication with Ciao toplevel processes (ciaosh,
@@ -170,13 +163,13 @@ this buffer name."
 (defun ciao-proc-system (cproc)
   (cond ((eq cproc 'ciaosh-cproc) ciao-system)
 	((eq cproc 'ciaopp-cproc) ciao-ciaopp-system)
-	((eq cproc 'lpdoc-cproc) nil) ;; ciao-lpdoc-system
+	((eq cproc 'lpdoc-cproc) ciao-lpdoc-system)
 	(t (error "Unknown Ciao process %s" cproc))))
 
 (defun ciao-proc-system-args (cproc)
   (cond ((eq cproc 'ciaosh-cproc) ciao-system-args)
 	((eq cproc 'ciaopp-cproc) ciao-ciaopp-system-args)
-	((eq cproc 'lpdoc-cproc) nil) ;; ciao-lpdoc-system-args
+	((eq cproc 'lpdoc-cproc) ciao-lpdoc-system-args)
 	(t (error "Unknown Ciao process %s" cproc))))
 
 (defun ciao-proc-filter (cproc)
@@ -258,34 +251,30 @@ is no such buffer."
     ;; TODO: (JF) make the buffname optional
     (setq 
      newbuff
-     (if (eq cproc 'lpdoc-cproc)
-	 ;; It is an lpdoc buffer, use normal shell.
-	 (save-window-excursion ; Do not allow 'shell' disorder our windows
-	   (shell buffname))
-       (if (equal ""
-		  ;; Done differently because of filenames with blanks...
-		  ;; (ciao-get-string-after-blank system)
-		  system-args
-		  )
-	   (progn 
-	     (make-comint-in-buffer
-	      (ciao-proc-name cproc)
-	      buffname
-	      ;; Done differently because of filenames with blanks...
-	      ;; (ciao-get-string-before-blank system)
-	      system
-	      ))
-	 (make-comint-in-buffer
-	  (ciao-proc-name cproc)
-	  buffname 
-	  ;; Done differently because of filenames with blanks...
-	  ;; (ciao-get-string-before-blank system) ; command name
-	  system
-	  nil                                   ; filename
-	  ;; Done differently because of filenames with blanks...
-	  ;; (ciao-get-string-after-blank system)  ; arguments
-	  system-args
-	  ))))
+     (if (equal ""
+                ;; Done differently because of filenames with blanks...
+                ;; (ciao-get-string-after-blank system)
+                system-args
+                )
+         (progn 
+           (make-comint-in-buffer
+            (ciao-proc-name cproc)
+            buffname
+            ;; Done differently because of filenames with blanks...
+            ;; (ciao-get-string-before-blank system)
+            system
+            ))
+       (make-comint-in-buffer
+        (ciao-proc-name cproc)
+        buffname 
+        ;; Done differently because of filenames with blanks...
+        ;; (ciao-get-string-before-blank system) ; command name
+        system
+        nil                                   ; filename
+        ;; Done differently because of filenames with blanks...
+        ;; (ciao-get-string-after-blank system)  ; arguments
+        system-args
+        )))
 
     (with-current-buffer newbuff
       (ciao-inferior-mode-internal cproc)

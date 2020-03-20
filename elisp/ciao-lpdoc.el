@@ -37,38 +37,6 @@
 ;; LPdoc variables
 ;; ---------------------------------------------------------------------------
 
-(defcustom ciao-lpdoc-system (or (getenv "LPDOC") (ciao-get-config :lpdoc-bin))
-  "Name of LPdoc auto-documenter executable."
-  :group 'lpdoc
-  :type 'string)
-
-;;;###autoload
-(defun ciao-set-lpdoc-system () 
-  "Change the executable used to run the LPdoc auto-documenter. It is
-set by default to @tt{lpdoc} or to the environment  
-variable @tt{LPDOC} if it is defined. @cindex{lpdoc command, setting}
-@cindex{auto-documenter command, setting}"
-  (interactive)
-  (setq ciao-lpdoc-system
-	(read-file-name "Change Ciao LPdoc auto-documenter executable? "
-   		        ciao-lpdoc-system ciao-lpdoc-system))) 
-
-(defcustom ciao-lpdoc-system-args (or (getenv "LPDOCARGS") "")
-  "Arguments passed to LPdoc executable."
-  :group 'lpdoc
-  :type 'string)
-
-;;;###autoload
-(defun ciao-set-lpdoc-system-args () 
-  "Change the arguments passed to the LPdoc auto-documenter. They are
-set by default to none or to the environment variable @tt{LPDOCARGS} if it
-is defined. @cindex{lpdoc command args, setting}
-@cindex{auto-documenter command args, setting}" 
-  (interactive)
-  (setq ciao-lpdoc-system-args
-	(read-string "Change args passed to LPdoc auto documenter executable? " 
-		     ciao-lpdoc-system-args nil)))
-
 ;; TODO: Ask Ciao what are the docformats
 (defvar ciao-lpdoc-docformats
   '(;; "dvi"
@@ -108,7 +76,9 @@ inferior process"
   (setq ciao-last-source-buffer-used (current-buffer))
   (ciao-unmark-last-run-errors)
   ;; Send command to move to `dir'
-  (ciao-lpdoc-goto-dir dir)
+  (ciao-send-command 'lpdoc-cproc 
+		     (concat "working_directory(_,\'" dir "\').")
+		     t)
   ;; Then, execute LPdoc command `command'
   (ciao-proc-enqueue-w 'lpdoc-cproc
 		       `(lambda () (ciao-lpdoc-do-command ,command)))
@@ -120,28 +90,9 @@ inferior process"
   (if ciao-locate-errors-after-run
       (ciao-proc-enqueue-w 'lpdoc-cproc 'ciao-launch-find-last-run-errors-from-orig-buffer)))
 
-;;  ;; Execute `exit'
-;;  (ciao-send-command 'lpdoc-cproc 
-;;		     "exit"
-;;		     t)
-;; Does not work in windows:
-;; 	(ciao-send-command 'lpdoc-cproc 
-;; 	 (concat "cd \"" dir "\" ; \"" 
-;; 		 ciao-lpdoc-system "\" " 
-;; 		 (if (string= ciao-lpdoc-docformat "dvi")
-;; 		     ;; "large" Optional, for demos
-;; 		     "")
-;; 		 ciao-lpdoc-docformat "view")
-;; 	 t)
-
-(defun ciao-lpdoc-goto-dir (dir)
-  (ciao-send-command 'lpdoc-cproc 
-		     (concat "cd \"" dir "\"")
-		     t))
-
 (defun ciao-lpdoc-do-command (command)
   (ciao-send-command 'lpdoc-cproc 
-		     (concat "\"" ciao-lpdoc-system "\" " command)
+		     command
 		     t))
 
 (defun ciao-lpdoc-filter (proc string)
@@ -185,7 +136,7 @@ inferior process"
 	(let ((dir (ciao-lpdoc-settings-dir sourcefile)))
 	  (ciao-lpdoc-send-command-at-dir
 	   dir
-	   (concat "-t " ciao-lpdoc-docformat " SETTINGS.pl"))
+	   (concat "doc_cmd('SETTINGS.pl',[],gen(" ciao-lpdoc-docformat "))."))
 	  t) ;; TODO: Detect errors?
       nil)))
 
@@ -207,7 +158,7 @@ inferior process"
        (t
 	(ciao-lpdoc-send-command-at-dir
 	 dir
-	 (concat "-t " ciao-lpdoc-docformat " --view SETTINGS.pl")
+         (concat "doc_cmd('SETTINGS.pl',[],view(" ciao-lpdoc-docformat ")).")
 	 ))))))
 
 ;;------------------------------------------------------------
