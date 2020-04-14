@@ -396,8 +396,8 @@ documentation would be improved)."
   (concat 
   "\\("				      
   (if ciao-locate-also-note-messages
-      "^\\({?WARNING.*:\\|{?ERROR.*:\\|{?NOTE.*:\\)"
-    "^\\({?WARNING.*:\\|{?ERROR.*:\\)")
+      "^\\({?WARNING.*:\\|{?ERROR.*:\\|{?FAILED.*:\\|{?ABORTED.*:\\|{?NOTE.*:\\)"
+    "^\\({?WARNING.*:\\|{?ERROR.*:\\|{?FAILED.*:\\|{?ABORTED.*:\\)")
   "\\|"
   (ciao-any-prompt-pattern)
   "\\)"))
