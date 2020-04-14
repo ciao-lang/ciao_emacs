@@ -624,6 +624,35 @@ strings, commnds, etc.)."
   "Face to use for note messages."
   :group 'ciao-highlighting-faces-messages)
 
+(defvar ciao-face-passed-mess 'ciao-face-passed-mess)
+(defface ciao-face-passed-mess ;; ciao-face-forestgreen-bold
+  '(;;(((type tty) (class color)) (:foreground "green" :weight bold))
+    (((class grayscale) (background light)) (:foreground "LightGray" :weight bold))
+    (((class grayscale) (background dark)) (:foreground "DimGray" :weight bold))
+    (((class color) (background light)) (:foreground "ForestGreen" :weight bold))
+    (((class color) (background dark)) (:foreground "lime green" :weight bold))
+    (t (:inverse-video t :weight bold)))
+  "Face to use for passed teset messages." ;; copied from ciao-face-yes-answer
+  :group 'ciao-highlighting-faces-messages)
+
+(defvar ciao-face-failed-mess 'ciao-face-failed-mess)
+(defface ciao-face-failed-mess ;; ciao-face-warning
+  '(;;(((type tty) (class color)) (:foreground "red"))
+    (((class color) (background light)) (:foreground "Red" :weight bold)) ; :family "helv"
+    (((class color) (background dark)) (:foreground "Red" :weight bold)) ; :family "helv"
+    (t (:inverse-video t :weight bold)))
+  "Face to use for failed test messages." ;; copied from ciao-face-error-mess
+  :group 'ciao-highlighting-faces-messages)
+
+(defvar ciao-face-aborted-mess 'ciao-face-aborted-mess)
+(defface ciao-face-aborted-mess ;; ciao-face-warning
+  '(;;(((type tty) (class color)) (:foreground "red"))
+    (((class color) (background light)) (:foreground "Red" :weight bold)) ; :family "helv"
+    (((class color) (background dark)) (:foreground "Red" :weight bold)) ; :family "helv"
+    (t (:inverse-video t :weight bold)))
+  "Face to use for aborted test messages." ;; copied from ciao-face-error-mess
+  :group 'ciao-highlighting-faces-messages)
+
 (defvar ciao-face-other-mess 'ciao-face-other-mess)
 (defface ciao-face-other-mess ;; ciao-face-brown
   '(;;(((type tty) (class color)) (:foreground "cyan" :weight light))

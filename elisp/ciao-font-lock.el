@@ -500,6 +500,9 @@ affect other syntax highlighting."
 	("^{DEBUG.*$" . ciao-face-debug-mess)       ;; Error messages
 	("^{?Note:.*$" . ciao-face-note-mess)       ;; Error messages
 	("^{NOTE.*$" . ciao-face-note-mess)         ;; Error messages
+	("^{?PASSED:.*$" . ciao-face-passed-mess)   ;; Test results messages
+	("^{?FAILED:.*$" . ciao-face-failed-mess)   ;; Test results messages
+	("^{?ABORTED:.*$" . ciao-face-aborted-mess) ;; Test results messages
         ("^\\({.*\\|}\\)" . ciao-face-other-mess)   ;; Error messages
 ;;        ("^\\*\\*\\* ---------.*\n^\\*\\*\\* .*\n\\*\\*\\* ---------.*$" 
         ("^\\*\\*\\* \\(---------\\|=========\\).*$" 
