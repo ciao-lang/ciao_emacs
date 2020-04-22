@@ -73,11 +73,7 @@ Return the structure for ciao doc-spec."
 	(setq doc-spec (append doc-spec templist))))
     doc-spec))
 
-<<<<<<< HEAD
 (info-lookup-maybe-add-help
-=======
- (info-lookup-maybe-add-help
->>>>>>> f002a3129988110776fb7cfda25c073dd08d64e7
   :mode 'ciao-mode
   :topic 'symbol
   :regexp "^[A-Za-z0-9_@:=<>/\\\.%\$]+"
@@ -144,15 +140,7 @@ form of a list by `info-lookup->symbol'.  Predicates without arity are added."
       (setq begin (point))
       (skip-syntax-forward "w")
       (setq end (point)))
-<<<<<<< HEAD
-<<<<<<< HEAD
     (completion-in-region begin end (ciao-get-completions))))
-=======
-  (completion-in-region begin end (ciao-get-completions))))
->>>>>>> refactor ciao-info-look.el
-=======
-  (completion-in-region begin end (ciao-get-completions))))
->>>>>>> f002a3129988110776fb7cfda25c073dd08d64e7
 
 ; Modified code from info.el
 (defun info-selected-manuals-matches (string manuals)
@@ -160,12 +148,7 @@ form of a list by `info-lookup->symbol'.  Predicates without arity are added."
 Return a list of matches where each element is in the format
 \((FILENAME INDEXTEXT NODENAME LINENUMBER))."
   (unless (string= string "")
-<<<<<<< HEAD
     (let ((pattern (format "\n\\* +\\([^\n]*\\(%s\\)[^\n]*\\):[ \t]+\\([^\n]+\\)\\.\\(?:[ \t\n]*(line +\\([0-9]+\\))\\)?" (regexp-quote string)))
-=======
-    (let ((pattern (format "\n\\* +\\([^\n]*\\(%s\\)[^\n]*\\):[ \t]+\\([^\n]+\\)\\.\\(?:[ \t\n]*(line +\\([0-9]+\\))\\)?"
-			   (regexp-quote string)))
->>>>>>> f002a3129988110776fb7cfda25c073dd08d64e7
 	  (ohist Info-history)
 	  (ohist-list Info-history-list)
 	  (current-node Info-current-node)
@@ -214,34 +197,22 @@ Build a menu of the possible matches."
   (interactive
    (list
      (let ((default (info-lookup-guess-ciao-symbol)))
-  	  (completing-read
-  	    (if (not default) "Look up symbol: "
-  	      (format "Look up symbol (default %s): " default))
-  	    (ciao-get-completions)
-  	    nil
-  	    nil
-  	    default
-  	    'info-lookup-history
-  	    default))))
+	  (completing-read
+	    (if (not default) "Look up symbol: "
+	      (format "Look up symbol (default %s): " default))
+	    (ciao-get-completions)
+	    nil
+	    nil
+	    default
+	    'info-lookup-history
+	    default))))
   (if (equal string "")
       (Info-find-node Info-apropos-file "Top")
     (let* (nodename)
       (setq nodename (format "Index for ‘%s’" string))
-<<<<<<< HEAD
-<<<<<<< HEAD
-      (push (list nodename string (info-selected-manuals-matches string (ciao-get-config :manual-bases)))
-	    Info-apropos-nodes)
-      (Info-find-node Info-apropos-file nodename))))
-=======
-=======
->>>>>>> f002a3129988110776fb7cfda25c073dd08d64e7
-  	(push (list nodename string (info-selected-manuals-matches string (ciao-get-config :manual-bases)))
-  	      Info-apropos-nodes)
-  	(Info-find-node Info-apropos-file nodename))))
+	(push (list nodename string (info-selected-manuals-matches string (ciao-get-config :manual-bases)))
+	      Info-apropos-nodes)
+	(Info-find-node Info-apropos-file nodename))))
 
-<<<<<<< HEAD
->>>>>>> refactor ciao-info-look.el
-=======
->>>>>>> f002a3129988110776fb7cfda25c073dd08d64e7
 (provide 'ciao-info-look)
 ;;; ciao-info-look.el ends here
