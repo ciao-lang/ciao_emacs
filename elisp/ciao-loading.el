@@ -34,6 +34,7 @@
 		    ; ciao-replace-regexp-in-string,
 		    ; ciao-switch-other-window,
 		    ; ciao-switch-this-window, ciao-write-region
+(require 'ciao-syntax) ; ciao-narrow-loc-ln0
 
 ;;===========================================================================
 ;; Generic commands and functions for loading of code in a Ciao
@@ -559,11 +560,14 @@ is not loaded."
     (if (not error-buffer)
 	() ; buffer does not exist any more
       (with-current-buffer error-buffer
-	(if (ciao-error-has-lines err)
-	    (ciao-p-color (ciao-error-get err 'ln0)
+	(when (ciao-error-has-lines err)
+	  (save-excursion ; fix when ln0 is on blank or comment
+	    (goto-char (point-min))
+	    (forward-line (ciao-error-get err 'ln0))
+            (ciao-p-color (ciao-narrow-loc-ln0 (point))
 			  (ciao-error-get err 'ln1)
 			  face-or-uncolor
-			  'ciao-error)))))
+			  'ciao-error))))))
   ;; Color/uncolor mark in the inferior buffer
   (let ((infline (ciao-error-get err 'infln)))
     (if infline ;; TODO: In principle, this is never nil
