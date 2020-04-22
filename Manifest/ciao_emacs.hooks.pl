@@ -251,7 +251,7 @@ emacs_mode_files :=
 %       contain any hardwired list of files.
 
 ciao_mode_lisp_files := [
-    'word-help',
+    'ciao-info-look',
     'ciao-help',
     'ciao-faces',
     'ciao-syntax',

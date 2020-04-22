@@ -158,7 +158,8 @@
 
 ; Find the Ciao documentation (including CiaoPP properties) while in
 ; Xc mode (i.e., when visiting .xc files).
-(ciao-help-add-manual "Xc/l" ciao-manuals)
+; Not used, word-help replaced by info-look
+;; (ciao-help-add-manual "Xc/l" ciao-manuals)
 
 
 ;; Provide ourselves:

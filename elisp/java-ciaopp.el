@@ -156,7 +156,8 @@
 
 ; Find the Ciao documentation (including CiaoPP properties) while in
 ; Java mode (i.e., when visiting .java files).
-(ciao-help-add-manual "Java/l" ciao-manuals)
+; Not used, word-help replaced by info-look
+;; (ciao-help-add-manual "Java/l" ciao-manuals)
 
 
 ;; Provide ourselves:

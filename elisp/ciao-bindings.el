@@ -71,7 +71,8 @@ older versions."
 ;; bindings, menu bars, or tool bars.
 ;; ---------------------------------------------------------------------------
 
-(require 'ciao-help) ; ciao-goto-manuals, ciao-help-on-current-symbol
+(require 'ciao-info-look) ; ciao-info-lookup-symbol, ciao-info-complete, ciao-info-apropos
+(require 'ciao-help) ; ciao-goto-manuals
 (require 'ciao-splash) ; ciao-startup
 (require 'ciao-syntax) ; ciao-indent-line, ciao-format-file,
 		       ; ciao-insert-script-header
@@ -241,8 +242,9 @@ standard @tt{search} command (generally bound to @key{s}) can be used
 inside @apl{info} buffers to search for a given string.
    ")
 
-  (ciao-define-key map "\C-c\C-i" 'ciao-help-on-current-symbol)
-  (ciao-define-key map "\C-c/"    'ciao-complete-current-symbol)
+  (ciao-define-key map "\C-hS"    'ciao-info-lookup-symbol)
+  (ciao-define-key map "\C-h\M-s" 'ciao-info-apropos)
+  (ciao-define-key map "\C-h\C-i" 'ciao-info-complete)
   (ciao-define-key map "\C-c\C-m" 'ciao-goto-manuals)
   (ciao-define-key map "\C-hm"    'ciao-describe-mode)
 
@@ -284,9 +286,9 @@ include:
 
   ;; Not such a good idea: completion is better (see
   ;; 'comint-dynamic-complete above) 
-  ;; (ciao-define-key map "\t" 'ciao-indent-line)
-  (ciao-define-key inferior-map "\C-c\C-i" 'ciao-help-on-current-symbol)
-  (ciao-define-key inferior-map "\C-c/"    'ciao-complete-current-symbol)
+  (ciao-define-key inferior-map "\C-hS" 'ciao-info-lookup-symbol)
+  (ciao-define-key inferior-map "\C-h\M-s" 'ciao-info-apropos)
+  (ciao-define-key inferior-map "\C-c\C-i" 'ciao-info-complete)
   (ciao-define-key inferior-map "\C-c`"    'ciao-find-last-run-errors)
   (ciao-define-key inferior-map "\C-ce" 'ciao-unmark-last-run-errors)
   (ciao-define-key inferior-map "\C-g"  'ciao-unmark-last-run-errors-and-quit)
@@ -745,20 +747,21 @@ how things are set up in your @tt{.emacs} file).")
 
 (defconst ciao-mode-menus-help
   (list "CiaoHelp" 
-     ["Go to manual page for symbol under cursor" ciao-help-on-current-symbol t]
-;; MH Not backwards compatible...
-;;      :help "Go to manual page describing the symbol under the cursor" ]
-;; Also, these had ( ) 
-     ["Complete symbol under cursor"        ciao-complete-current-symbol t]
-     ["Ciao manuals area in info index" ciao-goto-manuals t]
-;;     ["Ciao system manual" ciao-goto-ciaocore-manual t]
-;;     ["Ciao preprocessor manual" ciao-goto-ciaopp-manual t]
-;;     ["LPdoc automatic documenter manual" ciao-goto-lpdoc-manual t]
-     ["List all key bindings" ciao-describe-mode t]
-     "----"
-;;     ["Ciao semantic search" ciao-semantic-find t]
-;;     "----"
-     ["Ciao environment (mode) version" ciao-report-mode-version t]
+        ["Go to manual page for symbol under cursor" ciao-info-lookup-symbol t]
+        ["Show all entries in manuals of symbol under cursor" ciao-info-apropos t]
+        ;; MH Not backwards compatible...
+        ;;      :help "Go to manual page describing the symbol under the cursor" ]
+        ;; Also, these had ( ) 
+        ["Complete symbol under cursor"        ciao-info-complete t]
+        ["Ciao manuals area in info index" ciao-goto-manuals t]
+        ;;     ["Ciao system manual" ciao-goto-ciaocore-manual t]
+        ;;     ["Ciao preprocessor manual" ciao-goto-ciaopp-manual t]
+        ;;     ["LPdoc automatic documenter manual" ciao-goto-lpdoc-manual t]
+        ["List all key bindings" ciao-describe-mode t]
+        "----"
+        ;;     ["Ciao semantic search" ciao-semantic-find t]
+        ;;     "----"
+        ["Ciao environment (mode) version" ciao-report-mode-version t]
    )
   "Help menu for the Ciao mode.")
 
