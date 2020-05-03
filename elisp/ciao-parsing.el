@@ -35,6 +35,7 @@
 		       ; ciao-error-or-prompt-pattern
 (require 'ciao-process) ; ciao-proc-any-prompt-pattern,
 			; ciao-proc-prompt
+(require 'ciao-builder) ; ciao-bundle-extend-path
 
 ;; -----------------------------------------------------------
 ;; Parsing of source code (approximate)
@@ -368,34 +369,36 @@ class, or normal module)."
 	    (goto-char openpoint)
 	    (search-forward "/")
 	    (backward-char 1)
+	    (skip-chars-backward "a-zA-Z0-9_-") ;; (include bundle name if needed)
 	    (let ((beg (point)))
 	      (search-forward-regexp 
 	       "\\(\\.\\(po\\|itf\\|asr\\|ast\\|testout\\|pls\\|pl\\|cgi\\)\\>\\|$\\)")
-	      (setq filename 
-		    (fix-cygwin-drive-letter
-		     (concat (buffer-substring-no-properties 
-			      beg (match-beginning 0)) 
-			     ;; MH cygdrive case for .pls, fixed bug
-			     (cond
-			      ((string= (match-string-no-properties 0) ".po") 
-			       ".pl")
-			      ((string= (match-string-no-properties 0) ".itf") 
-			       ".pl")
-			      ((string= (match-string-no-properties 0) ".asr") 
-			       ".pl")
-			      ((string= (match-string-no-properties 0) ".ast") 
-			       ".pl")
-			      ((string= (match-string-no-properties 0) ".testout") 
-			       ".pl")
-			      ((string= (match-string-no-properties 0) ".pls") 
-			       ".pls")
-			      ((string= (match-string-no-properties 0) ".pl") 
-			       ".pl")
-			      ((string= (match-string-no-properties 0) "cgi") ;; TODO: .cgi?
-			       ".cgi")
-			      ((string= (match-string-no-properties 0) "") 
-			       "")
-			      )))))
+	      (setq filename
+                    (ciao-bundle-extend-path
+                     (fix-cygwin-drive-letter
+                      (concat (buffer-substring-no-properties 
+                               beg (match-beginning 0)) 
+                              ;; MH cygdrive case for .pls, fixed bug
+                              (cond
+                               ((string= (match-string-no-properties 0) ".po") 
+                                ".pl")
+                               ((string= (match-string-no-properties 0) ".itf") 
+                                ".pl")
+                               ((string= (match-string-no-properties 0) ".asr") 
+                                ".pl")
+                               ((string= (match-string-no-properties 0) ".ast") 
+                                ".pl")
+                               ((string= (match-string-no-properties 0) ".testout") 
+                                ".pl")
+                               ((string= (match-string-no-properties 0) ".pls") 
+                                ".pls")
+                               ((string= (match-string-no-properties 0) ".pl") 
+                                ".pl")
+                               ((string= (match-string-no-properties 0) "cgi") ;; TODO: .cgi?
+                                ".cgi")
+                               ((string= (match-string-no-properties 0) "") 
+                                "")
+                               ))))))
 	    (goto-char messpoint)
 	    ;; (beginning-of-line)
 	    (move-to-column 0)

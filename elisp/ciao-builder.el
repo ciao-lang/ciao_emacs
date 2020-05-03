@@ -139,6 +139,46 @@
   (ciao-builder-command "list"))
 
 ;; ---------------------------------------------------------------------------
+;; Extend relative bundle path
+
+;; TODO: invalidate cache if CIAOPATH changes
+
+;; Create a hash table for caching source paths
+(defvar ciao--bundle-src-cache (make-hash-table :test 'equal))
+
+(defun ciao-bundle-src (bundle)
+  "Obtain the source directory of a bundle"
+  (let ((src (gethash bundle ciao--bundle-src-cache)))
+    (if src
+        src
+      (setq src (ciao-bundle-src-nocache bundle))
+      (if src
+          (progn
+            (puthash bundle src ciao--bundle-src-cache)
+            src)
+        nil))))
+
+(defun ciao-bundle-src-nocache (bundle)
+  "Obtain the source directory of a bundle (calling the builder)"
+  (message "extracting")
+  (let ((str (shell-command-to-string 
+              (ciao-builder-cmdstr (concat "info " bundle)))))
+    (if (string-match "^  src: \\(.*\\)" str)
+        (match-string 1 str)
+      nil)))
+
+(defun ciao-bundle-extend-path (filename)
+  "Same as bundle_paths:bundle_extend_path/2 predicate"
+  (if (string-match "^\\([a-zA-Z0-9_-]+\\)\\(/.*\\)" filename)
+      (let* ((bundle (match-string 1 filename))
+             (rest (match-string 2 filename))
+             (src (ciao-bundle-src bundle)))
+        (if src
+            (concat src rest)
+          filename))
+    filename))
+
+;; ---------------------------------------------------------------------------
 ;; Grep on bundles source
 ;; TODO: add tags-search
 
