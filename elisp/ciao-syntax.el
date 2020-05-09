@@ -225,10 +225,7 @@ rigidly along with this one."
         (setq lparen
               (if (eq prev 'period)
                   nil ;; it was nil before
-                (cond ((looking-at "\\(:-\\|:=\\|-->\\)") 'neck)
-                      ((looking-at "\\(->\\)") 'arrow) ;; TODO: some trouble with '?', '=>'
-                      ((looking-at "[;|]") 'bar)
-                      (t nil)))))) ;; it was nil before
+                (ciao--lparen-sym)))))
       ;; stop if needed
       (if (not lparen)
           (setq lparen
@@ -253,6 +250,17 @@ rigidly along with this one."
     (if (eq lparen 'base0)
         (progn (skip-chars-forward " \t") 'base)
       lparen)))
+
+(defun ciao--lparen-sym ()
+  ;; Get lparen from symbol at point, or nil if none
+  (cond ((looking-at "\\(:-\\|-->\\)") 'neck)
+        ((and (looking-at ":=") (not (eq (preceding-char) ?=))) 
+         'neck)
+        ;; TODO: has some trouble with '?', '=>'
+        ((and (looking-at "->") (not (eq (preceding-char) ?-)))
+         'arrow)
+        ((looking-at "[;|]") 'bar)
+        (t nil)))
 
 (defun ciao--at-clause-head ()
   (save-excursion 
