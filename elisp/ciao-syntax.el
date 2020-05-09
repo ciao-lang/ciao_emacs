@@ -293,26 +293,27 @@ rigidly along with this one."
 (defun ciao-narrow-loc-ln0 (position)
   "Return the first non-empty line  found, if POSITION is on blank or comment.
 Used to fix the error/warning location range reported by the Ciao parser."
-  (goto-char position)
-  (let ((line-found nil))
-    (while (not line-found)
-      (cond
-       ((eq (point) (point-max)) ; End of buffer case
-	(setq line-found t))
-       ((or (nth 4 (syntax-ppss)) (string-blank-p (string (char-after)))) ; Whitespace case
-	(forward-char))
-       ((eq ?% (char-after)) ; Line comment case
-	(if (nth 4 (syntax-ppss (+ (point) 1)))
-	    (forward-char)
-	  (setq line-found t)))
-       ((eq ?/ (char-after)) ; Block comment case
-	(if (not (eq (+ (point) 1) (point-max)))
-	    (if (string-equal "*" (buffer-substring-no-properties (+ (point) 1) (+ (point) 2)))
-		(forward-char 2)
-	      (setq line-found t))
-	  (setq line-found t)))
-       ((setq line-found t))))) ; Default case
-    (line-number-at-pos))
+  (save-excursion
+    (goto-char position)
+    (let ((line-found nil))
+      (while (not line-found)
+        (cond
+         ((eq (point) (point-max)) ; End of buffer case
+          (setq line-found t))
+         ((or (nth 4 (syntax-ppss)) (string-blank-p (string (char-after)))) ; Whitespace case
+          (forward-char))
+         ((eq ?% (char-after)) ; Line comment case
+          (if (nth 4 (syntax-ppss (+ (point) 1)))
+              (forward-char)
+            (setq line-found t)))
+         ((eq ?/ (char-after)) ; Block comment case
+          (if (not (eq (+ (point) 1) (point-max)))
+              (if (string-equal "*" (buffer-substring-no-properties (+ (point) 1) (+ (point) 2)))
+                  (forward-char 2)
+                (setq line-found t))
+            (setq line-found t)))
+         ((setq line-found t))))) ; Default case
+    (line-number-at-pos)))
 
 ;; (defun ciao-comment-indent ()
 ;;   "Compute Ciao comment indentation."

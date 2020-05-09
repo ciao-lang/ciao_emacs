@@ -563,7 +563,7 @@ is not loaded."
 	(when (ciao-error-has-lines err)
 	  (save-excursion ; fix when ln0 is on blank or comment
 	    (goto-char (point-min))
-	    (forward-line (ciao-error-get err 'ln0))
+	    (forward-line (- (ciao-error-get err 'ln0) 1))
             (ciao-p-color (ciao-narrow-loc-ln0 (point))
 			  (ciao-error-get err 'ln1)
 			  face-or-uncolor
