@@ -289,7 +289,9 @@ include:
   (ciao-define-key inferior-map "\C-hS" 'ciao-info-lookup-symbol)
   (ciao-define-key inferior-map "\C-h\M-s" 'ciao-info-apropos)
   (ciao-define-key inferior-map "\C-c\C-i" 'ciao-info-complete)
-  (ciao-define-key inferior-map "\C-c`"    'ciao-find-last-run-errors)
+  ; (ciao-define-key inferior-map "\C-c`" 'ciao-find-last-run-errors)
+  (ciao-define-key inferior-map "\M-n"  'ciao-find-last-run-errors)
+  ; (ciao-define-key inferior-map "M-p"   'ciao-previous-error)
   (ciao-define-key inferior-map "\C-ce" 'ciao-unmark-last-run-errors)
   (ciao-define-key inferior-map "\C-g"  'ciao-unmark-last-run-errors-and-quit)
   (ciao-define-key inferior-map "\C-cq" 'ciao-set-query)
@@ -353,9 +355,10 @@ well as performing several syntactic checks of assertions:
 @cindex{locating errors} 
    ")
 
-  (ciao-define-key map "\C-c`"  'ciao-find-last-run-errors)
-  (ciao-define-key map "\C-ce" 'ciao-unmark-last-run-errors)
-  (ciao-define-key map "\C-g"  'ciao-unmark-last-run-errors-and-quit)
+  ;(ciao-define-key map "\C-c`"  'ciao-find-last-run-errors)
+  (ciao-define-key map "\M-n"   'ciao-find-last-run-errors)
+  (ciao-define-key map "\C-ce"  'ciao-unmark-last-run-errors)
+  (ciao-define-key map "\C-g"   'ciao-unmark-last-run-errors-and-quit)
   (ciao-define-key map "\C-cE"  'ciao-check-buffer-syntax)
 
   (ciao-documentation-section 

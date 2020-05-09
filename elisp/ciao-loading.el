@@ -451,7 +451,7 @@ source buffer)."
 
 (defun ciao-find-and-highlight-error (procbuffer cproc)
   "Go to location in source file containing next error, highlight."
-  ;; First, remove error previous marks in the source and process
+  ;; First, remove previous error marks in the source and process
   ;; buffers. No need to do anything if file is not being visited
   ;; any more.
   (if ciao-current-error

@@ -24,9 +24,100 @@
 ;; Font-lock support - (customizable) face definitions
 ;;----------------------------------------------------------------------------
 
+
+;; DONE:
+;; - Added list of standard faces, normally set by themes:
+;;   should use them more (inherit by default, but let set)
+;; - Set ciao code highlighting to use theme default (inherit)
+;; TODO:
+;; - Eliminate 'highlighting' from all variables names (really, leftover from hilit)
+
 ;; Reminder of tty colors:
 ;; black, red, green, yellow, blue, magenta, cyan, white
 ;; (tty-color-translate color) approximates the color
+
+;; ;; Reminder of standard faces (these are normally set up by themes)
+;; ;; A) standard faces (subset)
+;; default
+;; bold
+;; italic
+;; bold-italic
+;; underline
+;; fixed-pitch
+;; fixed-pitch-serif
+;; variable-pitch
+;; shadow
+;; 
+;; Here's an incomplete list of faces used to highlight parts of the
+;; text temporarily for specific purposes.
+;; 
+;; highlight
+;;    This face is used for text highlighting in various contexts, such
+;;    as when the mouse cursor is moved over a hyperlink.
+;; isearch
+;;    This face is used to highlight the current Isearch match (see Incremental Search).
+;; query-replace
+;;    This face is used to highlight the current Query Replace match (see Replace).
+;; lazy-highlight
+;;    This face is used to highlight lazy matches for Isearch and Query
+;;    Replace (matches other than the current one).
+;; region
+;;    This face is used for displaying an active region (see Mark). 
+;; secondary-selection
+;;    This face is used for displaying a secondary X selection (see Secondary Selection).
+;; trailing-whitespace
+;;    The face for highlighting excess spaces and tabs at the end of a
+;;    line when show-trailing-whitespace is non-nil (see Useless Whitespace).
+;; escape-glyph
+;;    The face for displaying control characters and escape sequences (see Text Display).
+;; homoglyph
+;;    The face for displaying lookalike characters, i.e., characters that
+;;    look like but are not the characters being represented (see Text Display).
+;; nobreak-space
+;;    The face for displaying no-break space characters (see Text Display).
+;; nobreak-hyphen
+;;     The face for displaying no-break hyphen characters (see Text Display).
+;; 
+;; The following faces control the appearance of parts of the Emacs frame:
+;; 
+;; tty-menu-enabled-face
+;;    This face is used to display enabled menu items on text-mode terminals.
+;; tty-menu-disabled-face
+;;    This face is used to display disabled menu items on text-mode terminals.
+;; tty-menu-selected-face
+;;    This face is used to display on text-mode terminals the menu item that
+;;    would be selected if you click a mouse or press <RET>.
+;; 
+;; ;; B) font lock standard faces
+;; font-lock-warning-face
+;;      for a construct that is peculiar, or that greatly changes the
+;;      meaning of other text, like ‘;;;###autoload’ in Emacs Lisp and ‘#error’ in C.
+;; font-lock-function-name-face
+;;      for the name of a function being defined or declared.
+;; font-lock-variable-name-face
+;;      for the name of a variable being defined or declared.
+;; font-lock-keyword-face
+;;       for a keyword with special syntactic significance, like ‘for’ and ‘if’ in C.
+;; font-lock-comment-face
+;;      for comments.
+;; font-lock-comment-delimiter-face
+;;      for comments delimiters, like ‘/*’ and ‘*/’ in C. On most terminals,
+;;      this inherits from font-lock-comment-face.
+;; font-lock-type-face
+;;      for the names of user-defined data types.
+;; font-lock-constant-face
+;;      for the names of constants, like ‘NULL’ in C.
+;; font-lock-builtin-face
+;;      for the names of built-in functions.
+;; font-lock-preprocessor-face
+;;      for preprocessor commands. This inherits, by default, from font-lock-builtin-face.
+;; font-lock-string-face
+;;      for string constants.
+;; font-lock-doc-face
+;;      for documentation strings in the code. This inherits, by default, from font-lock-string-face.
+;; font-lock-negation-char-face
+;;      for easily-overlooked negation characters.
+
 
 ;; General faces group
 (defgroup ciao-highlighting-faces nil
@@ -664,12 +755,16 @@ strings, commnds, etc.)."
   "Face to use for other messages."
   :group 'ciao-highlighting-faces-messages)
 
+;; (defvar ciao-face-highlight-code 'highlight) ; Alt: 'region
 (defvar ciao-face-highlight-code 'ciao-face-highlight-code)
-(defface ciao-face-highlight-code ;; ciao-face-yellowish-block
+(defface ciao-face-highlight-code
   '(;;(((type tty) (class color)) (:background "yellow" :foreground "black"))
-    (((class color) (background light)) (:background "yellow" :foreground "black"))
-    (((class color) (background dark)) (:background "SlateGray2" :foreground "black"))
-    (t (:inverse-video t)))
+;;     (((class color) (background light)) (:background "yellow" :foreground "black"))
+;;     (((class color) (background dark)) (:background "SlateGray2" :foreground "black"))
+;;     (((class color) (background light)) (:inherit 'region))
+;;     (((class color) (background dark)) (:inherit 'region)))
+      (((class color)) (:inherit 'region)))
+    ; (t (:inverse-video t)))
   "Face to use for highlighting code areas (e.g., when locating 
    the code area that an error message refers to)."
   :group 'ciao-highlighting-faces-messages)
