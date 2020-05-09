@@ -464,7 +464,8 @@ affect other syntax highlighting."
   (if (ciao-emacs-can-do-font-lock-p)
       (setq-local font-lock-defaults
                   '(ciao-inferior-font-lock-keywords
-                    nil nil ((?_ . "w")) nil
+                    t ;; 't' means font-lock-keywords-only
+                    nil ((?_ . "w")) nil
                     (font-lock-syntactic-face-function
                      . ciao-syntactic-face-function)))))
 
