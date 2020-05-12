@@ -54,8 +54,9 @@
 ;; (define-key java-mode-map "\C-cT"    'ciao-check-assertions)
 ;; (define-key java-mode-map "\C-cO"    'ciao-optimize-buffer)
 (define-key java-mode-map "\C-c\C-v" 'ciao-show-preprocessor-output)
-;(define-key java-mode-map "\C-c`"    'ciao-find-last-run-errors)
-(define-key java-mode-map "\M-n"  '   ciao-find-last-run-errors)
+; Compat
+(define-key java-mode-map "\C-c`"    'ciao-find-last-run-errors)
+(define-key java-mode-map "\M-]"  '   ciao-find-last-run-errors)
 (define-key java-mode-map "\C-ce"    'ciao-unmark-last-run-errors)
 ;(define-key java-mode-map "\C-g"     'ciao-unmark-last-run-errors-and-quit)
 (define-key java-mode-map "\C-c\C-r" 'run-ciao-preprocessor)
