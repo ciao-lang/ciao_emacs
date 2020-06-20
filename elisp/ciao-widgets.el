@@ -355,8 +355,8 @@ Example:
 
 WARNING: do not remove the space between \"? )\", because '? ' MEANS
 SPACE character"
-  (let ((menu_width  45))
-    (concat title (make-string (max 0 (- menu_width (length title))) ? ))))
+  (let ((menu_width  33))
+    (concat (make-string (max 0 (- menu_width (length title))) ? ) title)))
 
 (defun ciao-widget-indent-center-text (title)
 "Put spaces before title to make all text be centered."
@@ -396,14 +396,14 @@ SPACE character"
   (widget-insert " \n"))
 
 ;
-; The _MAGICAL_ regular expresion for parsing menu lines
+; The _MAGIC_ regular expresion for parsing menu lines
 ;
 (defvar ciao-widgets-menu-regexp
-  "\\([[:upper:]|][a-zA-Z _()/|\\-]*\\): *\\(\\[[a-zA-Z0-9, _\t\n]*\\]\\)?[ \t\n]*\\(([^)]*)\\)[ \t\n]*\\(\\?\\)"
+  "\\([A-Z][a-zA-Z \\-]*\\): *\\(\\[[a-zA-Z0-9, _\t\n]*\\]\\)?[ \t\n]*\\(([^)]*)\\)[ \t\n]*\\(\\?\\)"
   "The regular expresion to parse a menu line.")
 
 ;; ;
-;; ; The _MAGICAL_ regular expresion for parsing a prompt
+;; ; The _MAGIC_ regular expresion for parsing a prompt
 ;; ;
 ;; (defun ciao-widgets-prompt-regexp nil
 ;; ;  "\\([a-zA-Z]*\\) \\?-"
