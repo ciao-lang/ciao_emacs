@@ -60,7 +60,7 @@ question the value of the widget has to be typed.")
 
 (defvar ciao-widget-last-changed-option -1
   "This variable identifies which widget was modified. The algorithm
-will introduce answers in the CiaoPP buffer (as is the user had typed
+will introduce answers in the CiaoPP buffer (as if the user had typed
 them) while the current menu question number is less or equal that the
 value of this variable.")
 
@@ -365,7 +365,7 @@ SPACE character"
 			 ?  ) title)))
 
 (defun ciao-widget-cb-indent-text (title)
-  "Same than ciao-widget-indent-text but with another lengt (for combo-boxes)"
+  "Same as ciao-widget-indent-text but with another length (for combo-boxes)"
   (let*((menu_width  20)
 	(half        (max 0 (/ (- menu_width (length title)) 2)))
 	(rest        (max 0 (- (- menu_width (length title)) half)))
