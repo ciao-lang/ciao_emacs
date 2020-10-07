@@ -1,0 +1,43 @@
+@cindex{companyciao, intro} @href{https://company-mode.github.io/}{Company} is a text completion framework for Emacs. The name stands for "complete anything".
+
+@section{Setup}
+
+Before installing this package, @apl{emacs} 24 is needed for using  @href{https://company-mode.github.io/}{Company}. If you do not have installed it yet, this package @apl{company-ciao} will do it automatically from ELPA repository.
+
+There are two options for the setup:
+
+@begin{itemize}
+
+@item Insert the next line into your @apl{emacs} init file.
+
+@begin{verbatim}
+
+(eval-after-load 'company '(add-hook 'company-mode-hook #'company-ciao-setup))
+
+@end{verbatim}
+
+@item If you use @href{https://github.com/jwiegley/use-package}{use-package}, you can insert instead.
+
+@begin{verbatim}
+
+(use-package flycheck-ciao
+  :after flycheck
+  :hook
+  (company-mode . company-ciao-setup)
+  )
+
+@end{verbatim}
+
+@end{itemize}
+
+@section{Using Company}
+
+Once enabled the use of @apl{company-mode} will be automatic.
+
+To enable @apl{company-mode} in all buffers where possible, insert into your @apl{emacs} file the next line:
+
+@begin{verbatim}
+
+(add-hook 'after-init-hook 'global-company-mode)
+
+@end{verbatim}

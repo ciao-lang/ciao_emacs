@@ -117,7 +117,7 @@ class, or normal module)."
 
 ;; TODO: Why are those different?
 (defun ciao-debug-predicate-boundaries (point)
-  (let ((start) 
+  (let ((start)
 	(bound)
 	(begin)
 	(test t))
@@ -169,17 +169,19 @@ class, or normal module)."
 
 ;; The error structure
 
-(defun ciao-error-new (beginline endline filename infline)
+(defun ciao-error-new (beginline endline filename infline level message)
   "Create a new error structure."
-  (list beginline endline filename infline))
+  (list beginline endline filename infline level message))
 
 (defun ciao-error-get (err prop)
   "Get the property `prop' of error structure `err'."
   (cond
-   ((eq prop 'ln0) (car err)) ;; begin line
-   ((eq prop 'ln1) (car (cdr err))) ;; end line
-   ((eq prop 'file) (car (cdr (cdr err)))) ;; source
-   ((eq prop 'infln) (car (cdr (cdr (cdr err))))) ;; line of error at
+   ((eq prop 'ln0) (nth 0 err)) ;; begin line
+   ((eq prop 'ln1) (nth 1 err)) ;; end line
+   ((eq prop 'file) (nth 2 err)) ;; source
+   ((eq prop 'infln) (nth 3 err)) ;; line of error at
+   ((eq prop 'level) (nth 4 err)) ;; level of error (error, warning, ...)
+   ((eq prop 'message) (nth 5 err)) ;; message of error
 						  ;; inferior buffer
    (t (error "Unknown property of error data %s" prop))))
 
@@ -261,11 +263,13 @@ class, or normal module)."
       ))
 
 (defun ciao-error-session-next (procbuffer cproc)
-  "Locates next error, and highlights it. Returns:
-     nil -- if no more errors
-     '(beginline endline file) -- if an error found, where
-        beginline/endline = location of error in process buffer
-        file = source file containing error (if nil: no file was located)"
+  "Locate next Ciao error in PROCBUFFER and highlight it in CPROC buffer.
+Ciao error structure is '(beginline endline file infline level message):
+    beginline/endline = line where error is found in source buffer.
+    file = source file.
+    infline = line where error is found in compiler buffer.
+    level = error/warning/info.
+    message = message associated to the error."
 ;;; ALT:
 ;;;         beginline/endline = can also contain predicate name / clause number
 ;;;             (this is a temporary kludge while preprocessor error
@@ -285,126 +289,142 @@ class, or normal module)."
       (if (ciao-no-more-errors cproc)
 	  ;; No (more) errors found, return null error structure
 	  nil
-	(let ((messpoint (point)) beginline endline openpoint filename infline)
-	  (move-to-column 0)
-	  (if (not (search-forward "lns " (+ (point) 80) t))
-;;; MH OLD
-	      ;; No line number info: -1 -1
-	      (progn
-		(setq beginline -1)
-		(setq endline -1))
-;;; MH ALT
-;;;  	  (if (not (search-forward " at " (+ (point) 80) t))
-;;; 	      ;; No line number info: -1 -1
-;;; 	      (progn
-;;; 		(setq beginline -1)
-;;; 		(setq endline -1))
-;;; 	    ;; locate by e.g. "at partition/4/3/1" 
-;;; 	    ;; This is a kludge while messages from preprocessor improve
-;;;  	    (let ((beg (point)) predicate clausenumber)
-;;;  	      (search-forward "/")
-;;;  	      (backward-char 1)
-;;;  	      (setq predicate (buffer-substring-no-properties beg (point)))
-;;;  	      (forward-char 1)
-;;;  	      ;; ignore arity (approximation)
-;;;  	      (search-forward "/")
-;;;  	      (setq beg (point))
-;;;  	      (search-forward "/")
-;;;  	      (setq clausenumber
-;;;  		    (string-to-number (buffer-substring-no-properties beg
-;;;  								   (point))))
-;;; 	      ;; MH ***
-;;; 	      (message (append "ERROR DATA: " predicate " "
-;;; 			       (int-to-string clausenumber )))
-;;; 	      ;; This typically done elsewhere, but kludge to get line numbers
-;;; 	      (save-excursion 
-;;; 		(find-file-other-window filename)
-;;; 		(search-forward-regexp (concat "^" beginline) nil t endline)
-;;; 		(setq beginline (point))
-;;; 		(search-forward-regexp (concat "\\(^" beginline "\\|^$\\)")  nil t)
-;;; 		(setq endline (point)))
-;;; 	      )
-;;; 	    (progn 
-;;; 	      (setq beginline -1)
-;;; 	      (setq endline -1))
-;;; 	    )
-	    ;; Get line number info.
-;;;	(search-forward "lns " (+ (point) 80) t)
-	    (let ((beg (point)))
-	      (search-forward "-")
+        (ciao-locate-next-error (current-buffer))))))
+
+(defun ciao-locate-next-error (procbuffer)
+  "Locates the next error in a Ciao PROCBUFFER.
+Returns a Ciao error structure or nil if there are no more errors in PROCBUFFER."
+  (let ((messpoint (point)) beginline endline openpoint filename infline level message)
+    (move-to-column 0)
+    (let ((keep-searching-errors t)
+	  (error-found nil))
+      (while keep-searching-errors
+	(if (not (search-forward ":" nil t)) 
+            (setq keep-searching-errors nil) ; if there are no more : stop searching for errors
+          (setq level (ciao-error-level (buffer-substring-no-properties (line-beginning-position) (1- (point)))))
+          (if (not level) ; if not level was found at beginning of line, search for next error 
+	      nil
+            (setq infline (line-number-at-pos (point)))
+	    (if (not (search-forward "lns " (+ (point) 80) t))
+		(progn
+		  (setq beginline -1)
+		  (setq endline -1)
+                  (setq message (ciao-get-error-message level))
+                  (setq level (ciao-replace-error-level level)))
+	      (let ((beg (point)))
+		(search-forward "-")
+		(backward-char 1)
+		(setq beginline 
+		      (string-to-number (buffer-substring-no-properties beg (point)))))
+	      (forward-char 1)
+	      (let ((beg (point)))
+		(search-forward ")")
+                (setq message (ciao-get-error-message level))
+                (setq level (ciao-replace-error-level level))
+                (backward-char 1)
+		(setq endline
+		      (string-to-number (buffer-substring-no-properties beg (point))))))
+            (move-to-column 0)
+	    ;; Try to find opening "{" by inserting a "}"
+	    (insert "}")
+	    ;; Change syntax of parenthesis
+	    (modify-syntax-entry ?\( "_")
+	    (modify-syntax-entry ?\) "_")
+	    (modify-syntax-entry ?\[ "_")
+	    (modify-syntax-entry ?\] "_")
+	    ;; Scan to "{"
+	    (condition-case nil
+		(setq openpoint (scan-sexps (point) -1))
+	      (error (setq openpoint 0)))
+	    ;; Return syntax of parenthesis
+	    (modify-syntax-entry ?\( "()")
+	    (modify-syntax-entry ?\) ")(")
+	    (modify-syntax-entry ?\[ "(]")
+	    (modify-syntax-entry ?\] ")[")      
+	    ;; Delete the "}" inserted
+	    (delete-char -1)
+	    (if (= openpoint 0)
+		(setq filename nil)
+	      (goto-char openpoint)
+              (if (not (search-forward "/" nil t))
+                  (setq filename (buffer-file-name))
 	      (backward-char 1)
-	      (setq beginline 
-		    (string-to-number (buffer-substring-no-properties beg (point)))))
-	    (forward-char 1)
-	    (let ((beg (point)))
-	      (search-forward ")")
-	      (backward-char 1)
-	      (setq endline 
-		    (string-to-number (buffer-substring-no-properties beg (point)))))
-	    )
-	  ;; Beginning of ERROR/WARNING/... line
-	  (move-to-column 0)
-	  (setq infline (line-number-at-pos (point)))
-	  
-	  ;; Try to find opening "{" by inserting a "}"
-	  (insert "}")
-	  ;; Change syntax of parenthesis
-	  (modify-syntax-entry ?\( "_")
-			       (modify-syntax-entry ?\) "_")
-	  (modify-syntax-entry ?\[ "_")
-			       (modify-syntax-entry ?\] "_")
-	  ;; Scan to "{"
-	  (condition-case nil
-	      (setq openpoint (scan-sexps (point) -1))
-	    (error (setq openpoint 0)))
-	  ;; Return syntax of parenthesis
-	  (modify-syntax-entry ?\( "()")
-			       (modify-syntax-entry ?\) ")(")
-	  (modify-syntax-entry ?\[ "(]")
-			       (modify-syntax-entry ?\] ")[")      
-	  ;; Delete the "}" inserted
-	  (delete-char -1)
-	  (if (= openpoint 0)
-	      (setq filename nil)
-	    (goto-char openpoint)
-	    (search-forward "/")
-	    (backward-char 1)
-	    (skip-chars-backward "a-zA-Z0-9_-") ;; (include bundle name if needed)
-	    (let ((beg (point)))
-	      (search-forward-regexp 
-	       "\\(\\.\\(po\\|itf\\|asr\\|ast\\|testout\\|pls\\|pl\\|cgi\\)\\>\\|$\\)")
-	      (setq filename
-                    (ciao-bundle-extend-path
-                     (fix-cygwin-drive-letter
-                      (concat (buffer-substring-no-properties 
-                               beg (match-beginning 0)) 
-                              ;; MH cygdrive case for .pls, fixed bug
-                              (cond
-                               ((string= (match-string-no-properties 0) ".po") 
-                                ".pl")
-                               ((string= (match-string-no-properties 0) ".itf") 
-                                ".pl")
-                               ((string= (match-string-no-properties 0) ".asr") 
-                                ".pl")
-                               ((string= (match-string-no-properties 0) ".ast") 
-                                ".pl")
-                               ((string= (match-string-no-properties 0) ".testout") 
-                                ".pl")
-                               ((string= (match-string-no-properties 0) ".pls") 
-                                ".pls")
-                               ((string= (match-string-no-properties 0) ".pl") 
-                                ".pl")
-                               ((string= (match-string-no-properties 0) "cgi") ;; TODO: .cgi?
-                                ".cgi")
-                               ((string= (match-string-no-properties 0) "") 
-                                "")
-                               ))))))
-	    (goto-char messpoint)
-	    ;; (beginning-of-line)
-	    (move-to-column 0)
-	    )
-	  ;; Create the error structure
-	  (ciao-error-new beginline endline filename infline))))))
+	      (skip-chars-backward "a-zA-Z0-9_-") ;; (include bundle name if needed)
+	      (let ((beg (point)))
+		(search-forward-regexp 
+		 "\\(\\.\\(po\\|itf\\|asr\\|ast\\|testout\\|pls\\|pl\\|cgi\\)\\>\\|$\\)")
+		(setq filename
+		      (ciao-bundle-extend-path
+		       (fix-cygwin-drive-letter
+			(concat (buffer-substring-no-properties 
+				 beg (match-beginning 0)) 
+				;; MH cygdrive case for .pls, fixed bug
+				(cond
+				 ((string= (match-string-no-properties 0) ".po") 
+				  ".pl")
+				 ((string= (match-string-no-properties 0) ".itf") 
+				  ".pl")
+				 ((string= (match-string-no-properties 0) ".asr") 
+				  ".pl")
+				 ((string= (match-string-no-properties 0) ".ast") 
+				  ".pl")
+				 ((string= (match-string-no-properties 0) ".testout") 
+				  ".pl")
+				 ((string= (match-string-no-properties 0) ".pls") 
+				  ".pls")
+				 ((string= (match-string-no-properties 0) ".pl") 
+				  ".pl")
+				 ((string= (match-string-no-properties 0) "cgi") ;; TODO: .cgi?
+				  ".cgi")
+				 ((string= (match-string-no-properties 0) "") 
+				  "")))))))))
+	    (setq keep-searching-errors nil)
+	    (setq error-found t))))
+      (goto-char messpoint)
+      ;; (beginning-of-line)
+      (move-to-column 0)
+      ;; Create the error structure
+      (if error-found
+	(ciao-error-new beginline endline filename infline level message)
+      nil))))
+
+(defun ciao-get-error-message (level)
+  "Return the error message while parsing errors, depends on LEVEL."
+  (cond
+   ((eq level 'test-failed)
+    (buffer-substring-no-properties (+ (point) 1) (- (save-excursion (search-forward "But instead:")) 13)))
+   ((eq level 'test-passed)
+    (concat "PASSED " (buffer-substring-no-properties (+ (point) 1) (line-end-position))))
+   ((eq (char-after (line-beginning-position)) ?{)
+    (buffer-substring-no-properties (+ (point) 1) (1- (save-excursion (search-forward "}")))))
+  (t
+   (buffer-substring-no-properties (+ (point) 1) (line-end-position)))))
+
+(defun ciao-error-level (string)
+  "Verify if STRING is an error tag and return its value."
+  (let ((case-fold-search nil)) ; do not ignore case
+    (cond
+     ((string-match "WARNING" string)
+      'warning)
+     ((string-match "\\(ERROR\\|ABORTED\\|SYNTAX ERROR\\)" string)
+      'error)
+     ((string-match "FAILED" string)
+      'test-failed)
+     ((string-match "NOTE" string)
+      'info)
+     ((string-match "PASSED" string)
+      'test-passed)
+     (t nil))))
+
+(defun ciao-replace-error-level (level)
+  "Replace LEVEL if it was the result of a test."
+  (cond
+   ((eq 'test-failed level)
+    'error)
+   ((eq 'test-passed level)
+    'info)
+   (t level)))
+
 
 
 ;; Provide ourselves:
@@ -412,4 +432,3 @@ class, or normal module)."
 (provide 'ciao-parsing)
 
 ;;; ciao-parsing.el ends here
-

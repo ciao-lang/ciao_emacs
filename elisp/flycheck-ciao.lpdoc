@@ -1,0 +1,91 @@
+@cindex{flycheckciao, intro} @href{https://www.flycheck.org/en/latest/}{Flycheck}
+is an @apl{emacs} extension for checking syntax on the fly. This package adds
+@href{https://www.flycheck.org/en/latest/}{Flycheck} support for Ciao @em{mode} with
+various checkers for different purposes.
+
+@begin{itemize}
+
+@item @apl{ciaoc} as syntax checker.
+
+@item @apl{ciaopp} as syntax and assertions checker.
+
+@end{ítemize}
+
+@section{Setup}
+
+Before installing this package, @apl{emacs} 24 is needed for using @href{https://www.flycheck.org/en/latest/}{Flycheck}. If you do not have installed it yet, this package @apl{flycheck-ciao} will do it automatically from MELPA repository, but as it is not available in @apl{emacs} by default, you should add this code to your @apl{emacs} @em{init} file.
+
+@begin{verbatim}
+
+(require 'package)
+
+(add-to-list 'package-archives '("MELPA Stable" . "https://stable.melpa.org/packages/") t)
+
+(package-initialize)
+
+@end{verbatim}
+
+There are two options for the setup:
+
+@begin{itemize}
+
+@item Insert the next line into your @apl{emacs} init file.
+
+@begin{verbatim}
+
+(eval-after-load 'flycheck '(add-hook 'flycheck-mode-hook #'flycheck-ciao-setup))
+
+@end{verbatim}
+
+@item If you use @href{https://github.com/jwiegley/use-package}{use-package}, you can insert instead.
+
+@begin{verbatim}
+
+(use-package flycheck-ciao
+  :after flycheck
+  :hook
+  (flycheck-mode . flycheck-ciao-setup)
+  )
+
+@end{verbatim}
+
+@end{itemize}
+
+@section{Using Flycheck}
+
+All options when using @href{https://www.flycheck.org/en/latest/}{Flycheck} are available on the top bar menu @em{Tools -> Syntax Checking}.
+
+@begin{itemize} 
+
+@item To enable Flycheck in the current buffer @key{ESC} @key{^X} flycheck-mode @key{↵}.
+
+@begin{itemize}
+
+@item If you are interested in having Flycheck enabled by default in all buffers where syntax checking is possible, insert the next line in your @apl{emacs} init file.
+
+@begin{verbatim}
+
+(add-hook 'after-init-hook #'global-flycheck-mode)
+
+@end{verbatim}
+
+@end{itemize}
+
+@item To list all errors found by the checker: @key{C-c} @key{!} @key{l} or @key{ESC} @key{^X} flycheck-list-errors @key{↵}.
+
+@item To select a different syntax checker: @key{C-c} @key{!} @key{s} or @key{ESC} @key{^X} flycheck-select-checker @key{↵}.
+
+@item To verify setup: @key{C-c} @key{!} @key{v} or @key{ESC} @key{^X} flycheck-verify-setup @key{↵}.
+
+@end{itemize}
+
+@section{Recommended extensions}
+
+In the official @href{https://www.flycheck.org/en/latest/}{Flycheck} manual some extensions are recommended for better user experience.
+
+@begin{itemize}
+
+@item @href{https://github.com/flycheck/flycheck-color-mode-line}{flycheck-colors-modeline} (official) colors the mode line according to the Flycheck status.
+@item @href{https://github.com/flycheck/flycheck-pos-tip}{flycheck-pos-tip} shows Flycheck error messages in a graphical popup.
+
+@end{itemize}
