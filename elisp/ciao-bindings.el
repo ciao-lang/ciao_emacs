@@ -772,7 +772,7 @@ how things are set up in your @tt{.emacs} file).")
 (defconst ciao-mode-menus-ciaopp
   (list "CiaoPP"
 ;;     "CIAO PREPROCESSOR (in development)"
-     "Note: CiaoPP required (in development)"
+     "Note: CiaoPP bundle required"
      "----"
 ;;      ["Preprocess buffer (choosing options)"   ciao-preprocess-buffer-menu t]
 ;;      ["Preprocess buffer (w/previous options)" ciao-preprocess-buffer t]
