@@ -167,7 +167,7 @@ the CiaoPP buffer.")
      (if (eq ciao-ciaopp-prog-lang 1)
        "customize_java(all)."
        (if (eq ciao-ciaopp-prog-lang 2)
-	 "customize_xc(all)."
+	 "customize_c(all)."
 	 "customize(all)."
        ))
      )
@@ -186,7 +186,7 @@ the CiaoPP buffer.")
 	    (concat "customize_and_preprocess_java('" 
 		    (buffer-file-name ciao-last-source-buffer-used) "').")
 	    (if (eq ciao-ciaopp-prog-lang 2)
-		(concat "customize_and_preprocess_xc('" 
+		(concat "customize_and_preprocess_c('" 
 		    (buffer-file-name ciao-last-source-buffer-used) "').")
 	        (concat "customize_and_preprocess('" 
 		  (buffer-file-name ciao-last-source-buffer-used) "').")
@@ -238,7 +238,7 @@ corresponding toolbar buttons."
 
 
 ;;;###autoload
-(defun xc-browse-preprocessor-options ()
+(defun c-browse-preprocessor-options ()
   "Browse and select (using the preprocessor menus) the actions to be
 performed by the preprocessor when performing analisys used by the
 corresponding toolbar buttons."
@@ -246,7 +246,7 @@ corresponding toolbar buttons."
   (message "Browsing preprocessor options... ")
   (ciao-remember-last-menu-key  -1)
   (setq ciao-ciaopp-prog-lang 2 )
-  (message "Sets the ciao-ciaopp-prog-lang variable to Xc")
+  (message "Sets the ciao-ciaopp-prog-lang variable to C")
   (ciao-do-preprocess-buffer 'customize t)
   )
 

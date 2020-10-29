@@ -608,7 +608,7 @@ creates widgets for each element."
     (if (eq ciao-ciaopp-prog-lang 2)
 	(progn
 	  (ciao-insert-image 'png (ciao-get-logo :ciaopp) "")
-	  (ciao-insert-image 'png (ciao-get-logo :xc) "xC"))
+	  (ciao-insert-image 'png (ciao-get-logo :c) "C"))
 	;; Default: Ciao
 	(progn
 	  (insert "      ")

@@ -1,4 +1,4 @@
-;;; xc-ciaopp.el --- CiaoPP mode for Xc
+;;; c-ciaopp.el --- CiaoPP mode for C (LLVM-based)
 ;; Copyright (C) 1986-2012 Free Software Foundation, Inc. and
 ;; M. Hermenegildo and others (herme@fi.upm.es, UPM-CLIP, Spain).
 
@@ -21,7 +21,7 @@
 
 ;;---------------------------------------------------------------------------
 ;; Emacs additional support for the CiaoPP preprocessor 
-;; when working on Xc files (complementary to ciao.el).
+;; when working on C files (complementary to ciao.el).
 ;; (Very preliminary version!) --M. Hermenegildo
 ;;---------------------------------------------------------------------------
 
@@ -34,58 +34,56 @@
 (require 'ciao-help)
 
 ; ---------------------------------------------------------------------------
-; Add a hook in the Xc mode to load xc-ciaopp.el 
+; Add a hook in the C mode to load c-ciaopp.el 
 
 ;;;###autoload
-(defun load-xc-ciaopp-mode ()
+(defun load-c-ciaopp-mode ()
   ;; 'require' not necessary since this is being autoloaded (JFMC)
-  ;; (require 'xc-ciaopp)
-  (xc-ciaopp-setup))
+  ;; (require 'c-ciaopp)
+  (c-ciaopp-setup))
 
-;;;###autoload(add-hook 'c-mode-hook 'load-xc-ciaopp-mode)
-
-;;;###autoload(add-to-list 'auto-mode-alist '("\\.xc\\'" . c-mode))
+;;;###autoload(add-hook 'c-mode-hook 'load-c-ciaopp-mode)
 
 ; ---------------------------------------------------------------------------
 
-(defvar xc-mode-map c-mode-map)
+(defvar ciaopp-c-mode-map c-mode-map)
 
-(defun xc-ciaopp-setup ()
+(defun c-ciaopp-setup ()
   (interactive)
   ;; option in the menu
-  (easy-menu-define ciao-xc-menu-ciaopp xc-mode-map 
-    "CiaoPP Mode Menus" ciao-mode-menus-xc)
-  (easy-menu-add ciao-xc-menu-ciaopp)
+  (easy-menu-define ciao-c-menu-ciaopp ciaopp-c-mode-map 
+    "CiaoPP Mode Menus" ciao-mode-menus-c)
+  (easy-menu-add ciao-c-menu-ciaopp)
   ;; toolbar
-  (ciao-xc-setup-tool-bar))
+  (ciao-c-setup-tool-bar))
 
 ; ---------------------------------------------------------------------------
 ; Key bindings
 
-;; (define-key xc-mode-map "\C-cA"    'ciao-analyze-buffer)
-;; (define-key xc-mode-map "\C-cT"    'ciao-check-assertions)
-;; (define-key xc-mode-map "\C-cO"    'ciao-optimize-buffer)
-(define-key xc-mode-map "\C-cM"    'xc-browse-preprocessor-options)
-(define-key xc-mode-map "\C-c\C-v" 'ciao-show-preprocessor-output)
+;; (define-key ciaopp-c-mode-map "\C-cA"    'ciao-analyze-buffer)
+;; (define-key ciaopp-c-mode-map "\C-cT"    'ciao-check-assertions)
+;; (define-key ciaopp-c-mode-map "\C-cO"    'ciao-optimize-buffer)
+(define-key ciaopp-c-mode-map "\C-cM"    'c-browse-preprocessor-options)
+(define-key ciaopp-c-mode-map "\C-c\C-v" 'ciao-show-preprocessor-output)
 ; Compat
-(define-key xc-mode-map "\C-c`"   'ciao-find-last-run-errors)
-(define-key xc-mode-map "\M-]"     'ciao-find-last-run-errors)
-(define-key xc-mode-map "\C-ce"    'ciao-unmark-last-run-errors)
-;(define-key xc-mode-map "\C-g"     'ciao-unmark-last-run-errors-and-quit)
-(define-key xc-mode-map "\C-c\C-r" 'run-ciao-preprocessor)
-;; (define-key xc-mode-map "\C-ch"    'ciao-fontify-buffer)
-(define-key xc-mode-map "\C-c\C-i" 'ciao-help-on-current-symbol)
-(define-key xc-mode-map "\C-c/"    'ciao-complete-current-symbol)
-(define-key xc-mode-map "\C-c\C-m" 'ciao-goto-manuals)
-(define-key xc-mode-map "\C-ct"    'run-ciao-toplevel)
-(define-key xc-mode-map "\C-cl"    'ciao-load-buffer)
+(define-key ciaopp-c-mode-map "\C-c`"   'ciao-find-last-run-errors)
+(define-key ciaopp-c-mode-map "\M-]"     'ciao-find-last-run-errors)
+(define-key ciaopp-c-mode-map "\C-ce"    'ciao-unmark-last-run-errors)
+;(define-key ciaopp-c-mode-map "\C-g"     'ciao-unmark-last-run-errors-and-quit)
+(define-key ciaopp-c-mode-map "\C-c\C-r" 'run-ciao-preprocessor)
+;; (define-key ciaopp-c-mode-map "\C-ch"    'ciao-fontify-buffer)
+(define-key ciaopp-c-mode-map "\C-c\C-i" 'ciao-help-on-current-symbol)
+(define-key ciaopp-c-mode-map "\C-c/"    'ciao-complete-current-symbol)
+(define-key ciaopp-c-mode-map "\C-c\C-m" 'ciao-goto-manuals)
+(define-key ciaopp-c-mode-map "\C-ct"    'run-ciao-toplevel)
+(define-key ciaopp-c-mode-map "\C-cl"    'ciao-load-buffer)
 
 ; ---------------------------------------------------------------------------
 ; Menus
 
-(defconst ciao-mode-menus-xc
+(defconst ciao-mode-menus-c
   (list "CiaoPP"
-     "CiaoPP Xc Preprocessor (beta)"
+     "CiaoPP C Preprocessor (beta)"
      "----"
      "----"
 ;;     Commented by JNL 
@@ -94,7 +92,7 @@
 ;;     ["Optimize buffer"                        ciao-optimize-buffer t]
 ;;     ["Browse analysis/checking/optimizing options"         
 ;;                                           ciao-browse-preprocessor-options t]
-     ["Browse analysis options"         xc-browse-preprocessor-options t]
+     ["Browse analysis options"         c-browse-preprocessor-options t]
      "----"
      ["Show last preprocessor output file"     ciao-show-preprocessor-output t]
      ["Go to (next) preproc/compiler error msg" ciao-find-last-run-errors t]
@@ -121,53 +119,53 @@
 ; ---------------------------------------------------------------------------
 ; Tool bar
 
-(defun ciao-xc-setup-tool-bar () 
+(defun ciao-c-setup-tool-bar () 
   (interactive)
   (make-local-variable 'tool-bar-map) 
   (setq tool-bar-map (make-sparse-keymap))
   ;; General stuff (from standard tool bar); added only in FSF emacs.
   (ciao-general-toolbar tool-bar-map)
-  ;; Xc/CiaoPP-specific stuff
+  ;; C/CiaoPP-specific stuff
   ;; Stuff that is not in menus will not work.
   (ciao-tool-bar-local-item-from-menu 
-   'ciao-analyze-buffer "icons/ciaoanalysis" tool-bar-map xc-mode-map)
+   'ciao-analyze-buffer "icons/ciaoanalysis" tool-bar-map ciaopp-c-mode-map)
   (ciao-tool-bar-local-item-from-menu 
-   'ciao-check-assertions "icons/checkassertions" tool-bar-map xc-mode-map)
+   'ciao-check-assertions "icons/checkassertions" tool-bar-map ciaopp-c-mode-map)
   (ciao-tool-bar-local-item-from-menu 
-   'ciao-optimize-buffer "icons/ciaopeval" tool-bar-map xc-mode-map)
+   'ciao-optimize-buffer "icons/ciaopeval" tool-bar-map ciaopp-c-mode-map)
   (ciao-tool-bar-local-item-from-menu 
-   'xc-browse-preprocessor-options
-   "icons/ciaocustomize" tool-bar-map xc-mode-map)
+   'c-browse-preprocessor-options
+   "icons/ciaocustomize" tool-bar-map ciaopp-c-mode-map)
   (ciao-tool-bar-local-item-from-menu 
-   'ciao-find-last-run-errors "icons/jump_to" tool-bar-map xc-mode-map)
+   'ciao-find-last-run-errors "icons/jump_to" tool-bar-map ciaopp-c-mode-map)
   (ciao-tool-bar-local-item-from-menu 
-   'ciao-unmark-last-run-errors "icons/clear" tool-bar-map xc-mode-map)
+   'ciao-unmark-last-run-errors "icons/clear" tool-bar-map ciaopp-c-mode-map)
   (tool-bar-add-item "icons/manuals" 
    'ciao-goto-manuals 'ciao-goto-manuals 
    :help "Go to area containing the Ciao system manuals")
   (ciao-tool-bar-local-item-from-menu 
-   'ciao-help-on-current-symbol "icons/wordhelp" tool-bar-map xc-mode-map)
+   'ciao-help-on-current-symbol "icons/wordhelp" tool-bar-map ciaopp-c-mode-map)
   (ciao-tool-bar-local-item-from-menu 
-   'ciao-complete-current-symbol "icons/complete" tool-bar-map xc-mode-map)
+   'ciao-complete-current-symbol "icons/complete" tool-bar-map ciaopp-c-mode-map)
   (ciao-tool-bar-local-item-from-menu 
    'ciao-customize-all
-   "icons/preferences" tool-bar-map xc-mode-map
+   "icons/preferences" tool-bar-map ciaopp-c-mode-map
    :help "Edit (customize) preferences for Ciao, CiaoPP, LPdoc")
 ;;   (ciao-tool-bar-local-item-from-menu 
-;;    'ciao-fontify-buffer "icons/ciaorehighlight" tool-bar-map xc-mode-map)
+;;    'ciao-fontify-buffer "icons/ciaorehighlight" tool-bar-map ciaopp-c-mode-map)
   )
 
 ; ---------------------------------------------------------------------------
 
 ; Find the Ciao documentation (including CiaoPP properties) while in
-; Xc mode (i.e., when visiting .xc files).
+; C mode (i.e., when visiting .c files).
 ; Not used, word-help replaced by info-look
-;; (ciao-help-add-manual "Xc/l" ciao-manuals)
+;; (ciao-help-add-manual "C/l" ciao-manuals)
 
 
 ;; Provide ourselves:
 
-(provide 'xc-ciaopp)
+(provide 'c-ciaopp)
 
-;;; xc-ciaopp.el ends here
+;;; c-ciaopp.el ends here
 
