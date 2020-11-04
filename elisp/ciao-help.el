@@ -23,18 +23,38 @@
 ;; Help (locating manuals etc.)
 ;;------------------------------------------------------------
 
+;;; Code:
+
 (require 'ciao-config) ; ciao-get-config
 (require 'info)
+
+(defvar ciao-info-dir (ciao-get-config :builddoc-dir)
+  "Where the actual Ciao (LPdoc) info directory is.")
+
+;; As all Ciao manuals have the same index nodes, there should be no problem
+;; if this list is fixed. In case this changes, it would be interesting
+;; using Info-index-nodes to obtain dynamically these nodes, but as
+;; this function takes too much time at Emacs start, the use of a fixed list
+;; is preferable at the moment
+(defvar ciao-manual-index-list
+  (list "Library/Module Index" "Predicate Index" "Property Index"
+	"Regular Type Index" "Declaration Index" "Concept Index"
+	"Author Index" "Global Index")
+  "List of all indexes from the Ciao manual.")
 
 ;; TODO: This may not be necessary if stored in the bundle data
 ;; structure
 (defun ciao-help-info-entry-exists-p (inf)
   "Detects if the (Ciao) info manual INF actually exists."
   (file-exists-p
-   (concat (ciao-get-config :builddoc-dir) "/" (car inf))))
+   (concat ciao-info-dir "/" (car inf))))
 
-(defvar ciao-info-dir (ciao-get-config :builddoc-dir)
-  "Where the actual Ciao (LPdoc) info directory is.")
+
+(defun ciao-get-generated-manual-bases ()
+  "Return the list of Ciao generated manual bases."
+  (let ((manuals (directory-files ciao-info-dir nil "[a-zA-Z_]+[.]info$")))
+    (mapcar (lambda (manual) (file-name-base manual))
+	     manuals)))
 
 ;;;###autoload
 (defun ciao-update-info-dir ()

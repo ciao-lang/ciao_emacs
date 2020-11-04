@@ -29,6 +29,7 @@
 (require 'info-look)
 (require 'seq) ; seq-do, seq-filter
 (require 'ciao-config) ; ciao-get-config
+(require 'ciao-help)
 
 (defun ciao-doc-spec-entry (manual index)
   "Build the structure for a doc-spec entry, from an INDEX in a Ciao MANUAL.
@@ -41,28 +42,17 @@ Returns the stucture of a doc-spec entry."
    "^ -- \\(PREDICATE\\|PROPERTY\\|REGTYPE\\|DECLARATION\\|MODE\\): "
    ":"))
 
-;; As all Ciao manuals have the same index nodes, there should be no problem
-;; if this list is fixed. In case this changes, it would be interesting
-;; using Info-index-nodes to obtain dynamically these nodes, but as
-;; this function takes too much time at Emacs start, the use of a fixed list
-;; is preferable by now
-(defvar index-list
-  (list "Library/Module Index" "Predicate Index" "Property Index"
-	"Regular Type Index" "Declaration Index" "Concept Index"
-	"Author Index" "Global Index")
-  "List of all indexes from the Ciao manual.")
-
 (defun ciao-doc-spec ()
   "Builds all the structure for Ciao doc-spec.
 Return the structure for ciao doc-spec."
   (let ((doc-spec nil)
-	(manuals (ciao-get-config :manual-bases)))
+	(manuals (ciao-get-generated-manual-bases)))
     (if (eq manuals nil)
 	(message "WARNING: info-look could not find Ciao manuals.")
       (let ((templist nil))
 	(seq-do
 	 (lambda (manual)
-	   (let ((indexes index-list))
+	   (let ((indexes ciao-manual-index-list))
 	     (seq-do
 	      (lambda (index)
 		(if (string-match "\\(Library/Module\\|Predicate\\|Property\\|Regular Type\\|Declaration\\) Index" index)
@@ -210,7 +200,7 @@ Build a menu of the possible matches."
       (Info-find-node Info-apropos-file "Top")
     (let* (nodename)
       (setq nodename (format "Index for ‘%s’" string))
-	(push (list nodename string (info-selected-manuals-matches string (ciao-get-config :manual-bases)))
+	(push (list nodename string (info-selected-manuals-matches string (ciao-get-generated-manual-bases)))
 	      Info-apropos-nodes)
 	(Info-find-node Info-apropos-file nodename))))
 

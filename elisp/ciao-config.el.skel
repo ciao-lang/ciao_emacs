@@ -35,8 +35,6 @@
     :builddoc-dir {{BUILDDIRDOC}}
     :bundledir-ciao-emacs {{BUNDLEDIR_CIAO_EMACS}}
     :bundledir-lpdoc {{BUNDLEDIR_LPDOC}}
-    ;; Manuals
-    :manual-bases {{MANUAL_BASES}}
     ;; Binaries
     :ciaosh-bin ,{{CIAOSHELL}}    
     :ciaopp-bin ,{{CIAOPPSHELL}}

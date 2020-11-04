@@ -158,8 +158,8 @@ get_bundle_manual_base_elisp(Bundle, Name):-
 :- use_module(engine(internals), ['$bundle_id'/1]).
 
 % Manuals from all bundles
-all_manuals(Bases) :-
-    Bases = ~findall(B, ('$bundle_id'(Bundle), get_bundle_manual_base_elisp(Bundle, B))).
+%all_manuals(Bases) :-
+%   Bases = ~findall(B, ('$bundle_id'(Bundle), get_bundle_manual_base_elisp(Bundle, B))).
 
 % ---------------------------------------------------------------------------
 % Generate ciao-config.el (from ciao-config.el.skel)
@@ -175,10 +175,7 @@ all_manuals(Bases) :-
 generate_emacs_config :-
     In = ~path_concat(~emacsmode_elisp_dir, 'ciao-config.el.skel'),
     Out = ~path_concat(~emacsmode_elisp_dir, 'ciao-config.el'),
-    % manual base names
-    all_manuals(Bases),
-    elisp_string_list(Bases, BasesStr, []),
-    %
+    
     BundleDirCore = ~final_bundle_path(core, '.'),
     BundleDirCiaoEmacs = ~final_bundle_path(ciao_emacs, '.'),
     ( '$bundle_id'(lpdoc) ->
@@ -199,8 +196,6 @@ generate_emacs_config :-
         'BUILDDIRDOC' = ~get_dir_elisp(BuildDirDoc),
         'BUNDLEDIR_CIAO_EMACS' = ~get_dir_elisp(BundleDirCiaoEmacs),
         'BUNDLEDIR_LPDOC' = ~get_dir_elisp(BundleDirLPDoc),
-        % Manual bases (for ciao-help.el)
-        'MANUAL_BASES' = BasesStr,
         % Command binaries
         'CIAOSHELL' = ~cmdpath_elisp(core, 'ciao', script),
         'CIAOPPSHELL' = ~cmdpath_elisp(ciaopp, 'ciaopp', plexe),
@@ -328,4 +323,3 @@ do_emacs_mode_tests :-
        '-l', 'run-indent-test.el',
        '-f', 'ciao-test-indent-check'],
       [cwd(TestDir), status(_)]).
-
