@@ -52,9 +52,10 @@
 
 (defun ciao-get-generated-manual-bases ()
   "Return the list of Ciao generated manual bases."
-  (let ((manuals (directory-files ciao-info-dir nil "[a-zA-Z_]+[.]info$")))
-    (mapcar (lambda (manual) (file-name-base manual))
-	     manuals)))
+  (when (file-directory-p ciao-info-dir)
+      (let ((manuals (directory-files ciao-info-dir nil "[a-zA-Z_]+[.]info$")))
+	(mapcar (lambda (manual) (file-name-base manual))
+		manuals))))
 
 ;;;###autoload
 (defun ciao-update-info-dir ()
