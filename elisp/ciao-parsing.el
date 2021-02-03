@@ -302,7 +302,7 @@ Returns a Ciao error structure or nil if there are no more errors in PROCBUFFER.
 	(if (not (search-forward ":" nil t)) 
             (setq keep-searching-errors nil) ; if there are no more : stop searching for errors
           (setq level (ciao-error-level (buffer-substring-no-properties (line-beginning-position) (1- (point)))))
-          (if (not level) ; if not level was found at beginning of line, search for next error 
+          (if (not level) ; if level was not found at beginning of line, search for next error 
 	      nil
             (setq infline (line-number-at-pos (point)))
 	    (if (not (search-forward "lns " (+ (point) 80) t))
@@ -392,7 +392,10 @@ Returns a Ciao error structure or nil if there are no more errors in PROCBUFFER.
   "Return the error message while parsing errors, depends on LEVEL."
   (cond
    ((eq level 'test-failed)
-    (buffer-substring-no-properties (+ (point) 1) (- (save-excursion (search-forward "But instead:")) 13)))
+    (buffer-substring-no-properties (+ (point) 1)
+                                    (save-excursion (search-forward-regexp "PASSED\\|FAILED\\|}")
+                                                    (goto-char (1- (line-beginning-position)))
+                                                    (point))))
    ((eq level 'test-passed)
     (concat "PASSED " (buffer-substring-no-properties (+ (point) 1) (line-end-position))))
    ((eq (char-after (line-beginning-position)) ?{)
