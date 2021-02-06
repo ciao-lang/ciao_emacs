@@ -175,7 +175,7 @@ get_bundle_manual_base_elisp(Bundle, Name):-
 generate_emacs_config :-
     In = ~path_concat(~emacsmode_elisp_dir, 'ciao-config.el.skel'),
     Out = ~path_concat(~emacsmode_elisp_dir, 'ciao-config.el'),
-    
+    %
     BundleDirCore = ~final_bundle_path(core, '.'),
     BundleDirCiaoEmacs = ~final_bundle_path(ciao_emacs, '.'),
     ( '$bundle_id'(lpdoc) ->
@@ -265,6 +265,7 @@ ciao_mode_lisp_files := [
     'ciao-ciaopp',
     'java-ciaopp',
     'ciao-builder',
+    'ciao-server',
     'ciao-optim-comp',
     'ciao-widgets',
     'ciao-common',

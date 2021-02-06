@@ -1,5 +1,5 @@
 ;;; ciao-builder.el --- Interface to Ciao Builder
-;; Copyright (C) 2012-2015 Jose F. Morales <jfran@clip.dia.fi.upm.es>
+;; Copyright (C) 2012-2021 Jose F. Morales <jfmcjf@gmail.com>
 
 ;; This file is not part of GNU Emacs.
 
@@ -231,27 +231,8 @@
 	 (cmdstr (mapconcat 'shell-quote-argument args " ")))
       (grep cmdstr)))
 
-;; ---------------------------------------------------------------------------
-;; Start a ciao-serve process
-;; TODO: move to another .el file
-
-(defun ciao-get-serve-proc-buffer ()
-  (get-buffer-create "*Ciao-Server*"))
-
 ;; TODO: define 'ciao-builder-build-all'?
 ;; TODO: define 'ciao-builder-update'? (should it download anything?)
-
-(defun ciao-serve-command ()
-  "Execute the ciao-serve command"
-  (async-shell-command
-   (concat ciao-bin-dir "/ciao-serve")
-   (ciao-get-serve-proc-buffer)))
-
-;;;###autoload
-(defun ciao-serve () 
-  "Start a process for Ciao services"
-  (interactive)
-  (ciao-serve-command))
 
 
 ;; Provide ourselves:
