@@ -39,8 +39,7 @@ the `ciao-server-process' variable."
   (if ciao-server-process
       (progn
         (message "Restarting Ciao server")
-        (delete-process ciao-server-process)
-        (setq ciao-server-process nil))
+        (ciao--server-kill))
     (message "Starting Ciao server"))
   (setq ciao-server-process 
         (start-process
@@ -53,8 +52,17 @@ the `ciao-server-process' variable."
   (interactive)
   (when (get-process "ciao-serve")
     (message "Stopping Ciao server")
-    (delete-process ciao-server-process)
-    (setq ciao-server-process nil)))
+    (ciao--server-kill)))
+
+(defun ciao--server-kill ()
+  "Kill the main server process and the daemons"
+  (delete-process ciao-server-process)
+  (setq ciao-server-process nil)
+  (call-process (concat ciao-bin-dir "/ciao-serve")
+                nil 
+                "*Ciao-Server*"
+                nil
+                "stop"))
 
 
 ;; Provide ourselves:
