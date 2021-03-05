@@ -120,7 +120,7 @@
 (require 'ciao-font-lock) ; ciao-font-lock-defaults-create
 (require 'ciao-debugger) ; ciao-debugger-mode-variables
 
-;; TODO: Make it parametric to support corrent syntax for literate
+;; TODO: Make it parametric to support current syntax for literate
 ;;   Ciao (.lpdoc) modules.
 (defun ciao-mode-internal ()
   "Internal ininitialization of the Ciao major mode."
