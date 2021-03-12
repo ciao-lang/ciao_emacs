@@ -1,7 +1,7 @@
 @cindex{flycheckciao, intro} @href{https://www.flycheck.org/en/latest/}{Flycheck}
 is an @apl{emacs} extension for checking syntax on the fly. This package adds
 @href{https://www.flycheck.org/en/latest/}{Flycheck} support for Ciao @em{mode} with
-various checkers for different purposes.
+various checkers for different purposes: 
 
 @begin{itemize}
 

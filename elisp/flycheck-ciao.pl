@@ -2,7 +2,7 @@
 
 :- doc(filetype, part).
 
-:- doc(title,"Flycheck Ciao").
+:- doc(title,"Flycheck Ciao: on-the-fly syntax and assertion checking, and testing").
 
 :- doc(author,"Miguel Angel Sanchez Ordaz").
 

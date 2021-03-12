@@ -2,7 +2,7 @@
 
 :- doc(filetype, part).
 
-:- doc(title,"Company Ciao").
+:- doc(title,"Company Ciao: advanced autocompletion").
 
 :- doc(author,"Miguel Angel Sanchez Ordaz").
 
