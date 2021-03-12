@@ -404,11 +404,13 @@ checking must be done with the preprocessor."
 error reported by the last Ciao subprocess (preprocessor or
 toplevel) which was run."
   (interactive)
-  (let ((procbuffer ciao-last-process-buffer-used))
-    (if (and procbuffer (buffer-live-p procbuffer))
-	;; buffer still exists
-	(ciao-do-find-errors procbuffer ciao-last-process-cproc)
-      (message "No recent program processing active."))))
+  (if (and (require 'flycheck nil 'noerror) (flycheck-has-current-errors-p))
+      (flycheck-next-error)       
+    (let ((procbuffer ciao-last-process-buffer-used))
+      (if (and procbuffer (buffer-live-p procbuffer))
+	  ;; buffer still exists
+	  (ciao-do-find-errors procbuffer ciao-last-process-cproc)
+        (message "No recent program processing active.")))))
 
 (defun ciao-do-find-errors (procbuffer cproc)
   "Go to the location in the source file containing the next
@@ -430,6 +432,8 @@ error reported `procbuffer'."
   "Remove error marks from last run (and also debugging marks if
 present). This finish the error finding session."
   (interactive)
+  (if (and (require 'flycheck nil 'noerror) (flycheck-has-current-errors-p))
+      (flycheck-clear)       
   (let ((procbuffer ciao-last-process-buffer-used))
     (if (and procbuffer (buffer-live-p procbuffer))
 	;; buffer still exists
@@ -439,7 +443,7 @@ present). This finish the error finding session."
 	  ;; This returns nil if not debugging, so it does not hurt and
 	  ;; is handy
 	  (ciao-debug-remove-marks))
-      (message "No recent program processing active."))))
+      (message "No recent program processing active.")))))
 
 (defun ciao-unmark-errors (procbuffer)
   "Remove error marks from `procbuffer' (and its companion
@@ -678,4 +682,3 @@ buffer (e.g., top level, preprocessor, etc.)."
 (provide 'ciao-loading)
 
 ;;; ciao-loading.el ends here
-
