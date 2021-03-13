@@ -12,7 +12,7 @@ There are two options for the setup:
 
 @begin{verbatim}
 
-(eval-after-load 'company '(add-hook 'company-mode-hook #'company-ciao-setup))
+(eval-after-load 'company '(add-hook 'company-mode-hook 'company-ciao-setup))
 
 @end{verbatim}
 

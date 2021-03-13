@@ -33,7 +33,7 @@ There are two options for the setup:
 
 @begin{verbatim}
 
-(eval-after-load 'flycheck '(add-hook 'flycheck-mode-hook #'flycheck-ciao-setup))
+(eval-after-load 'flycheck '(add-hook 'flycheck-mode-hook 'flycheck-ciao-setup))
 
 @end{verbatim}
 
@@ -65,7 +65,7 @@ All options when using @href{https://www.flycheck.org/en/latest/}{Flycheck} are 
 
 @begin{verbatim}
 
-(add-hook 'after-init-hook #'global-flycheck-mode)
+(add-hook 'after-init-hook 'global-flycheck-mode)
 
 @end{verbatim}
 
