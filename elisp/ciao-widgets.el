@@ -23,8 +23,8 @@
 ;; ==========================================================================
 ;; 
 ;; This is a generic library which captures ASCII menus (see
-;; library/menu.pl) for selecting options from an Ciao inferor shell
-;; mode, and presents a graphical interface.
+;; library/menu.pl) for selecting options from an inferor shell
+;; in Ciao mode, and presents a graphical interface.
 ;; 
 ;; TODO: Remove references to CiaoPP within this code. It should be
 ;;   next to the code that presents the menus from the command line.
@@ -355,12 +355,12 @@ Example:
 
 WARNING: do not remove the space between \"? )\", because '? ' MEANS
 SPACE character"
-  (let ((menu_width  45))
+  (let ((menu_width  52)) ; 45
     (concat title (make-string (max 0 (- menu_width (length title))) ? ))))
 
 (defun ciao-widget-indent-center-text (title)
 "Put spaces before title to make all text be centered."
-  (let ((menu_width  80))
+  (let ((menu_width  84)) ; 80
     (concat (make-string (max 0 (/ (- menu_width (length title)) 2))
 			 ?  ) title)))
 
