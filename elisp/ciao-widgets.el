@@ -556,6 +556,10 @@ ones we do not want to show)")
 			   ((not (equal def_opt nil))
 			    (list title options `(quote ,def_opt)))))
 		)
+          
+          (when (featurep 'flycheck-ciao)
+             (flycheck-ciao-gmenu-ciaopp-flag title defopt))
+          
 	  (if (equal options 'nil)
 	      (ciao-create-edit-box id title defopt)
 	    (if (not (equal (member defopt (cadr options)) nil))
