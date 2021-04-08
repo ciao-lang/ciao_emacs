@@ -47,6 +47,14 @@ CiaoPP, instead of asking ascii questions in the CiaoPP buffer."
   :group 'ciaopp
   :type 'boolean)
 
+(define-minor-mode ciaopp-gmenu-mode
+  "Minor-mode for CiaoPP graphic menu."
+  :init nil
+  :global nil
+  :lighter " CiaoPP-GMenu"
+  :keymap ciao-widget-keymap
+  )
+
 ;; (defun ciao-preprocess-buffer-menu ()
 ;;   "Preprocess the buffer, selecting options. Instructs the
 ;; preprocessor to load the current buffer and start an interactive
@@ -384,8 +392,10 @@ corresponding toolbar buttons."
 	  (setq ciao-cancel-widget-values 
 		(copy-sequence ciao-widget-values)))))
   (goto-char (point-max))
-  (ciao-create-widgets-buttons)
-  (ciao-run-widget-buffer))
+  ; OK/Cancel buttons
+  ; (ciao-create-widgets-buttons)
+  (ciao-run-widget-buffer)
+  (ciaopp-gmenu-mode))
 
 (defun ciao-ciaopp-end-graphic-menu ()
   "Removes the graphic ciaopp menu process hook"

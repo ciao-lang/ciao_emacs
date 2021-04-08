@@ -261,6 +261,7 @@ clicking the OK button in the graphical menu.")
 
 (defvar ciao-widget-keymap
   (let ((map (make-sparse-keymap)))
+    (define-key map "q"            'kill-buffer-and-window) 
     (define-key map "\t"           'widget-forward)
     (define-key map [(shift tab)]  'widget-backward)
     (define-key map [backtab]      'widget-backward)
@@ -636,7 +637,7 @@ creates widgets for each element."
      'face face)))
 
 (defun ciao-run-widget-buffer nil
-  (use-local-map ciao-widget-keymap)
+  ;(use-local-map ciao-widget-keymap)
   (widget-setup))
 
 (defun ciao-create-widgets-buttons nil
