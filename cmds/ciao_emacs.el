@@ -31,7 +31,7 @@
 ;; Start an emacs server
 
 (setq server-name "ciao-emacs")
-(setenv "EMACS_SOCKET_NAME" "ciao-emacs") ;; Make sure that emacsclient see it
+(setenv "EMACS_SOCKET_NAME" "ciao-emacs") ;; Make sure that emacsclient sees it
 (server-start)
 
 ;; ---------------------------------------------------------------------------

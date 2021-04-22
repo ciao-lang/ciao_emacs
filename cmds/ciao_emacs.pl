@@ -6,7 +6,7 @@
 %
 %  \module
 %
-%  This module implements an launcher for Emacs using the Ciao mode.
+%  This module implements a launcher for Emacs using the Ciao mode.
 %  
 %  ## Usage
 %  
