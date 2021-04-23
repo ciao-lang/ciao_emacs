@@ -134,7 +134,7 @@ corresponding toolbar buttons."
   (message "Browsing preprocessor options... ")
   (ciao-remember-last-menu-key  -1)
   (setq ciao-ciaopp-prog-lang 0)
-  (ciao-do-preprocess-buffer 'customize t))
+  (ciao-do-preprocess-buffer 'customize nil))
 
 ;; DTM: Added this new "hook"
 (defvar ciao-ciaopp-gmenu-hook nil
@@ -151,73 +151,75 @@ the CiaoPP buffer.")
 	(setq ciao-g-showoutput showoutput)))
   (setq ciao-gm-recovering 0)
   (ciao-unmark-last-run-errors)
-  (ciao-send-command 'ciaopp-cproc
-   ;; Command
-   (cond
-;   ((eq action 'menu)        (ciao-build-ciaopp-command "[]"))
-;   ((eq action 'nomenu)      (ciao-build-ciaopp-command nil ))
-;   ((eq action 'typesmodes)  (ciao-build-ciaopp-specific-command "ctcheck"))
-    ; a) check assertions
-    ((eq action 'checkassrt)  (ciao-build-ciaopp-specific-command 
-			       "auto_check_assert"))
-    ; b) analyze
-    ((eq action 'analyze)     (ciao-build-ciaopp-specific-command
-			       "auto_analyze"))
-    ; c) optimize
-    ((eq action 'optimize)    (ciao-build-ciaopp-specific-command
-			       "auto_optimize"))
-    ; d) browse options, using graphical menu
-    ((and ciao-ciaopp-use-graphical-menu
-	  (or
-	   (eq action 'customize)
-	   (eq action 'customize-no-set-hook)))
 
-     (if (eq ciao-ciaopp-prog-lang 1)
-       "customize_java(all)."
-       (if (eq ciao-ciaopp-prog-lang 2)
-	 "customize_c(all)."
-	 "customize(all)."
-       ))
-     )
-
-    ; e) browse options, not using graphical menu 
-    ; this action is meant to be called only from the OK button hook
-    ; of the graphical menu AND only after having executed a customize
-    ; action
-    ((or (eq action 'customize-and-exec) 
-	  (and (eq action 'customize)
-	       (not ciao-ciaopp-use-graphical-menu)))
-
-      (if (not (eq ciao-last-source-buffer-used nil))
-
-	  (if (eq ciao-ciaopp-prog-lang 1)
-	    (concat "customize_and_preprocess_java('" 
-		    (buffer-file-name ciao-last-source-buffer-used) "').")
-	    (if (eq ciao-ciaopp-prog-lang 2)
-		(concat "customize_and_preprocess_c('" 
-		    (buffer-file-name ciao-last-source-buffer-used) "').")
-	        (concat "customize_and_preprocess('" 
-		  (buffer-file-name ciao-last-source-buffer-used) "').")
-	    )
-	  )
-	
-	(error "INTERNAL ERROR: cannot find the last source buffer used!")
-	nil))
-
-    ; f) failsafe default: return nil (empty command)    
-    (t nil))
-    ; last argument of ciao-send-command: recenter = true
-   t)
-
+  (let ((showbuf t)) ; by default show process buffer
+    (ciao-send-command 'ciaopp-cproc
+                       ;; Command
+                       (cond
+                        ;   ((eq action 'menu)        (ciao-build-ciaopp-command "[]"))
+                        ;   ((eq action 'nomenu)      (ciao-build-ciaopp-command nil ))
+                        ;   ((eq action 'typesmodes)  (ciao-build-ciaopp-specific-command "ctcheck"))
+                        ; a) check assertions
+                        ((eq action 'checkassrt)  (ciao-build-ciaopp-specific-command 
+			                           "auto_check_assert"))
+                        ; b) analyze
+                        ((eq action 'analyze)     (ciao-build-ciaopp-specific-command
+			                           "auto_analyze"))
+                        ; c) optimize
+                        ((eq action 'optimize)    (ciao-build-ciaopp-specific-command
+			                           "auto_optimize"))
+                        ; d) browse options, using graphical menu
+                        ((and ciao-ciaopp-use-graphical-menu
+	                      (or
+	                       (eq action 'customize)
+	                       (eq action 'customize-no-set-hook)))
+                         (setq showbuf nil)
+                         (if (eq ciao-ciaopp-prog-lang 1)
+                             "customize_java(all)."
+                           (if (eq ciao-ciaopp-prog-lang 2)
+	                       "customize_c(all)."
+	                     "customize(all)."
+                             ))
+                         )
+                        
+                        ; e) browse options, not using graphical menu 
+                        ; this action is meant to be called only from the OK button hook
+                        ; of the graphical menu AND only after having executed a customize
+                        ; action
+                        ((or (eq action 'customize-and-exec) 
+	                     (and (eq action 'customize)
+	                          (not ciao-ciaopp-use-graphical-menu)))
+                         
+                         (if (not (eq ciao-last-source-buffer-used nil))
+                             
+	                     (if (eq ciao-ciaopp-prog-lang 1)
+	                         (concat "customize_and_preprocess_java('" 
+		                         (buffer-file-name ciao-last-source-buffer-used) "').")
+	                       (if (eq ciao-ciaopp-prog-lang 2)
+		                   (concat "customize_and_preprocess_c('" 
+		                           (buffer-file-name ciao-last-source-buffer-used) "').")
+	                         (concat "customize_and_preprocess('" 
+		                         (buffer-file-name ciao-last-source-buffer-used) "').")
+	                         )
+	                       )
+	                   
+	                   (error "INTERNAL ERROR: cannot find the last source buffer used!")
+	                   nil))
+                        
+                        ; f) failsafe default: return nil (empty command)    
+                        (t nil))
+                       ; last argument of ciao-send-command: gmenu
+                       showbuf))
+  
   (if ciao-ciaopp-use-graphical-menu
       (if (eq action 'customize-and-exec)
-	  (progn 
+	  (progn
 	    (setq ciao-widget-str-list   nil)
 	    (setq ciao-widget-id           0)
 	    (setq ciao-ciaopp-gmenu-hook 
 		  'ciao-ciaopp-process-gmenu-just-write-answers))
 	(if (or (eq action 'customize) (eq action 'customize-no-set-hook))
-	    (progn 
+	    (progn
 	      (setq ciao-widget-str-list   nil)
 	      (setq ciao-widget-id           0)
 	  
@@ -226,9 +228,11 @@ the CiaoPP buffer.")
 		    (setq ciao-ciaopp-gmenu-hook 
 			  'ciao-ciaopp-process-graphical-menu)
 		    (ciao-proc-enqueue-w 'ciaopp-cproc 'ciao-ciaopp-show-graphic-menu))))
-	  (ciao-ciaopp-continuation-hooks showoutput)))
+	  ;(ciao-ciaopp-continuation-hooks showoutput)
+          ))
     ; this means: if cannot use graphical menu, then put the hooks
-    ; (switch-to-buffer (ciao-proc-get-buffer 'ciaopp-cproc))
+    (if (not ciao-ciaopp-use-graphical-menu)
+        (switch-to-buffer (ciao-proc-get-buffer 'ciaopp-cproc)))
     (ciao-ciaopp-continuation-hooks showoutput)))
 
 ;;;###autoload
@@ -244,7 +248,6 @@ corresponding toolbar buttons."
   (ciao-do-preprocess-buffer 'customize t)
   )
 
-
 ;;;###autoload
 (defun c-browse-preprocessor-options ()
   "Browse and select (using the preprocessor menus) the actions to be
@@ -257,7 +260,6 @@ corresponding toolbar buttons."
   (message "Sets the ciao-ciaopp-prog-lang variable to C")
   (ciao-do-preprocess-buffer 'customize t)
   )
-
 
 (defun ciao-toggle-ciaopp-use-graphical-menu ()
   "Toggle graphical/textual menu."
@@ -368,7 +370,7 @@ corresponding toolbar buttons."
 	      (progn
 		; *** (switch-to-buffer-other-window (ciao-proc-buffer 'ciaopp-cproc)) 
 		(set-buffer (ciao-proc-get-buffer 'ciaopp-cproc))
-		(kill-buffer ciao-ciaopp-gmenu-buffer-name)
+		; (kill-buffer ciao-ciaopp-gmenu-buffer-name)
 		(setq ciao-ciaopp-gmenu-hook nil)
 		(setq ciao-cancel-widget-values nil)
 
@@ -439,6 +441,10 @@ corresponding toolbar buttons."
    ; Now invokes the CiaoPP menu until the question numbered key
    (ciao-do-preprocess-buffer 'customize-and-exec nil))
 
+
+(defun ciao-exit-button-widget-hook (widget &rest ignore)
+  "This funcion is invoked when the Exit WIDGET button is released."
+  (kill-buffer-and-window))
 
 (defun ciao-cancel-button-widget-hook (widget &rest ignore)
   "This funcion is invoked when the OK button is released."

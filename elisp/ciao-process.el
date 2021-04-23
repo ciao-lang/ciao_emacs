@@ -472,7 +472,8 @@ on the Ciao toplevel side before executing the next command."
     (not (eq (comint-check-proc procbuffer) nil))))
 
 ;; General interface to subprocess
-(defun ciao-send-command (cproc command recenter-opt)
+(defun ciao-send-command (cproc command &optional showbuf)
+  "Create CPROC if is not alive and send COMMAND. When SHOWBUF is t, show CPROC."
   ;; remember the buffer we are at
   (let ((procbuffer (ciao-proc-get-buffer cproc))
 	(origbuffer (current-buffer)))
@@ -481,40 +482,53 @@ on the Ciao toplevel side before executing the next command."
 	;; The buffer or process may not exist
 	(progn
 	  (setq procbuffer (ciao-start-inferior-process cproc))
-	  (ciao-show-inferior-process procbuffer)
+	  (when showbuf (ciao-show-inferior-process procbuffer))
 	  ;; Send command using the hook
 	  (ciao-proc-enqueue-w
 	   cproc
 	   `(lambda ()
-	      (ciao-do-send-command ,origbuffer ,procbuffer ,command nil))))
+	      (ciao-do-send-command ,origbuffer ,procbuffer ,command ,showbuf))))
       ;; Send the command directly
-      (ciao-do-send-command origbuffer procbuffer command recenter-opt))
+      (ciao-do-send-command origbuffer procbuffer command showbuf))
     ;; MH Added to improve tracking of last inferior buffer used.
     (setq ciao-last-process-buffer-used procbuffer)
     (setq ciao-last-process-cproc cproc)))
 
 ;; TODO: Do not switch buffers here (define other command to do it)
-(defun ciao-do-send-command (origbuffer procbuffer command recenter-opt)
-  (let ((at-menu nil))
-    (if (string= (buffer-name) ciao-ciaopp-gmenu-buffer-name)
-	(progn
-	  ;; (set-buffer procbuffer)
-	  (switch-to-buffer procbuffer)
-	  (setq at-menu t))
-      (ciao-switch-other-window procbuffer))
-    ;; (set-buffer procbuffer)
+(defun ciao-do-send-command (origbuffer procbuffer command &optional showbuf)
+  "Send COMMAND to PROCBUFFER from ORIGBUFFER. When SHOWBUF is t switch to PROCBUFFER."
+  (when showbuf (ciao-switch-other-window procbuffer))
+  (with-current-buffer procbuffer
     (goto-char (point-max))
-    (if (eq recenter-opt t) 
-	(recenter 0))
+    ;; (if (eq recenter-opt t)
+    ;;     (recenter 0))
     ;; Send the command
     (insert command)
     ;; (setq comint-process-echoes t)
-    (comint-send-input nil t)
-    (if at-menu
-	; ()
-	(switch-to-buffer ciao-ciaopp-gmenu-buffer-name)
-      (ciao-switch-other-window origbuffer))
-    ))
+    (comint-send-input nil t)))
+
+;; TODO: Do not switch buffers here (define other command to do it)
+;; (defun ciao-do-send-command (origbuffer procbuffer command recenter-opt)
+;;   (let ((at-menu nil))
+;;     (if (string= (buffer-name) ciao-ciaopp-gmenu-buffer-name)
+;; 	(progn
+;; 	  ;; (set-buffer procbuffer)
+;; 	  (switch-to-buffer procbuffer)
+;; 	  (setq at-menu t))
+;;       (ciao-switch-other-window procbuffer))
+;;     ;; (set-buffer procbuffer)
+;;     (goto-char (point-max))
+;;     (if (eq recenter-opt t) 
+;; 	(recenter 0))
+;;     ;; Send the command
+;;     (insert command)
+;;     ;; (setq comint-process-echoes t)
+;;     (comint-send-input nil t)
+;;     (if at-menu
+;; 	; ()
+;; 	(switch-to-buffer ciao-ciaopp-gmenu-buffer-name)
+;;       (ciao-switch-other-window origbuffer))
+;;     ))
 
 ;; MH Alternative (but doesn't work?)
 ;; (defun ciao-send-command (buffername command)

@@ -582,7 +582,9 @@ creates widgets for each element."
 (defun ciao-create-widgets-buffer nil
   "Create the CiaoPP widgets buffer."
   (interactive)
-  (kill-buffer (get-buffer-create ciao-ciaopp-gmenu-buffer-name))
+  ;; (kill-buffer (get-buffer-create ciao-ciaopp-gmenu-buffer-name)) 
+  (with-current-buffer (get-buffer-create ciao-ciaopp-gmenu-buffer-name)
+    (let ((inhibit-read-only t)) (erase-buffer)))
   (set-buffer (get-buffer-create ciao-ciaopp-gmenu-buffer-name))
   ;; (switch-to-buffer (get-buffer-create ciao-ciaopp-gmenu-buffer-name))
   (kill-all-local-variables)
@@ -626,6 +628,7 @@ creates widgets for each element."
   (insert "   ")
   ;; (ciao-insert-image 'xpm ciao-customize-img "Customize")
   (insert-image ciao-customize-img)
+  (ciao-create-widgets-exit-button)
   (insert "\n\n"))
 
 (defun ciao-insert-with-face (string face)
@@ -640,7 +643,20 @@ creates widgets for each element."
   ;(use-local-map ciao-widget-keymap)
   (widget-setup))
 
+(defun ciao-create-widgets-exit-button nil
+  "Create Exit button for the CiaoPP widgets buffer."
+  (insert "         ")
+  (widget-create 'push-button
+		 :tag         "exit"
+		 :tag-glyph   ciao-cancel-img
+		 :button-face 'ciao-button-widget-face
+		 :pressed-face 'ciao-button-widget-face
+		 :format      "%[ %t %]"
+		 :action      'ciao-exit-button-widget-hook
+		 "Push button"))
+
 (defun ciao-create-widgets-buttons nil
+  "Create Apply and Cancel buttons for the CiaoPP widgets buffer."
   (widget-insert "\n                       ")
   (widget-create 'push-button
 		 :tag         "cancel"
