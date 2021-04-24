@@ -521,7 +521,7 @@ save it in the same symbol."
 
 ;;;###autoload
 (defun ciao-show-preprocessor-output ()
-  "Show last output file produced by Ciao preprocessor. The preprocessor
+  "Show last output file produced by CiaoPP. The preprocessor
 works by producing a file which is a transformed and/or adorned (with
 assertions) version of the input file. This command is often used after
 running the preprocessor in order to visit the output file and see the
@@ -614,7 +614,7 @@ pattern to look for)."
 
 ;;;###autoload
 (defun run-ciao-preprocessor ()
-  "Ensure that an inferior Ciao preprocessor process is running. 
+  "Ensure that an inferior CiaoPP process is running. 
 
    This opens a preprocessor top-level window (if one did not exist
 already) where preprocessing commands and preprocessing menu options

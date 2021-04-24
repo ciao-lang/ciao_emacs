@@ -44,7 +44,6 @@
 ;; Images for logos
 (defvar ciao-logos
   '(:ciao "ciao-logo.png"
-    :ciaopp "ciaopp-logo.png"
     :java "java-logo.png"
     :c "c-logo.png"
     ))
@@ -150,13 +149,13 @@ this buffer name."
 
 (defun ciao-proc-desc (cproc)
   (cond ((eq cproc 'ciaosh-cproc) "Ciao toplevel")
-	((eq cproc 'ciaopp-cproc) "Ciao preprocessor")
-	((eq cproc 'lpdoc-cproc) "LPdoc auto-documenter")
+	((eq cproc 'ciaopp-cproc) "CiaoPP toplevel")
+	((eq cproc 'lpdoc-cproc) "LPdoc toplevel")
 	(t (error "Unknown Ciao process %s" cproc))))
 
 (defun ciao-proc-logo (cproc)
   (cond ((eq cproc 'ciaosh-cproc) (ciao-get-logo :ciao))
-	((eq cproc 'ciaopp-cproc) (ciao-get-logo :ciaopp))
+	((eq cproc 'ciaopp-cproc) (ciao-get-logo :ciao))
 	((eq cproc 'lpdoc-cproc) nil)
 	(t (error "Unknown Ciao process %s" cproc))))
 

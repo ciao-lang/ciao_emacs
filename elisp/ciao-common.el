@@ -168,8 +168,8 @@ is defined. @cindex{toplevel command args, setting}"
   :group 'lpdoc
   :type 'string) 
 
-(defcustom ciao-ciaopp-buffer-name "*Ciao Preprocessor*"
-  "Basic name of the buffer running the Ciao preprocessor inferior process."
+(defcustom ciao-ciaopp-buffer-name "*CiaoPP*"
+  "Basic name of the buffer running the CiaoPP inferior process."
   :group 'ciaopp
   :type 'string) 
 
@@ -221,17 +221,17 @@ is defined. @cindex{lpdoc command args, setting}
 
 ;; (defcustom ciao-ciaopp-system (or (getenv "CIAOPP") "ciaopp-1.0")
 (defcustom ciao-ciaopp-system (or (getenv "CIAOPP") (ciao-get-config :ciaopp-bin))
-  "Name of Ciao preprocessor executable."
+  "Name of CiaoPP executable."
   :group 'ciaopp
   :type 'string)
 
 (defun ciao-set-ciaopp-system () 
-  "Change the executable used to run the Ciao Preprocessor
+  "Change the executable used to run the CiaoPP
 toplevel. It is set by default to @tt{ciaopp} or, to the environment 
 variable @tt{CIAOPP} if it is defined. @cindex{preprocessor command, setting}"
   (interactive)
   (setq ciao-ciaopp-system
-	(read-file-name "Change Ciao preprocessor executable? "
+	(read-file-name "Change CiaoPP executable? "
    		        ciao-ciaopp-system ciao-ciaopp-system))) 
 
 (defun ciao-ciaopp-system-args-interactive ()
@@ -240,21 +240,21 @@ variable @tt{CIAOPP} if it is defined. @cindex{preprocessor command, setting}"
 (defcustom ciao-ciaopp-system-args 
   (or (getenv "CIAOPPARGS") 
       (ciao-ciaopp-system-args-interactive))
-  "Arguments passed to Ciao preprocessor executable."
+  "Arguments passed to CiaoPP executable."
   :group 'ciaopp
   :type 'string)
 
 (defun ciao-set-ciaopp-system-args () 
-  "Change the arguments passed to the Ciao preprocessor executable. They are
+  "Change the arguments passed to the CiaoPP executable. They are
 set by default to none or to the environment variable @tt{CIAOPPARGS} if it
 is defined. @cindex{preprocessor command args, setting}"
   (interactive)
   (setq ciao-ciaopp-system-args
-	(read-string "Change args passed to Ciao preprocessor executable? "
+	(read-string "Change args passed to CiaoPP executable? "
 		     ciao-ciaopp-system-args nil))) 
 
 (defcustom ciao-ciaopp-gmenu-buffer-name "*CiaoPP Interface*"
-  "Name of the buffer running the Ciao preprocessor graphical
+  "Name of the buffer running the CiaoPP graphical
 menu interface."
   :group 'ciaopp
   :type 'string) 

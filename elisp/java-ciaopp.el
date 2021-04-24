@@ -89,7 +89,7 @@
      "----"
 ;;      ["Preprocess buffer (w/previous options) and show output"  
 ;;                                 ciao-preprocess-buffer-and-show-output t]
-     ["(Re)Start Ciao preprocessor"              run-ciao-preprocessor t]
+     ["(Re)Start CiaoPP"              run-ciao-preprocessor t]
 ;;      ["Update syntax-based coloring"             ciao-fontify-buffer t]
      "----"
      ["Go to manual page for symbol under cursor" ciao-help-on-current-symbol]

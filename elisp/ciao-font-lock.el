@@ -512,7 +512,7 @@ affect other syntax highlighting."
         ("^\\*\\*\\* .*$" . ciao-face-debug-call) ;; LPdoc (1.9) messages
 	; The different startup messages
 ;	("^Ciao\\>.*$" . ciao-face-startup-message);; Startup
-	("^\\(Ciao [0-9]+\\.[0-9].*:\\|Ciao Preprocessor\\).*$" . ciao-face-startup-message);; Startup
+	("^Ciao [0-9]+\\.[0-9].*:.*$" . ciao-face-startup-message);; Startup
         ; Recognizes a date at the end of the line (ciaopp still does it)
 	("^(C) .* \\w\\w\\w \\w\\w\\w [1-3]?[0-9]\
  [0-9][0-9]:[0-9][0-9]:[0-9][0-9] [A-Z][A-Z][A-Z] [1-2][0-9][0-9][0-9]$"

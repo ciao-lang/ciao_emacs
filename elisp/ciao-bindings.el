@@ -421,10 +421,10 @@ commands implement comunication with the Ciao top level:
    "Preprocessing programs" 
 
    "These commands allow @index{preprocessing programs} with
-@apl{ciaopp}, the @index{Ciao preprocessor}.
+@apl{ciaopp}, the @index{CiaoPP Program Processor}.
 
 See the preprocessor manual for details. The following commands
-implement the communication with the Ciao preprocessor:
+implement the communication with CiaoPP:
   ")
 
 ;;   (ciao-define-key map "\C-cM" 'ciao-preprocess-buffer-menu)
@@ -735,8 +735,8 @@ how things are set up in your @tt{.emacs} file).")
      ["Set Ciao toplevel args"                 ciao-set-ciao-system-args t]
      "----"
 ;;     ["Customize all CiaoPP environment settings" (customize-group 'ciaopp) t]
-     ["Set Ciao Preprocessor executable"       ciao-set-ciaopp-system t]
-     ["Set Ciao Preprocessor executable args"  ciao-set-ciaopp-system-args t]
+     ["Set CiaoPP executable"                  ciao-set-ciaopp-system t]
+     ["Set CiaoPP executable args"             ciao-set-ciaopp-system-args t]
      "----"
 ;;     ["Customize all LPdoc environment settings" (customize-group 'lpdoc) t]
      ["Set LPdoc executable"                   ciao-set-lpdoc-system t]
@@ -759,7 +759,7 @@ how things are set up in your @tt{.emacs} file).")
         ["Complete symbol under cursor"        ciao-info-complete t]
         ["Ciao manuals area in info index" ciao-goto-manuals t]
         ;;     ["Ciao system manual" ciao-goto-ciaocore-manual t]
-        ;;     ["Ciao preprocessor manual" ciao-goto-ciaopp-manual t]
+        ;;     ["CiaoPP manual" ciao-goto-ciaopp-manual t]
         ;;     ["LPdoc automatic documenter manual" ciao-goto-lpdoc-manual t]
         ["List all key bindings" ciao-describe-mode t]
         "----"
@@ -797,7 +797,7 @@ how things are set up in your @tt{.emacs} file).")
 ;;      ["Output literal- and pred-level analysis info" ciao-set-ciaopp-output-full t]
 ;;      ["Do not output analysis info" ciao-set-ciaopp-output-none t]
      "----"
-     ["Start Ciao preprocessor"                run-ciao-preprocessor t]
+     ["Start CiaoPP"                run-ciao-preprocessor t]
      )
   "Menus for CiaoPP mode.")
 
@@ -846,7 +846,7 @@ how things are set up in your @tt{.emacs} file).")
      "----"
 ;;     "PREPROCESSOR (in development)"
      ["Show last preprocessor output file"     ciao-show-preprocessor-output t]
-     ["Start Ciao preprocessor"                run-ciao-preprocessor t]
+     ["Start CiaoPP"                run-ciao-preprocessor t]
      )
   "Menus for the Ciao (inferior) mode.")
 
