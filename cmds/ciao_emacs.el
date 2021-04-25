@@ -28,6 +28,20 @@
 (package-initialize)
 
 ;; ---------------------------------------------------------------------------
+;; Theme
+
+(use-package doom-themes
+  :ensure t
+  ;; :load-path "themes"
+  :config
+  ;; Global settings (defaults)
+  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+        doom-themes-enable-italic t) ; if nil, italics is universally disabled
+  ;(load-theme 'doom-one-light t)
+  (load-theme 'doom-nord t)
+  )
+
+;; ---------------------------------------------------------------------------
 ;; Start an emacs server
 
 (setq server-name "ciao-emacs")
@@ -37,37 +51,57 @@
 ;; ---------------------------------------------------------------------------
 ;; Start Ciao
 
+;; TODO: ciao sytem should be ciaosh, not ciao (use ciao for builder, etc.)
+;; Add auxemacs.pl to toplevel args to preload it
+(setq ciao-system
+      (concat (ciao-get-config :bin-dir) "/ciaosh"))
+(setq ciao-system-args
+      (concat "-u " (concat (ciao-get-config :bundledir-ciao-emacs) "/cmds/auxemacs.pl")))
+
 (switch-to-buffer "*Ciao*")
+;; Insert big logo
 (insert "
-Welcome to Ciao!
-
-  Ciao is an open-source project publicly developed at 
-    https://github.com/ciao-lang/ciao
-  Please report issues at https://github.com/ciao-lang/ciao/issues
-
-  New to Prolog? Visit https://ciao-lang.org/documentation.html
-  for courses, tutorials, and general documentation.
-  
-  Visit the Ciao manual at https://ciao-lang.org/ciao/build/doc/ciao.html/
-
-Useful emacs commands:
-
-  M-x info   Info documentation (search for Ciao)
-  C-x C-f    Find a file
-  C-x o      Switch window
-  C-x b      Switch buffer
-  C-c C-l    Load into the Ciao top level
-
-Some useful commands for editing, loading, and debugging:
-
-  ?- working_directory(D,D).            % See the current directory
-  ?- working_directory(_,'somedir').    % Change directory
-  [?- use_module(library(emacs)).]
-  ?- emacs_edit('file.pl').             % Edit file.pl in emacs (requires server-start)
-  ?- use_module('file.pl').             % Load the module
-  ?- make_exec('file').                 % Create an executable (requires main/{0,1})
-  ?- process_call('file', [], []).      % Execute as a separate process
 
 ")
+(insert "                                         ")
+(insert-image
+ (create-image (concat (ciao-get-config :root-dir) "/core/doc/common/ciao-logo.png")))
+
+(insert "
+
+                  Ciao is an open-source project publicly developed at https://github.com/ciao-lang/ciao
+                  Please report issues at https://github.com/ciao-lang/ciao/issues
+                
+                  New to Prolog? Visit https://ciao-lang.org/documentation.html
+                  for courses, tutorials, and general documentation.
+                  
+                  Visit the Ciao manual at https://ciao-lang.org/ciao/build/doc/ciao.html/
+
+       ----------------------------------------------------------------------------------------------------------
+       Useful emacs commands:
+       
+         M-x info   Info documentation (search for Ciao)
+         C-x C-f    Find a file
+         C-x o      Switch window
+         C-x b      Switch buffer
+         C-c C-l    Load into the Ciao top level
+         C-x C-c    Exit
+       ----------------------------------------------------------------------------------------------------------
+       Some useful commands for editing, loading, and debugging:
+       
+         ?- pwd.                           % Show the current directory
+         ?- ls.                            % List files in the current directory
+         ?- cd('somedir').                 % Change directory
+         ?- edit('file.pl').               % Edit file.pl
+         ?- use_module('file.pl').         % Load the module
+         ?- make_exec('file').             % Create an executable (requires main/{0,1})
+         ?- process_call('file', [], []).  % Execute as a separate process                 
+         ?- help.                          % Open help
+         ?- search.                        % Open search box
+       ----------------------------------------------------------------------------------------------------------
+
+")
+(defun ciao-insert-logo-richer (cproc procbuffer) t) ;; nicer way?
+(advice-add 'ciao-insert-logo :override #'ciao-insert-logo-richer)
 (ciao)
 (goto-address-mode)
