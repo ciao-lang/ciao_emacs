@@ -250,35 +250,18 @@ is no such buffer."
     ;; TODO: (JF) make the buffname optional
     (setq 
      newbuff
-     (if (equal ""
-                ;; Done differently because of filenames with blanks...
-                ;; (ciao-get-string-after-blank system)
-                system-args
-                )
-         (progn 
-           (make-comint-in-buffer
-            (ciao-proc-name cproc)
-            buffname
-            ;; Done differently because of filenames with blanks...
-            ;; (ciao-get-string-before-blank system)
-            system
-            ))
-       (make-comint-in-buffer
-        (ciao-proc-name cproc)
-        buffname 
-        ;; Done differently because of filenames with blanks...
-        ;; (ciao-get-string-before-blank system) ; command name
-        system
-        nil                                   ; filename
-        ;; Done differently because of filenames with blanks...
-        ;; (ciao-get-string-after-blank system)  ; arguments
-        system-args
-        )))
-
+     (apply 'make-comint-in-buffer
+            (append
+             (list (ciao-proc-name cproc)
+                   buffname 
+                   system
+                   nil)
+             (split-string-and-unquote system-args))))
+    ;;
     (with-current-buffer newbuff
       (ciao-inferior-mode-internal cproc)
       (goto-char (point-max)))
-
+    ;;
     (setq ciao-last-process-buffer-used newbuff)
     (setq ciao-last-process-cproc cproc)
     ;; Return the buffer
