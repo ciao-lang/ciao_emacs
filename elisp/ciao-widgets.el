@@ -610,16 +610,16 @@ creates widgets for each element."
   (if (eq ciao-ciaopp-prog-lang 1)
       (progn
 	;; TODO: add a ciaopp-java logo?
-	(ciao-insert-image 'png (ciao-get-logo :ciaopp) "")
+	(ciao-insert-image 'png (ciao-get-logo :ciao) "")
 	(ciao-insert-image 'png (ciao-get-logo :java) "Java"))
     (if (eq ciao-ciaopp-prog-lang 2)
 	(progn
-	  (ciao-insert-image 'png (ciao-get-logo :ciaopp) "")
+	  (ciao-insert-image 'png (ciao-get-logo :ciao) "")
 	  (ciao-insert-image 'png (ciao-get-logo :c) "C"))
 	;; Default: Ciao
 	(progn
 	  (insert "      ")
-	  (ciao-insert-image 'png (ciao-get-logo :ciaopp) "")
+	  (ciao-insert-image 'png (ciao-get-logo :ciao) "")
 	  (insert "   "))
     )
   )
