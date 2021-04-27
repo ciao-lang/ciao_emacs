@@ -105,6 +105,7 @@ traditional debug."
   (ciao-send-command 'ciaosh-cproc "display_debugged." t))
 
 (defun ciao-real-select-debug-mode (&optional list)
+  ;; TODO: make sure that runs in source buffer: (message "%s" (current-buffer))
   (let ((end 0) 
 	(buffers-debug)
 	(module (ciao-module-name))
@@ -202,6 +203,7 @@ mode."
   (ciao-proc-enqueue-w 'ciaosh-cproc 'ciao-real-debug-buffer))
 
 (defun ciao-real-debug-buffer ()
+  ;; TODO: make sure that runs in source buffer: (message "%s" (current-buffer))
   (let ((end 0) 
 	(buffers-debug)
 	(module (ciao-module-name))
@@ -236,6 +238,7 @@ the debug mode for each of them (same as doing \\<ciao-mode-map>
 (defvar ciao-buffers nil)
 
 (defun ciao-real-select-buffers-for-debug ()
+  ;; TODO: make sure that runs in source buffer: (message "%s" (current-buffer))
   (let* ((buffers (ciao-how-debugged))
 	 (ciao-select-ciao-buffers
 	  (function (lambda (buffer)
@@ -557,6 +560,7 @@ in the source files and the Ciao toplevel are synchronized."
                         'ciao-debug)))))
   
 (defun ciao-debug-remove-marks ()
+  ;; TODO: (sure?) make sure that runs in source buffer: (message "%s" (current-buffer))
   (ciao-debug-uncolor-line)
   (setq overlay-arrow-position nil))
 

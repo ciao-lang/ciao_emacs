@@ -487,7 +487,8 @@ on the Ciao toplevel side before executing the next command."
     ;; Send the command
     (insert command)
     ;; (setq comint-process-echoes t)
-    (comint-send-input nil t)))
+    (comint-send-input nil t))
+  (when showbuf (ciao-switch-other-window origbuffer)))
 
 ;; TODO: Do not switch buffers here (define other command to do it)
 ;; (defun ciao-do-send-command (origbuffer procbuffer command recenter-opt)
