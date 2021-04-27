@@ -404,7 +404,7 @@ checking must be done with the preprocessor."
 error reported by the last Ciao subprocess (preprocessor or
 toplevel) which was run."
   (interactive)
-  (if (and (require 'flycheck nil 'noerror) (flycheck-has-current-errors-p))
+  (if (and (featurep 'flycheck-ciao) (flycheck-has-current-errors-p))
       (flycheck-next-error)  
     (let ((procbuffer ciao-last-process-buffer-used))
       (if (and procbuffer (buffer-live-p procbuffer))
@@ -432,7 +432,7 @@ error reported `procbuffer'."
   "Remove error marks from last run (and also debugging marks if
 present). This finish the error finding session."
   (interactive)
-  (when (and (require 'flycheck nil 'noerror) (flycheck-has-current-errors-p))
+  (when (and (featurep 'flycheck-ciao) (flycheck-has-current-errors-p))
       (flycheck-clear))       
   (let ((procbuffer ciao-last-process-buffer-used))
     (if (and procbuffer (buffer-live-p procbuffer))
