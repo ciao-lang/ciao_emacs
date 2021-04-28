@@ -11,10 +11,26 @@
 :- use_module(library(process)).
 :- use_module(library(emacs)).
 
+% ---------------------------------------------------------------------------
+%! # Ciao mode interaction
+
+:- export(help/0).
+:- pred help # "Open the Ciao manuals".
+help :-
+    process_call(path(emacsclient), ['-e', '(set-buffer "*Ciao*")', '-e', '(ciao-goto-manuals)'], [stdout(null)]).
+
+:- export(ciao_build/0).
+:- pred ciao_build # "Call the Ciao builder".
+ciao_build :-
+    process_call(path(emacsclient), ['-e', '(set-buffer "*Ciao*")', '-e', '(ciao-build)'], [stdout(null)]).
+
 :- export(ciao_browse_preprocessor_options/0).
 :- pred ciao_browse_preprocessor_options # "Open the CiaoPP options menu".
 ciao_browse_preprocessor_options :-
     process_call(path(emacsclient), ['-e', '(set-buffer "*Ciao*")', '-e', '(ciao-browse-preprocessor-options)'], [stdout(null)]).
+
+% ---------------------------------------------------------------------------
+%! # HTML helper
 
 :- export(pwd/0).
 :- pred pwd # "Show the current directory.".
@@ -37,6 +53,11 @@ find_file :-
     % process_call(path(emacsclient), ['-e', '(set-buffer "*Ciao*")', '-e', '(find-file ".")'], [stdout(null)]).
     process_call(path(emacsclient), ['-e', '(find-file ".")'], [stdout(null)]).
 
+% TODO: create a ciao html buffer abstraction (elisp) based on this, that can be called from lpdoc
+
+% ---------------------------------------------------------------------------
+%! # HTML helper
+
 :- export(open_url/1).
 open_url(Url) :-
     process_call(path(emacsclient), [
@@ -44,10 +65,6 @@ open_url(Url) :-
         '-e', ~atom_concat('(xwidgets-reuse-xwidget-reuse-browse-url "',
                            ~atom_concat(Url, '")'))
     ], [stdout(null)]).
-
-% TODO: create a ciao html buffer abstraction (elisp) based on this, that can be called from lpdoc
-
-% ---------------------------------------------------------------------------
 
 :- export(html_view/0).
 :- pred html_view # "Open a HTML-view buffer".
@@ -79,18 +96,28 @@ html_replace(X) :-
 % (xwidget-webkit-current-session) "document.body.parentElement.innerHTML = '<html><body style=\"background: black; color: white\"><div style=\"font-family: Sometype Mono; font-size: 50px\">Fine!</div></body></html>';")
 
 % ---------------------------------------------------------------------------
+%! # HTML-based help
 
-:- export(search/0).
-:- pred search # "Open the Ciao search page (HTML)".
-search :-
-    open_url('https://ciao-lang.org/ciao/build/doc/ciao.html/ciaosearch.html').
+:- export(html_search/0).
+:- pred html_search # "Open the Ciao search page (HTML)".
+html_search :-
+    open_url('http://localhost:8000/ciao/build/doc/ciao.html/ciaosearch.html').
 
-:- export(help/0).
-:- pred search # "Open the Ciao manual (HTML)".
-help :-
-    open_url('https://ciao-lang.org/ciao/build/doc/ciao.html/').
+:- export(html_help/0).
+:- pred html_help # "Open the Ciao manual (HTML)".
+html_help :-
+    open_url('http://localhost:8000/ciao/build/doc/ciao.html/').
 
 % ---------------------------------------------------------------------------
+%! # Github and gitlab pointers
+
+:- export(github_repo/0).
+github_repo :-
+    open_url('https://github.com/ciao-lang/ciao').
+
+:- export(github_issues/0).
+github_issues :-
+    open_url('https://github.com/ciao-lang/ciao/issues').
 
 :- export(gitlab_issues/0).
 gitlab_issues :-
