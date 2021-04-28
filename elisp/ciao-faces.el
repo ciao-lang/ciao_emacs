@@ -514,8 +514,8 @@ strings, commnds, etc.)."
   '(;;(((type tty) (class color)) (:foreground "magenta" :weight bold))
     (((class grayscale) (background light)) (:foreground "LightGray" :weight bold))
     (((class grayscale) (background dark)) (:foreground "DimGray" :weight bold))
-    (((class color) (background light)) (:foreground "Brown" :weight bold))
-    (((class color) (background dark)) (:foreground "Brown" :weight bold))
+    (((class color) (background light)) (:foreground "brown" :weight bold))
+    (((class color) (background dark)) (:foreground "salmon1" :weight bold))
     (t (:inverse-video t :weight bold)))
   "Face to use for entry assertions."
   :group 'ciao-highlighting-faces-assertions)
@@ -698,8 +698,8 @@ strings, commnds, etc.)."
   '(;;(((type tty) (class color)) (:foreground "magenta" :weight bold))
     (((class grayscale) (background light)) (:foreground "LightGray" :weight bold))
     (((class grayscale) (background dark)) (:foreground "DimGray" :weight bold))
-    (((class color) (background light)) (:foreground "Brown" :weight bold)) ; :family "helv"
-    (((class color) (background dark)) (:foreground "Brown" :weight bold)) ; :family "helv"
+    (((class color) (background light)) (:foreground "brown" :weight bold)) ; :family "helv"
+    (((class color) (background dark)) (:foreground "salmon1" :weight bold)) ; :family "helv"
     (t (:inverse-video t :weight bold)))
   "Face to use for warning messages."
   :group 'ciao-highlighting-faces-messages)
@@ -710,7 +710,7 @@ strings, commnds, etc.)."
     (((class grayscale) (background light)) (:foreground "LightGray"))
     (((class grayscale) (background dark)) (:foreground "DimGray"))
     (((class color) (background light)) (:foreground "brown")) ; :family "helv"
-    (((class color) (background dark)) (:foreground "brown")) ; :family "helv"
+    (((class color) (background dark)) (:foreground "salmon1")) ; :family "helv"
     (t (:inverse-video t)))
   "Face to use for note messages."
   :group 'ciao-highlighting-faces-messages)
@@ -750,7 +750,7 @@ strings, commnds, etc.)."
     (((class grayscale) (background light)) (:foreground "LightGray"))
     (((class grayscale) (background dark)) (:foreground "DimGray"))
     (((class color) (background light)) (:foreground "brown")) ; :family "helv"
-    (((class color) (background dark)) (:foreground "brown")) ; :family "helv"
+    (((class color) (background dark)) (:foreground "salmon1")) ; :family "helv"
     (t (:inverse-video t)))
   "Face to use for other messages."
   :group 'ciao-highlighting-faces-messages)
