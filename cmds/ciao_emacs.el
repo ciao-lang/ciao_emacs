@@ -20,12 +20,67 @@
                     ; '(font . "Courier 14"))))
 
 ;; ---------------------------------------------------------------------------
-
 (require 'package)
 
 (add-to-list 'package-archives
              '("MELPA Stable" . "https://stable.melpa.org/packages/") t)
+
+
+;; Create third-party directory
+(let ((third-party-dir
+       (expand-file-name "elisp" (expand-file-name "third-party"
+						   (ciao-get-config
+						    :root-dir)))))
+      (if (not (file-directory-p third-party-dir))
+	  (mkdir third-party-dir))
+
+      ;; Set directory for installed packages
+      (setq package-user-dir third-party-dir))
+
 (package-initialize)
+
+(unless package-archive-contents
+  (package-refresh-contents))
+
+;; Install third-party packages 
+(if (not (package-installed-p 'use-package))
+    (package-install 'use-package))
+
+(if (not (package-installed-p 'flycheck))
+    (package-install 'flycheck))
+
+(if (not (package-installed-p 'company))
+    (package-install 'company))
+
+;; Install recommended extensions for third-party packages
+(if (not (package-installed-p 'flycheck-pos-tip))
+    (package-install 'flycheck-pos-tip))
+
+(with-eval-after-load 'flycheck (flycheck-pos-tip-mode))
+
+(if (not (package-installed-p 'flycheck-color-mode-line))
+    (package-install 'flycheck-color-mode-line))
+
+(eval-after-load "flycheck"
+  '(add-hook 'flycheck-mode-hook 'flycheck-color-mode-line-mode))
+
+;; Add ciao_emacs contrib packages to our load-path
+(let ((ciao-emacs-contrib-dir
+       (expand-file-name "contrib" (ciao-get-config
+		    		    :bundledir-ciao-emacs))))
+  (add-to-list 'load-path (expand-file-name "flycheck-ciao" ciao-emacs-contrib-dir))
+  (add-to-list 'load-path (expand-file-name "company-ciao" ciao-emacs-contrib-dir)))
+
+;; Setup packages
+(require 'flycheck-ciao)
+(eval-after-load 'flycheck '(add-hook 'flycheck-mode-hook 'flycheck-ciao-setup))
+
+(require 'company-ciao)
+(eval-after-load 'company '(add-hook 'company-mode-hook 'company-ciao-setup))
+
+;; Enable Flycheck and Company in buffers
+(add-hook 'after-init-hook #'global-flycheck-mode)
+(add-hook 'after-init-hook #'global-company-mode)
 
 ;; ---------------------------------------------------------------------------
 ;; Theme
