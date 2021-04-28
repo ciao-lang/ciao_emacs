@@ -110,9 +110,10 @@
 (eval-after-load 'company '(add-hook 'company-mode-hook 'company-ciao-setup))
 
 ;; Enable Flycheck and Company in buffers
-(add-hook 'after-init-hook #'global-flycheck-mode)
-(add-hook 'after-init-hook #'global-company-mode)
-
+;; (add-hook 'after-init-hook #'global-flycheck-mode)
+;; (add-hook 'after-init-hook #'global-company-mode)
+(global-flycheck-mode)
+(global-company-mode)
 ;; ---------------------------------------------------------------------------
 ;; xwidgets-webkit (optional)
 
