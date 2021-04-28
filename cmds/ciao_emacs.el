@@ -205,7 +205,7 @@
 
     ;; Override .pl, .pro, .prolog extensions
     (treemacs-create-icon
-     :file (expand-file-name "cmds/prolog-icon.png"
+     :file (expand-file-name "elisp/icons/prolog-icon.png"
                              (ciao-get-config :bundledir-ciao-emacs))
      :extensions ("pro" "prolog" "pl"))
 
