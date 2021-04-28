@@ -7,7 +7,7 @@
 
 (setq-default indent-tabs-mode nil)
 ;;(setq pop-up-windows nil)
-(tool-bar-mode 0)
+;;(tool-bar-mode 0)
 ;;(tooltip-mode  0)
 ;;(scroll-bar-mode 0)
 ;; Disable irritating visual line move
@@ -114,6 +114,7 @@
 ;; (add-hook 'after-init-hook #'global-company-mode)
 (global-flycheck-mode)
 (global-company-mode)
+
 ;; ---------------------------------------------------------------------------
 ;; xwidgets-webkit (optional)
 
@@ -130,12 +131,12 @@
         (insert "** Examples\n")
         (insert "- path :: ")
         (insert (expand-file-name "core/examples/misc" (ciao-get-config :root-dir)))
-        (insert "\n"))
+        (insert "\n")
         (insert "* Ciao\n")
         (insert "** Ciao\n")
         (insert "- path :: ")
         (insert (ciao-get-config :root-dir))
-        (insert "\n")))
+        (insert "\n"))))
 
 (use-package treemacs
   :ensure t
@@ -255,9 +256,23 @@
   ;; Global settings (defaults)
   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
         doom-themes-enable-italic t) ; if nil, italics is universally disabled
-  ;(load-theme 'doom-one-light t)
   (load-theme 'doom-nord t)
+  ; (load-theme 'doom-spacegrey t)
+  ; (load-theme 'doom-one t)
+  ; (load-theme 'doom-dracula t)
+  ; (load-theme 'doom-tomorrow-night t)
+  ; (load-theme 'doom-challenger-deep t)
+  ; (load-theme 'doom-opera t)
+  ; (load-theme 'doom-tomorrow-day t)
+  ; (load-theme 'doom-one-light t)
   )
+
+;; ---------------------------------------------------------------------------
+;; Further Ciao mode customization
+
+;; Special faces for some Ciao properties
+(font-lock-add-keywords 'ciao-mode
+                        '(("\\<\\(atm\\|list\\|int\\|nonvar\\|var\\|gnd\\|ground\\|string\\|flt\\|term\\|num\\|nnegint\\|mshare\\|indep\\|not_fails\\|fails\\|non_det\\|is_det\\)\\>" . font-lock-keyword-face)))
 
 ;; ---------------------------------------------------------------------------
 ;; Start an emacs server
