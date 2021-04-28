@@ -73,7 +73,9 @@
 (unless package-archive-contents
   (package-refresh-contents))
 
+;; ---------------------------------------------------------------------------
 ;; Install third-party packages 
+
 (if (not (package-installed-p 'use-package))
     (package-install 'use-package))
 
@@ -122,7 +124,18 @@
     (package-install 'xwidgets-reuse))
 
 ;; ---------------------------------------------------------------------------
-;; File sidebar (for easy file navigation)
+;; Markdown mode
+
+(use-package markdown-mode
+  :ensure t
+  :commands (markdown-mode gfm-mode)
+  :mode (("README\\.md\\'" . gfm-mode)
+         ("\\.md\\'" . markdown-mode)
+         ("\\.markdown\\'" . markdown-mode))
+  :init (setq markdown-command "multimarkdown"))
+
+;; ---------------------------------------------------------------------------
+;; Treemacs sidebar (for easy file navigation)
 
 (let ((f (expand-file-name "treemacs-persist" ciao-emacs-init-dir)))
   (if (not (file-exists-p f))
@@ -257,14 +270,14 @@
   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
         doom-themes-enable-italic t) ; if nil, italics is universally disabled
   (load-theme 'doom-nord t)
-  ; (load-theme 'doom-spacegrey t)
-  ; (load-theme 'doom-one t)
-  ; (load-theme 'doom-dracula t)
-  ; (load-theme 'doom-tomorrow-night t)
-  ; (load-theme 'doom-challenger-deep t)
-  ; (load-theme 'doom-opera t)
-  ; (load-theme 'doom-tomorrow-day t)
-  ; (load-theme 'doom-one-light t)
+;  (load-theme 'doom-spacegrey t)
+;  (load-theme 'doom-one t)
+;  (load-theme 'doom-dracula t)
+;  (load-theme 'doom-tomorrow-night t)
+;  (load-theme 'doom-challenger-deep t)
+;  (load-theme 'doom-opera t)
+;  (load-theme 'doom-tomorrow-day t)
+;  (load-theme 'doom-one-light t)
   )
 
 ;; ---------------------------------------------------------------------------
