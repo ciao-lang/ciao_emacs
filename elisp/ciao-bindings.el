@@ -431,7 +431,7 @@ implement the communication with CiaoPP:
 ;;   (ciao-define-key map "\C-cP" 'ciao-preprocess-buffer)
 ;;   (ciao-define-key map "\C-cT" 'ciao-check-types-modes)
   (ciao-define-key map "\C-cA" 'ciao-analyze-buffer)
-  (ciao-define-key map "\C-cT" 'ciao-check-assertions)
+  (ciao-define-key map "\C-cV" 'ciao-check-assertions)
   (ciao-define-key map "\C-cO" 'ciao-optimize-buffer)
   (ciao-define-key map "\C-cM" 'ciao-browse-preprocessor-options)
 ;;   (ciao-define-key map "\C-c\C-p" 'ciao-set-ciaopp-output-pred)
