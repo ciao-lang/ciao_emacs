@@ -399,6 +399,11 @@ checking must be done with the preprocessor."
 	;; buffer still exists
 	(ciao-any-errors procbuffer ciao-last-process-cproc))))
 
+;; (optional) flycheck function declarations
+(declare-function flycheck-has-current-errors-p "flycheck")
+(declare-function flycheck-next-error "flycheck")
+(declare-function flycheck-clear "flycheck")
+
 (defun ciao-find-last-run-errors ()
   "Go to the location in the source file containing the next
 error reported by the last Ciao subprocess (preprocessor or

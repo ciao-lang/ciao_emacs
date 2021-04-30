@@ -515,6 +515,9 @@ ones we do not want to show)")
 ;; 	  (ciao-get-combo-box-components-from-str str)
 ;; 	  ))))
 
+;; (optional) flycheck-ciao function declarations
+(declare-function flycheck-ciao-gmenu-ciaopp-flag "flycheck-ciao")
+
 (defun ciao-create-widget (id str &optional def_opt)
 "Create a widget (combo or edit-box) depending on how the string is."
 (let ( (a 0)
