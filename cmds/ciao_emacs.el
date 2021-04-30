@@ -47,9 +47,9 @@
 
 (require 'package)
 
-(add-to-list 'package-archives
-             '("MELPA Stable" . "https://stable.melpa.org/packages/") t)
-
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+;; (add-to-list 'package-archives
+;;              '("MELPA Stable" . "https://stable.melpa.org/packages/") t)
 ;; 3rd party dir, make sure that it exists
 (setq third-party-dir (expand-file-name "third-party" (ciao-get-config :root-dir)))
 (if (not (file-directory-p third-party-dir))
