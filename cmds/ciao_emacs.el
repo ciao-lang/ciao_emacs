@@ -86,10 +86,17 @@
     (package-install 'company))
 
 ;; Install recommended extensions for third-party packages
+
 (if (not (package-installed-p 'flycheck-pos-tip))
     (package-install 'flycheck-pos-tip))
 
 (with-eval-after-load 'flycheck (flycheck-pos-tip-mode))
+
+;(if (not (package-installed-p 'flycheck-inline))
+;    (package-install 'flycheck-inline))
+;
+;(with-eval-after-load 'flycheck
+;  (add-hook 'flycheck-mode-hook #'flycheck-inline-mode))
 
 (if (not (package-installed-p 'flycheck-color-mode-line))
     (package-install 'flycheck-color-mode-line))
@@ -297,12 +304,11 @@
 (ciao-server-start) ;; Enable Ciao server
 
 ;; ---------------------------------------------------------------------------
-;; Enable useful modes
+;; Enable other useful modes
 
 (treemacs)
 (which-key-mode)
-;(flycheck-mode)
-;(company-mode)
+(global-hl-line-mode)
 
 ;; ---------------------------------------------------------------------------
 ;; Ciao splash
