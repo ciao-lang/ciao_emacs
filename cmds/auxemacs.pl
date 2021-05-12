@@ -24,9 +24,9 @@ help :-
 ciao_build :-
     process_call(path(emacsclient), ['-e', '(set-buffer "*Ciao*")', '-e', '(ciao-build)'], [stdout(null)]).
 
-:- export(ciao_browse_preprocessor_options/0).
-:- pred ciao_browse_preprocessor_options # "Open the CiaoPP options menu".
-ciao_browse_preprocessor_options :-
+:- export(ciaopp_menu/0).
+:- pred ciaopp_menu # "Open the CiaoPP options menu".
+ciaopp_menu :-
     process_call(path(emacsclient), ['-e', '(set-buffer "*Ciao*")', '-e', '(ciao-browse-preprocessor-options)'], [stdout(null)]).
 
 % ---------------------------------------------------------------------------
