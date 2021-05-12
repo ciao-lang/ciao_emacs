@@ -64,6 +64,9 @@ will introduce answers in the CiaoPP buffer (as if the user had typed
 them) while the current menu question number is less or equal that the
 value of this variable.")
 
+(defvar ciao-widget-last-point 0
+  "Saved point position before menu rewrite")
+
 (defvar ciao-widget-values nil
    "A list that contains the current values of the widgets created. It
 should look like: '((1 option_widget1) (2 option_widget2)).")
@@ -604,7 +607,8 @@ creates widgets for each element."
   (setq-local widget-button-pressed-face 'ciao-button-pressed-widget-face)
   (setq-local widget-mouse-face 'ciao-button-widget-face) 
 
-  (setq-local cursor-type nil)
+  ; (hide cursor)
+  ;(setq-local cursor-type nil)
 
   (insert "\n")
   ;; (ciao-insert-image 'xpm ciao-clip-logo "CLIP")

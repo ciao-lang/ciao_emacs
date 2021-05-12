@@ -295,12 +295,31 @@ corresponding toolbar buttons."
 	       (is_a_menu new-line)
 ;;	       (eq (ciao-proc-get-buffer 'ciaopp-cproc) nil)
 	       )
-	  (ciao-create-widgets-buffer)
+          (progn ;; new menu
+            ;; Save point before resetting buffer
+            (with-current-buffer (get-buffer-create ciao-ciaopp-gmenu-buffer-name)
+              (setq ciao-widget-last-point (point)))
+	    (ciao-create-widgets-buffer))
+        ;; continuing menu
 	(set-buffer (get-buffer-create ciao-ciaopp-gmenu-buffer-name)))
-      
-      (goto-char (point-max))
-      (setq widget-mark 
-	    (ciao-create-widget ciao-widget-id new-line default_opt))
+
+      (save-excursion
+        (goto-char (point-max))
+        (setq widget-mark 
+	      (ciao-create-widget ciao-widget-id new-line default_opt)))
+
+      ;; TODO: execute when we are done with the menu? how we know it? (JF)
+      (if (eq ciao-widget-last-point (point-min))
+          ;; Move to first widget
+          (progn
+            (goto-char (point-min))
+            (skip-chars-forward "^:")
+            (when (not (eobp)) (forward-char))
+            (when (not (eobp)) (forward-char)))
+        ;; Else to ciao-widget-last-point if possible
+        (if (<= ciao-widget-last-point (point-max))
+            (goto-char ciao-widget-last-point)))
+
       (setq ciao-widget-str-list (substring new-line widget-mark)))
     
       ; TRICK: As menu is always waiting for an input, menu is always
@@ -387,14 +406,15 @@ corresponding toolbar buttons."
 	  (ciao-proc-get-buffer 'ciaopp-cproc))
       (switch-to-buffer ciao-ciaopp-gmenu-buffer-name)
     (set-buffer     (get-buffer-create ciao-ciaopp-gmenu-buffer-name)) 
-    (display-buffer (get-buffer-create ciao-ciaopp-gmenu-buffer-name)) 
+    ;(display-buffer (get-buffer-create ciao-ciaopp-gmenu-buffer-name)) 
+    (ciao-switch-other-window (get-buffer-create ciao-ciaopp-gmenu-buffer-name)) 
 
     (if (eq ciao-cancel-widget-values nil)
 	(progn
 	  (setq ciao-cancel-widget-values 
 		(copy-sequence ciao-widget-values)))))
-  (goto-char (point-max))
   ; OK/Cancel buttons
+  ; (goto-char (point-max))
   ; (ciao-create-widgets-buttons)
   (ciao-run-widget-buffer)
   (ciaopp-gmenu-mode))
