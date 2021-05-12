@@ -309,6 +309,7 @@
 (treemacs)
 (which-key-mode)
 (global-hl-line-mode)
+(add-hook 'ciao-mode-hook 'display-line-numbers-mode)
 
 ;; ---------------------------------------------------------------------------
 ;; Ciao splash
