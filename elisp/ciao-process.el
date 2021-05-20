@@ -459,12 +459,12 @@ on the Ciao toplevel side before executing the next command."
   ;; remember the buffer we are at
   (let ((procbuffer (ciao-proc-get-buffer cproc))
 	(origbuffer (current-buffer)))
-    (save-some-buffers) ;; TODO: This is not always necessary
+    (if showbuf (save-some-buffers)) ;; TODO: This is not always necessary
     (if (not (ciao-proc-alive cproc))
 	;; The buffer or process may not exist
 	(progn
 	  (setq procbuffer (ciao-start-inferior-process cproc))
-	  (when showbuf (ciao-show-inferior-process procbuffer))
+	  (if showbuf (ciao-show-inferior-process procbuffer))
 	  ;; Send command using the hook
 	  (ciao-proc-enqueue-w
 	   cproc
@@ -479,7 +479,7 @@ on the Ciao toplevel side before executing the next command."
 ;; TODO: Do not switch buffers here (define other command to do it)
 (defun ciao-do-send-command (origbuffer procbuffer command &optional showbuf)
   "Send COMMAND to PROCBUFFER from ORIGBUFFER. When SHOWBUF is t switch to PROCBUFFER."
-  (when showbuf (ciao-switch-other-window procbuffer))
+  (if showbuf (ciao-switch-other-window procbuffer))
   (with-current-buffer procbuffer
     (goto-char (point-max))
     ;; (if (eq recenter-opt t)
@@ -488,7 +488,7 @@ on the Ciao toplevel side before executing the next command."
     (insert command)
     ;; (setq comint-process-echoes t)
     (comint-send-input nil t))
-  (when showbuf (ciao-switch-other-window origbuffer)))
+  (if showbuf (ciao-switch-other-window origbuffer)))
 
 ;; TODO: Do not switch buffers here (define other command to do it)
 ;; (defun ciao-do-send-command (origbuffer procbuffer command recenter-opt)

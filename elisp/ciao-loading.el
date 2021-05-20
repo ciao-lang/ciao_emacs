@@ -438,7 +438,7 @@ error reported `procbuffer'."
 present). This finish the error finding session."
   (interactive)
   (when (and (featurep 'flycheck-ciao) (flycheck-has-current-errors-p))
-      (flycheck-clear))       
+    (flycheck-clear))
   (let ((procbuffer ciao-last-process-buffer-used))
     (if (and procbuffer (buffer-live-p procbuffer))
 	;; buffer still exists
