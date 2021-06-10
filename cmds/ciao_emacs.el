@@ -142,21 +142,47 @@
   :init (setq markdown-command "multimarkdown"))
 
 ;; ---------------------------------------------------------------------------
-;; Treemacs sidebar (for easy file navigation)
+;; Populate treemacs with examples
 
+(defun maybe-insert-treemacs (title bundle subpath)
+  (let ((bundledir (ciao-bundle-src bundle)))
+    (when bundledir
+      (let ((p (expand-file-name subpath bundledir)))
+        (when (file-exists-p p)
+          (insert (concat "** " title "\n"))
+          (insert (concat "- path :: " p "\n")))))))
+
+;; TODO: remove file to force rebuild
 (let ((f (expand-file-name "treemacs-persist" ciao-emacs-init-dir)))
   (if (not (file-exists-p f))
       (with-temp-file f
         (insert "* Examples\n")
-        (insert "** Examples\n")
-        (insert "- path :: ")
-        (insert (expand-file-name "core/examples/misc" (ciao-get-config :root-dir)))
-        (insert "\n")
-        (insert "* Ciao\n")
-        (insert "** Ciao\n")
-        (insert "- path :: ")
-        (insert (ciao-get-config :root-dir))
-        (insert "\n"))))
+        ; Benchmarks for Ciao
+        (maybe-insert-treemacs "Benchs" "core" "examples/misc")
+        ;; TODO: collect examples in bndls/ciaopp/examples
+        ;; Examples from CiaoPP tutorial
+        (maybe-insert-treemacs "Tutorials" "ciaopp" "doc/tutorials/tut_examples")
+        ;; General CiaoPP examples (classified by application or CiaoPP component)
+        (maybe-insert-treemacs "Advanced" "ciaopp_extra" "examples")
+        ;; "ciaopp_extra" "examples/Overall"
+        ;; "ciaopp_extra" "examples/Overall_Extra"
+        ;; CiaoPP Cost examples
+        (maybe-insert-treemacs "Cost" "ciaopp_cost" "examples")
+        ;; TODO: paths cannot appear more than once
+        ;; (maybe-insert-treemacs "Cost (res_plai)" "ciaopp_cost" "examples/resource_analysis_verification/multi_variant_param_resources")
+        ;; ;; Examples from playground
+        (maybe-insert-treemacs "Demo (General)" "ciaopp_online" "demo_files/general")
+        (maybe-insert-treemacs "Demo (Resources)" "ciaopp_online" "demo_files/resources")
+        ;; ---
+        ;(insert "* Ciao\n")
+        ;(insert "** Ciao\n")
+        ;(insert "- path :: ")
+        ;(insert (ciao-get-config :root-dir))
+        ;(insert "\n")
+        )))
+
+;; ---------------------------------------------------------------------------
+;; Treemacs sidebar (for easy file navigation)
 
 (use-package treemacs
   :ensure t
