@@ -171,8 +171,8 @@
         ;; TODO: paths cannot appear more than once
         ;; (maybe-insert-treemacs "Cost (res_plai)" "ciaopp_cost" "examples/resource_analysis_verification/multi_variant_param_resources")
         ;; ;; Examples from playground
-        (maybe-insert-treemacs "Demo (General)" "ciaopp_online" "demo_files/general")
-        (maybe-insert-treemacs "Demo (Resources)" "ciaopp_online" "demo_files/resources")
+        (maybe-insert-treemacs "Demo (General)" "ciaopp_wui" "demo_files/general")
+        (maybe-insert-treemacs "Demo (Resources)" "ciaopp_wui" "demo_files/resources")
         ;; ---
         ;(insert "* Ciao\n")
         ;(insert "** Ciao\n")
