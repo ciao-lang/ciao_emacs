@@ -290,6 +290,7 @@ include:
   (ciao-define-key inferior-map "\C-h\M-s" 'ciao-info-apropos)
   (ciao-define-key inferior-map "\C-c\C-i" 'ciao-info-complete)
   (ciao-define-key inferior-map "\M-]"  'ciao-find-last-run-errors)
+  (ciao-define-key inferior-map "\M-["  'ciao-find-last-previous-run-errors)
   ; Compat
   (ciao-define-key inferior-map "\C-c`" 'ciao-find-last-run-errors)
   (ciao-define-key inferior-map "\C-ce" 'ciao-unmark-last-run-errors)
@@ -356,6 +357,7 @@ well as performing several syntactic checks of assertions:
    ")
 
   (ciao-define-key map "\M-]"   'ciao-find-last-run-errors)
+  (ciao-define-key map "\M-["   'ciao-find-last-previous-run-errors)
   ; Compat
   (ciao-define-key map "\C-c`"  'ciao-find-last-run-errors)
   (ciao-define-key map "\C-ce"  'ciao-unmark-last-run-errors)
@@ -656,6 +658,8 @@ how things are set up in your @tt{.emacs} file).")
      "----"
      ["Go to (next) preproc/compiler error msg"  ciao-find-last-run-errors
       :help "Locate (next) error reported in the last run or the compiler, preprocessor, or documenter."]
+     ["Go to (previous) preproc/compiler error msg"  ciao-find-last-previous-run-errors
+      :help "Locate (previous) error reported in the last run or the compiler, preprocessor, or documenter."]
      ["Remove error/debug marks in buffers"  ciao-unmark-last-run-errors
       :help "Clear any error highlighting marks left in different buffers."]
      ["Quit (C-g) and remove error/debug marks"  ciao-unmark-last-run-errors-and-quit

@@ -311,7 +311,7 @@ this command always loads the predicate in debugging mode (interpreted)."
 ;;------------------------------------------------------------
 
 ;; TODO: This should be local to the inferior process
-(defvar ciao-assrt-lib-loaded nil
+(defvar ciao-assrt-lib-loaded nil ;; TODO: check if it can be commented
   "Stores whether assertion library has been loaded or not (see
 ciao-check-buffer-syntax).")
 
@@ -337,30 +337,30 @@ ciao-load-command).")
 ;; TODO: ciao-assrt-lib-loaded must be associated to the process
 ;; TODO: Simplify this code with a process queue
 
-(defun ciao-check-buffer-syntax ()
+;; (defun ciao-check-buffer-syntax ()
 
-  "Check the @em{syntax} of the code and assertions in the current
-buffer, as well as imports and exports.  This uses the standard top
-level (i.e., does not call the preprocessor and thus does not require
-the preprocessor to be installed). Note that full (semantic) assertion
-checking must be done with the preprocessor."
+;;   "Check the @em{syntax} of the code and assertions in the current
+;; buffer, as well as imports and exports.  This uses the standard top
+;; level (i.e., does not call the preprocessor and thus does not require
+;; the preprocessor to be installed). Note that full (semantic) assertion
+;; checking must be done with the preprocessor."
 
-  (interactive)
-  (setq ciao-last-source-buffer-used (current-buffer))
-  (ciao-unmark-last-run-errors)
-  (if (not (ciao-proc-alive 'ciaosh-cproc))
-      ;; Ciao process is not alive
-      (progn
-	(ciao-start-inferior-process 'ciaosh-cproc)
-	(ciao-show-inferior-process (ciao-proc-get-buffer 'ciaosh-cproc))
-	(ciao-proc-enqueue-w 'ciaosh-cproc 'ciao-load-assrt-lib)
-	(ciao-proc-enqueue-w 'ciaosh-cproc 'ciao-do-check-buffer-syntax))
-    ;; Ciao process is alive
-    (if ciao-assrt-lib-loaded ;; if lib loaded
-	(ciao-do-check-buffer-syntax)
-      ;; lib not loaded
-      (ciao-load-assrt-lib)
-      (ciao-proc-enqueue-w 'ciaosh-cproc 'ciao-do-check-buffer-syntax))))
+;;   (interactive)
+;;   (setq ciao-last-source-buffer-used (current-buffer))
+;;   (ciao-unmark-last-run-errors)
+;;   (if (not (ciao-proc-alive 'ciaosh-cproc))
+;;       ;; Ciao process is not alive
+;;       (progn
+;; 	(ciao-start-inferior-process 'ciaosh-cproc)
+;; 	(ciao-show-inferior-process (ciao-proc-get-buffer 'ciaosh-cproc))
+;; 	(ciao-proc-enqueue-w 'ciaosh-cproc 'ciao-load-assrt-lib)
+;; 	(ciao-proc-enqueue-w 'ciaosh-cproc 'ciao-do-check-buffer-syntax))
+;;     ;; Ciao process is alive
+;;     (if ciao-assrt-lib-loaded ;; if lib loaded
+;; 	(ciao-do-check-buffer-syntax)
+;;       ;; lib not loaded
+;;       (ciao-load-assrt-lib)
+;;       (ciao-proc-enqueue-w 'ciaosh-cproc 'ciao-do-check-buffer-syntax))))
 
 (defun ciao-load-assrt-lib ()
   (ciao-send-command 'ciaosh-cproc 
@@ -402,6 +402,7 @@ checking must be done with the preprocessor."
 ;; (optional) flycheck function declarations
 (declare-function flycheck-has-current-errors-p "flycheck")
 (declare-function flycheck-next-error "flycheck")
+(declare-function flycheck-previous-error "flycheck")
 (declare-function flycheck-clear "flycheck")
 
 (defun ciao-find-last-run-errors ()
@@ -417,7 +418,21 @@ toplevel) which was run."
 	  (ciao-do-find-errors procbuffer ciao-last-process-cproc)
         (message "No recent program processing active.")))))
 
-(defun ciao-do-find-errors (procbuffer cproc)
+(defun ciao-find-last-previous-run-errors ()
+  "Go to the location in the source file containing the previous
+error reported by the last Ciao subprocess (preprocessor or
+toplevel) which was run."
+  (interactive)
+  (if (and (featurep 'flycheck-ciao) (flycheck-has-current-errors-p))
+      (flycheck-previous-error)  
+    (let ((procbuffer ciao-last-process-buffer-used))
+      (if (and procbuffer (buffer-live-p procbuffer))
+	  ;; buffer still exists
+	  (ciao-do-find-errors procbuffer ciao-last-process-cproc
+			       t) ;; last arg specifies it is backwards
+        (message "No recent program processing active.")))))
+
+(defun ciao-do-find-errors (procbuffer cproc &optional backwards)
   "Go to the location in the source file containing the next
 error reported `procbuffer'."
   (if (not (ciao-error-session-active-p))
@@ -425,10 +440,10 @@ error reported `procbuffer'."
       (ciao-error-session-begin procbuffer cproc)
       ;; Only before we start a new finding errors session, delete
       ;; other windows to maximize frame space.
-      (if (not (eq procbuffer (current-buffer)))
-	  (delete-other-windows)))
+    (if (not (eq procbuffer (current-buffer)))
+	(delete-other-windows)))
   (ciao-switch-other-window procbuffer)
-  (ciao-find-and-highlight-error procbuffer cproc))
+  (ciao-find-and-highlight-error procbuffer cproc backwards))
 
 ;; TODO: Circular dependency! Use hooks to solve it.
 (autoload 'ciao-debug-remove-marks "ciao-debugger")
@@ -458,7 +473,7 @@ source buffer)."
     (ciao-unmark-error procbuffer ciao-current-error)
     (setq ciao-current-error nil)))
 
-(defun ciao-find-and-highlight-error (procbuffer cproc)
+(defun ciao-find-and-highlight-error (procbuffer cproc &optional backwards)
   "Go to location in source file containing next error, highlight."
   ;; First, remove previous error marks in the source and process
   ;; buffers. No need to do anything if file is not being visited
@@ -466,8 +481,10 @@ source buffer)."
   (if ciao-current-error
       (ciao-unmark-error procbuffer ciao-current-error))
   (let (err beginline endline filename infline)
-    ;; In process buffer, get next error data
-    (setq err (ciao-error-session-next procbuffer cproc))
+    ;; In process buffer, get next or previous error data
+    (if backwards
+	(setq err (ciao-error-session-previous procbuffer cproc))
+      (setq err (ciao-error-session-next procbuffer cproc)))
     (setq ciao-current-error err)
     (if (eq err nil)
 	;; There are no (more) errors

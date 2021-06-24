@@ -206,7 +206,7 @@ class, or normal module)."
   (not (eq ciao-error-session-orig-buffer nil)))
 
 (defun ciao-error-session-begin (procbuffer cproc)
-  "Begin a finding errors session for errors in `procbuffer'"
+  "Begin a finding errors session for errors in `procbuffer'."
   ;; Rmember the original buffer from which the session was started
   (setq ciao-error-session-orig-buffer (current-buffer))
   ;; In `procbuffer', go back to previous prompt or beginning of
@@ -220,7 +220,8 @@ class, or normal module)."
       ;; Move or create the session marker
       (if (not ciao-error-session-marker)
 	  (setq ciao-error-session-marker (make-marker)))
-      (set-marker ciao-error-session-marker (point) (current-buffer)))))
+      (set-marker ciao-error-session-marker (point) (current-buffer))
+      (message "Sesión marker: %s" ciao-error-session-marker))))
 
 (defun ciao-error-session-end (procbuffer) ; procbuffer unused at this
 					   ; moment
@@ -257,9 +258,22 @@ class, or normal module)."
 		 (- (point) (length (ciao-proc-prompt cproc))) (point))
 		(ciao-proc-prompt cproc))
       (eq (string-match ciao-os-shell-prompt-pattern
-		    (buffer-substring-no-properties 
-		     (match-beginning 0) (match-end 0))
-		    ) 0)
+			(buffer-substring-no-properties 
+			 (match-beginning 0) (match-end 0))
+			) 0)
+      ))
+
+(defun ciao-no-more-previous-errors (cproc)
+  "No more errors, from this point backwards."
+  (or (not (search-backward-regexp (ciao-error-or-prompt-pattern) nil t))
+      (<= (point) (marker-position ciao-error-session-marker))
+      (string= (buffer-substring-no-properties 
+		(- (point) (length (ciao-proc-prompt cproc))) (point))
+	       (ciao-proc-prompt cproc))
+      (eq (string-match ciao-os-shell-prompt-pattern
+			(buffer-substring-no-properties 
+			 (match-beginning 0) (match-end 0))
+			) 0)
       ))
 
 (defun ciao-error-session-next (procbuffer cproc)
@@ -290,6 +304,35 @@ Ciao error structure is '(beginline endline file infline level message):
 	  ;; No (more) errors found, return null error structure
 	  nil
         (ciao-locate-next-error (current-buffer))))))
+
+(defun ciao-error-session-previous (procbuffer cproc)
+  "Locate previous Ciao error in PROCBUFFER and highlight it in CPROC buffer.
+Ciao error structure is '(beginline endline file infline level message):
+    beginline/endline = line where error is found in source buffer.
+    file = source file.
+    infline = line where error is found in compiler buffer.
+    level = error/warning/info.
+    message = message associated to the error."
+;;; ALT:
+;;;         beginline/endline = can also contain predicate name / clause number
+;;;             (this is a temporary kludge while preprocessor error
+;;;              reporting is improved)
+  (with-current-buffer procbuffer
+    (save-excursion
+      (if ciao-current-error
+	  ;; Move to the previous error found in the inferior buffer
+	  (let ((infline (ciao-error-get ciao-current-error 'infln)))
+            (goto-char (point-min)) (forward-line (1- infline)))
+	;; Or to the beginning of the errors
+	(goto-char (marker-position ciao-error-session-marker)))
+      ;; From 21.1 on , this does not go over the prompt. Using column instead:
+      ;;  (beginning-of-line)
+      ;;  (move-to-column 0)
+      (end-of-line)
+      (if (ciao-no-more-previous-errors cproc)
+	  ;; No (more) errors found, return null error structure
+	  nil
+        (ciao-locate-previous-error (current-buffer))))))
 
 (defun ciao-locate-next-error (procbuffer)
   "Locates the next error in a Ciao PROCBUFFER.
@@ -388,6 +431,104 @@ Returns a Ciao error structure or nil if there are no more errors in PROCBUFFER.
 	(ciao-error-new beginline endline filename infline level message)
       nil))))
 
+(defun ciao-locate-previous-error (procbuffer)
+  "Locates the next error in a Ciao PROCBUFFER.
+Returns a Ciao error structure or nil if there are no more errors in PROCBUFFER."
+  (let ((messpoint (point)) beginline endline openpoint filename infline level message)
+    (move-to-column 0)
+    (let ((keep-searching-errors t)
+	  (error-found nil))
+      (while keep-searching-errors
+	(if (or (not (search-backward ":" nil t))
+                (<= (point) (marker-position ciao-error-session-marker)))
+            (setq keep-searching-errors nil) ; if there are no more : stop searching for errors
+          (setq level (ciao-error-level (buffer-substring-no-properties (line-beginning-position) (point))))
+          (if (not level) ; if level was not found at beginning of line, search for next error 
+	      nil
+	    (setq infline (line-number-at-pos (point)))
+	    (if (not (search-forward "lns " (+ (point) 80) t))
+		(progn
+		  (setq beginline -1)
+		    (setq endline -1)
+                    (setq message (ciao-get-error-message level))
+                    (setq level (ciao-replace-error-level level)))
+	      (let ((beg (point)))
+		(search-forward "-")
+		(backward-char 1)
+		  (setq beginline 
+			(string-to-number (buffer-substring-no-properties beg (point)))))
+	      (forward-char 1)
+	      (let ((beg (point)))
+		(search-forward ")")
+                (setq message (ciao-get-error-message level))
+                (setq level (ciao-replace-error-level level))
+                  (backward-char 1)
+		  (setq endline
+			(string-to-number (buffer-substring-no-properties beg (point))))))
+            (move-to-column 0)
+	    ;; Try to find opening "{" by inserting a "}"
+	    (insert "}")
+	    ;; Change syntax of parenthesis
+	    (modify-syntax-entry ?\( "_")
+	    (modify-syntax-entry ?\) "_")
+	    (modify-syntax-entry ?\[ "_")
+	    (modify-syntax-entry ?\] "_")
+	    ;; Scan to "{"
+	    (condition-case nil
+		(setq openpoint (scan-sexps (point) -1))
+	      (error (setq openpoint 0)))
+	    ;; Return syntax of parenthesis
+	    (modify-syntax-entry ?\( "()")
+	    (modify-syntax-entry ?\) ")(")
+	    (modify-syntax-entry ?\[ "(]")
+	    (modify-syntax-entry ?\] ")[")      
+	    ;; Delete the "}" inserted
+	    (delete-char -1)
+	    (if (= openpoint 0)
+		(setq filename nil)
+	      (goto-char openpoint)
+	      (if (not (search-forward "/" nil t))
+                  (setq filename (buffer-file-name))
+		(backward-char 1)
+		(skip-chars-backward "a-zA-Z0-9_-") ;; (include bundle name if needed)
+		(let ((beg (point)))
+		  (search-forward-regexp 
+		   "\\(\\.\\(po\\|itf\\|asr\\|ast\\|testout\\|pls\\|pl\\|cgi\\)\\>\\|$\\)")
+		  (setq filename
+			(ciao-bundle-extend-path
+			 (fix-cygwin-drive-letter
+			  (concat (buffer-substring-no-properties 
+				   beg (match-beginning 0)) 
+				  ;; MH cygdrive case for .pls, fixed bug
+				  (cond
+				   ((string= (match-string-no-properties 0) ".po") 
+				    ".pl")
+				   ((string= (match-string-no-properties 0) ".itf") 
+				      ".pl")
+				   ((string= (match-string-no-properties 0) ".asr") 
+				    ".pl")
+				   ((string= (match-string-no-properties 0) ".ast") 
+				    ".pl")
+				   ((string= (match-string-no-properties 0) ".testout") 
+				    ".pl")
+				   ((string= (match-string-no-properties 0) ".pls") 
+				    ".pls")
+				   ((string= (match-string-no-properties 0) ".pl") 
+				      ".pl")
+				   ((string= (match-string-no-properties 0) "cgi") ;; TODO: .cgi?
+				    ".cgi")
+				   ((string= (match-string-no-properties 0) "") 
+				    "")))))))))
+	    (setq keep-searching-errors nil)
+	    (setq error-found t))))
+    (goto-char messpoint)
+    ;; (beginning-of-line)
+    (move-to-column 0)
+    ;; Create the error structure
+    (if error-found
+	(ciao-error-new beginline endline filename infline level message)
+      nil))))
+
 (defun ciao-get-error-message (level)
   "Return the error message while parsing errors, depends on LEVEL."
   (cond
@@ -407,15 +548,15 @@ Returns a Ciao error structure or nil if there are no more errors in PROCBUFFER.
   "Verify if STRING is an error tag and return its value."
   (let ((case-fold-search nil)) ; do not ignore case
     (cond
-     ((string-match "WARNING" string)
+     ((string-match-p "WARNING$" string)
       'warning)
-     ((string-match "\\(ERROR\\|ABORTED\\|SYNTAX ERROR\\)" string)
+     ((string-match-p "\\(ERROR\\|ABORTED\\|SYNTAX ERROR\\)$" string)
       'error)
-     ((string-match "FAILED" string)
+     ((string-match-p "FAILED$" string)
       'test-failed)
-     ((string-match "NOTE" string)
+     ((string-match-p "NOTE$" string)
       'info)
-     ((string-match "PASSED" string)
+     ((string-match-p "PASSED$" string)
       'test-passed)
      (t nil))))
 
