@@ -548,15 +548,15 @@ Returns a Ciao error structure or nil if there are no more errors in PROCBUFFER.
   "Verify if STRING is an error tag and return its value."
   (let ((case-fold-search nil)) ; do not ignore case
     (cond
-     ((string-match-p "WARNING$" string)
+     ((string-match-p (regexp-quote "WARNING") string)
       'warning)
-     ((string-match-p "\\(ERROR\\|ABORTED\\|SYNTAX ERROR\\)$" string)
+     ((string-match-p "\\(ERROR\\|ABORTED\\|SYNTAX ERROR\\)" string)
       'error)
-     ((string-match-p "FAILED$" string)
+     ((string-match-p (regexp-quote "FAILED") string)
       'test-failed)
-     ((string-match-p "NOTE$" string)
+     ((string-match-p (regexp-quote "NOTE") string)
       'info)
-     ((string-match-p "PASSED$" string)
+     ((string-match-p (regexp-quote "PASSED") string)
       'test-passed)
      (t nil))))
 
