@@ -395,7 +395,7 @@ details."
 ;;   positives but it is still not optimal --JF
 
 (defcustom ciao-os-shell-prompt-pattern
-  "\\(^\\[[0-9]+\\]> \\|^\\$ \\|^[^ ].*\\$ \\|^[^ ]*> \\|^[A-Z]:.*>\\)"
+  "\\(^\\[[0-9]+\\]> \\|^\\$ \\|^[^ ].*\\$ \\|^[^ =]*> \\|^[A-Z]:.*>\\)"
   "Regular expression used to describe typical shell prompt
 patterns (csh and bash), so that error location works in inferior
 shells. This is useful for example so that errors are located
