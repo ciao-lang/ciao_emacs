@@ -312,8 +312,7 @@ this command always loads the predicate in debugging mode (interpreted)."
 
 ;; TODO: This should be local to the inferior process
 (defvar ciao-assrt-lib-loaded nil ;; TODO: check if it can be commented
-  "Stores whether assertion library has been loaded or not (see
-ciao-check-buffer-syntax).")
+  "Stores whether assertion library has been loaded or not.") ;; (see ciao-check-buffer-syntax)
 
 ;; TODO: This should be local to the inferior process
 (defvar ciao-testing-lib-loaded nil

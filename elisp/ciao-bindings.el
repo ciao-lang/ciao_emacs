@@ -79,7 +79,7 @@ older versions."
 (require 'ciao-font-lock) ; ciao-font-lock-defaults-create,
 			  ; ciao-inferior-font-lock-defaults-create
 (require 'ciao-loading) ; run-ciao-toplevel, ciao-set-main-filename,
-			; ciao-check-buffer-syntax, ciao-load-buffer,
+			; /*ciao-check-buffer-syntax,*/ ciao-load-buffer,
 			; ciao-load-from-main-module,
 			; ciao-load-region, ciao-load-predicate,
 			; ciao-consult-buffer, ciao-consult-region,
@@ -362,7 +362,7 @@ well as performing several syntactic checks of assertions:
   (ciao-define-key map "\C-c`"  'ciao-find-last-run-errors)
   (ciao-define-key map "\C-ce"  'ciao-unmark-last-run-errors)
   (ciao-define-key map "\C-g"   'ciao-unmark-last-run-errors-and-quit)
-  (ciao-define-key map "\C-cE"  'ciao-check-buffer-syntax)
+  ;;(ciao-define-key map "\C-cE"  'ciao-check-buffer-syntax)
 
   (ciao-documentation-section 
    "Commands which help typing in programs" 
@@ -668,9 +668,9 @@ how things are set up in your @tt{.emacs} file).")
      ["(Un)Set main module"                      ciao-set-main-filename
       :help "Define or undefine the main module of the current project (from which compilation will start)."]
      "----"
-     ["Check buffer syntax (incl. assertions)"   ciao-check-buffer-syntax
-      :help "Just check file syntax, including assertions, without loading."]
-     "----"
+     ;; ["Check buffer syntax (incl. assertions)"   ciao-check-buffer-syntax
+     ;;  :help "Just check file syntax, including assertions, without loading."]
+     ;; "----"
 ;;     ["Update syntax-based coloring"             ciao-fontify-buffer
 ;;      :help "Refresh the syntax-based coloring (useful for complex code or if syntax-based coloring gets out of sync)."]
      ["Format source code"                       ciao-format-file
