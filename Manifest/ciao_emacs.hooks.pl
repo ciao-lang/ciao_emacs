@@ -315,6 +315,14 @@ add_prefix([L|Ls], Preffix,  [R|Rs]) :-
 '$builder_hook'(test) :- !,
     do_emacs_mode_tests.
 
+% TODO: automatize tests for syntax highlight:
+%  - nodist/lpdoc-info-tests.pl
+%  - nodist/markup_test.pl
+%  - nodist/syntax-test-inferior.pl
+%  - nodist/syntax-test.pl
+%  - nodist/trivial.pl
+%  - nodist/trivial_fixed.pl
+
 do_emacs_mode_tests :-
     TestDir = ~bundle_path(ciao_emacs, 'tests'),
     CiaoMode = ~path_concat(~emacsmode_elisp_dir, 'ciao-site-file.el'),
