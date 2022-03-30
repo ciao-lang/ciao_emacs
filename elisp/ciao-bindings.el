@@ -372,7 +372,7 @@ writing programs: @cindex{script header, inserting automatically}
    ")
 
   (ciao-define-key map "\C-cIS" 'ciao-insert-script-header)
-  (ciao-define-key map "\C-ci"  'ciao-format-file)
+  (ciao-define-key map "\C-c\C-f" 'ciao-format-file)
 
   (ciao-documentation-section
    "Debugging programs"
