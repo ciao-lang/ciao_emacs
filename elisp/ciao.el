@@ -145,7 +145,8 @@ argument `cproc' specifies the Ciao process to run."
   (if (not (eq major-mode 'ciao-inferior-mode))
       (progn
 	(kill-all-local-variables)
-	(ciao-proc-mode cproc)
+        (if (get-buffer-process (current-buffer)) ; not nil
+	    (ciao-proc-mode cproc)) ; otherwise just do font lock
 	;;
 	(setq major-mode 'ciao-inferior-mode)
 	(setq mode-name "Ciao Listener")
