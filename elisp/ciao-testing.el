@@ -19,10 +19,10 @@
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
 
-(require 'ciao-loading)
-                        ; ciao-send-compiler-command
+(require 'ciao-loading) ; ciao-send-compiler-command
 (require 'ciao-process) ; ciao-proc-get-buffer, ciao-proc-prompt,
-			; ciao-send-command
+			; ciao-send-command,
+                        ; ciao-show-inferior-process
 
 ;; ---------------------------------------------------------------------------
 ;; Default query (for debugging and testing)

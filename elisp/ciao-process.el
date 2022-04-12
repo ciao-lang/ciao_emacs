@@ -267,9 +267,9 @@ is no such buffer."
     ;; Return the buffer
     newbuff))
 
-;; Make sure that the inferior process buffer is visible
 (defun ciao-show-inferior-process (procbuff)
-  (let (origbuff (current-buffer))
+  "Make sure that the inferior process buffer is visible"
+  (let ((origbuff (current-buffer)))
     (ciao-switch-other-window procbuff)
     (ciao-switch-other-window origbuff)))
 
@@ -457,29 +457,26 @@ on the Ciao toplevel side before executing the next command."
 (defun ciao-send-command (cproc command &optional showbuf)
   "Create CPROC if is not alive and send COMMAND. When SHOWBUF is t, show CPROC."
   ;; remember the buffer we are at
-  (let ((procbuffer (ciao-proc-get-buffer cproc))
-	(origbuffer (current-buffer)))
+  (let ((procbuffer (ciao-proc-get-buffer cproc)))
     (if showbuf (save-some-buffers)) ;; TODO: This is not always necessary
     (if (not (ciao-proc-alive cproc))
 	;; The buffer or process may not exist
 	(progn
 	  (setq procbuffer (ciao-start-inferior-process cproc))
-	  (if showbuf (ciao-show-inferior-process procbuffer))
 	  ;; Send command using the hook
 	  (ciao-proc-enqueue-w
 	   cproc
 	   `(lambda ()
-	      (ciao-do-send-command ,origbuffer ,procbuffer ,command ,showbuf))))
+	      (ciao-do-send-command ,procbuffer ,command))))
       ;; Send the command directly
-      (ciao-do-send-command origbuffer procbuffer command showbuf))
+      (ciao-do-send-command procbuffer command))
+    (if showbuf (ciao-show-inferior-process procbuffer))
     ;; MH Added to improve tracking of last inferior buffer used.
     (setq ciao-last-process-buffer-used procbuffer)
     (setq ciao-last-process-cproc cproc)))
 
-;; TODO: Do not switch buffers here (define other command to do it)
-(defun ciao-do-send-command (origbuffer procbuffer command &optional showbuf)
-  "Send COMMAND to PROCBUFFER from ORIGBUFFER. When SHOWBUF is t switch to PROCBUFFER."
-  (if showbuf (ciao-switch-other-window procbuffer))
+(defun ciao-do-send-command (procbuffer command)
+  "Send COMMAND to PROCBUFFER."
   (with-current-buffer procbuffer
     (goto-char (point-max))
     ;; (if (eq recenter-opt t)
@@ -487,8 +484,7 @@ on the Ciao toplevel side before executing the next command."
     ;; Send the command
     (insert command)
     ;; (setq comint-process-echoes t)
-    (comint-send-input nil t))
-  (if showbuf (ciao-switch-other-window origbuffer)))
+    (comint-send-input nil t)))
 
 ;; TODO: Do not switch buffers here (define other command to do it)
 ;; (defun ciao-do-send-command (origbuffer procbuffer command recenter-opt)

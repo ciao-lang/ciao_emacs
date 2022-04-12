@@ -23,7 +23,6 @@
 (require 'ciao-scratchpad) ; ciao-scratchpad-last-code-file,
 			   ; ciao-scratchpad-clean
 (require 'ciao-process) ; ciao-start-inferior-process,
-			; ciao-show-inferior-process,
 			; ciao-last-process-buffer-used,
 			; ciao-last-process-cproc,
 			; ciao-proc-enqueue-w,

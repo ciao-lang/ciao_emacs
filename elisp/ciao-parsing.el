@@ -221,7 +221,8 @@ class, or normal module)."
       (if (not ciao-error-session-marker)
 	  (setq ciao-error-session-marker (make-marker)))
       (set-marker ciao-error-session-marker (point) (current-buffer))
-      (message "Sesión marker: %s" ciao-error-session-marker))))
+      ;;(message "session marker: %s" ciao-error-session-marker)
+      )))
 
 (defun ciao-error-session-end (procbuffer) ; procbuffer unused at this
 					   ; moment
