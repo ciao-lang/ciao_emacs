@@ -152,9 +152,23 @@ inferior process"
        ((string= ciao-lpdoc-docformat "ascii") 
 	(find-file-other-window 
 	 (concat dir "/" thisfileroot ".ascii")))
-       ((string= ciao-lpdoc-docformat "info") 
-	(info-other-window
-	 (concat dir "/" thisfileroot ".info")))
+       ((string= ciao-lpdoc-docformat "info")
+        (if (and (get-buffer "*info*") (get-buffer-window "*info*"))
+            ;; Use same buffer/window; make sure contents are
+            ;; refreshed
+            (let ((origwin (get-buffer-window (current-buffer)))
+                  (infowin (get-buffer-window "*info*"))
+                  (infopoint))
+              (setq infopoint (window-point infowin))
+              (kill-buffer "*info*")
+              (select-window infowin)
+	      (info
+	       (concat dir "/" thisfileroot ".info"))
+              (set-window-point infowin infopoint)
+              (select-window origwin))
+	  (info-other-window
+	   (concat dir "/" thisfileroot ".info"))))
+
        (t
 	(ciao-lpdoc-send-command-at-dir
 	 dir
@@ -193,7 +207,7 @@ settings file."
   (let ((dir (ciao-lpdoc-settings-dir sourcefile))
 	(settings (ciao-lpdoc-settings-file sourcefile)))
     (if (file-exists-p settings)
-	;; Do nothing, the file already existed
+	;; Do nothing if file already exists
 	settings
       ;; Copy the SETTINGS.pl file from the default one
       (make-directory dir t)

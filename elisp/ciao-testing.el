@@ -136,7 +136,8 @@ The tests should be specified using test assertions in the module."
 
 ;;;###autoload
 (defun ciao-run-tests-in-buffer-check-exp-assrts ()
-  "Run the tests in the current buffer and check the assertions of exported predicates.
+  "Run the tests in the current buffer and check the assertions of
+exported predicates. 
 
 The tests should be specified using test assertions in the module."
   (interactive)

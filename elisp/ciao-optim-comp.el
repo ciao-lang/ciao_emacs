@@ -89,7 +89,8 @@
 
 ;;;###autoload
 (defun ciao-optim-comp-tests-full ()
-  "optim-comp regression: Full tests (comp + inccomp + (build-all) + runexec + check)"
+  "optim-comp regression: Full tests (comp + inccomp + (build-all) +
+runexec + check)"
   (interactive)
   (ciao-optim-comp-command "oc:tests full"))
 
@@ -107,7 +108,8 @@
 
 ;;;###autoload
 (defun ciao-optim-comp-tests-compare ()
-  "optim-comp regression: Compare saved results (invoking @app{meld} for each pair of files)"
+  "optim-comp regression: Compare saved results (invoking @app{meld}
+for each pair of files)" 
   (interactive)
   (ciao-optim-comp-command "oc:tests compare"))
 
