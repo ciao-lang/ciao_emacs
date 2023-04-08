@@ -145,13 +145,17 @@ inferior process"
    `ciao-lpdoc-docformat') for `sourcefile'"
   (let* ((sourcefile (buffer-file-name (current-buffer)))
 	 (thisfileroot (file-name-sans-extension (file-name-nondirectory sourcefile)))
+         (thisfilerootnodoc ; Eliminate _doc if necessary
+          (if (eq (string-match "\\(.*\\)_doc" thisfileroot) 0) 
+              (match-string 1 thisfileroot)
+            thisfileroot))
 	 (dir (ciao-lpdoc-settings-dir sourcefile)))
     (if (not (file-exists-p (ciao-lpdoc-settings-file sourcefile)))
 	(message "You need to first choose options in SETTINGS.pl")
       (cond
        ((string= ciao-lpdoc-docformat "ascii") 
 	(find-file-other-window 
-	 (concat dir "/" thisfileroot ".ascii")))
+	 (concat dir "/" thisfilerootnodoc ".ascii")))
        ((string= ciao-lpdoc-docformat "info")
         (if (and (get-buffer "*info*") (get-buffer-window "*info*"))
             ;; Use same buffer/window; make sure contents are
@@ -163,12 +167,11 @@ inferior process"
               (kill-buffer "*info*")
               (select-window infowin)
 	      (info
-	       (concat dir "/" thisfileroot ".info"))
+	       (concat dir "/" thisfilerootnodoc ".info"))
               (set-window-point infowin infopoint)
               (select-window origwin))
 	  (info-other-window
-	   (concat dir "/" thisfileroot ".info"))))
-
+	   (concat dir "/" thisfilerootnodoc ".info"))))
        (t
 	(ciao-lpdoc-send-command-at-dir
 	 dir
