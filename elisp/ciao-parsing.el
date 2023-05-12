@@ -540,7 +540,12 @@ Returns a Ciao error structure or nil if there are no more errors in PROCBUFFER.
                                                     (point))))
    ((eq level 'test-passed)
     (concat "PASSED " (buffer-substring-no-properties (+ (point) 1) (line-end-position))))
-   ((eq (char-after (line-beginning-position)) ?{)
+   ;; Case for messages of type "{WARNING ..."
+   ((eq (char-after (line-beginning-position)) ?{) ; { at beginning of line
+    (buffer-substring-no-properties (+ (point) 1) (1- (save-excursion (search-forward "}")))))
+   
+   ;; Case for messages of type "{In ... \nWARNING ..."
+   ((eq (char-after (line-beginning-position 0)) ?{) ; { at beginning of previous line
     (buffer-substring-no-properties (+ (point) 1) (1- (save-excursion (search-forward "}")))))
   (t
    (buffer-substring-no-properties (+ (point) 1) (line-end-position)))))

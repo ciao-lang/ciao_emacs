@@ -61,8 +61,9 @@ Return ERRORS, with lines modifications."
 (defun flycheck-ciao-parse-output (output checker buffer)
   "Parse Ciao errors from OUTPUT.
 
-CHECKER and BUFFER denoted the CHECKER that returned OUTPUT and
-the BUFFER that was checked respectively."
+CHECKER and BUFFER denote the CHECKER that returned OUTPUT and
+the BUFFER that was checked respectively. OUTPUT is the whole output
+from the run (can contain more than one error)."
   (flycheck-ciao-register-time)
   (if (string-blank-p output)
       (flycheck-ciao-remove-temporary-files)
