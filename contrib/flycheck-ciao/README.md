@@ -1,9 +1,11 @@
 # flycheck-ciao
 
-Flycheck support for `ciao-mode` adding different checkers.
+Flycheck support for Ciao Prolog (`ciao-mode`) adding different checkers:
 
-*  `ciaoc-checker` as syntax checker using `CiaoC`.
-*  `ciaopp-checker` as syntax and assertions checker using `CiaoPP`.
+* `ciaopp`: uses CiaoPP for checking assertions, tests, and syntax.
+* `lpdoc`: uses PDdoc for checking documentation.
+* `ciaoc`: uses CiaoC for checking syntax and compilation.
+* `ciao-test`: uses CiaoC for checking by testing.
 
 ## Installation and Setup
 Emacs 24 is needed for using [flycheck](https://github.com/flycheck/flycheck).

@@ -350,12 +350,12 @@ Returns a Ciao error structure or nil if there are no more errors in PROCBUFFER.
 	      nil
             (setq infline (line-number-at-pos (point)))
 	    (if (not (search-forward "lns " (+ (point) 80) t))
-		(progn
+		(progn ;; No line numbers case
 		  (setq beginline -1)
 		  (setq endline -1)
-                  (setq message (ciao-get-error-message level))
+                  (setq message (ciao-get-error-message level)) ;; Get message text
                   (setq level (ciao-replace-error-level level)))
-	      (let ((beg (point)))
+	      (let ((beg (point)))  ;; Else, get line numbers
 		(search-forward "-")
 		(backward-char 1)
 		(setq beginline 
@@ -363,8 +363,8 @@ Returns a Ciao error structure or nil if there are no more errors in PROCBUFFER.
 	      (forward-char 1)
 	      (let ((beg (point)))
 		(search-forward ")")
-                (setq message (ciao-get-error-message level))
-                (setq level (ciao-replace-error-level level))
+                (setq message (ciao-get-error-message level)) ;; Get message text
+                (setq level (ciao-replace-error-level level)) ;; Error level (info, warning, ...)
                 (backward-char 1)
 		(setq endline
 		      (string-to-number (buffer-substring-no-properties beg (point))))))
@@ -530,25 +530,48 @@ Returns a Ciao error structure or nil if there are no more errors in PROCBUFFER.
 	(ciao-error-new beginline endline filename infline level message)
       nil))))
 
+;; MH: Saved old version: did not preserve text properties
+;; (defun ciao-get-error-message (level)
+;;   "Return the error message while parsing errors, depends on LEVEL."
+;;   (cond
+;;    ((eq level 'test-failed)
+;;     (buffer-substring-no-properties (+ (point) 1)
+;;                                     (save-excursion (search-forward-regexp "PASSED\\|FAILED\\|}")
+;;                                                     (goto-char (1- (line-beginning-position)))
+;;                                                     (point))))
+;;    ((eq level 'test-passed)
+;;     (concat "PASSED " (buffer-substring-no-properties (+ (point) 1) (line-end-position))))
+;;    ;; Case for messages of type "{WARNING ..."
+;;    ((eq (char-after (line-beginning-position)) ?{) ; { at beginning of line
+;;     (buffer-substring-no-properties (+ (point) 1) (1- (save-excursion (search-forward "}")))))
+;;    
+;;    ;; Case for messages of type "{In ... \nWARNING ..."
+;;    ((eq (char-after (line-beginning-position 0)) ?{) ; { at beginning of previous line
+;;     (buffer-substring-no-properties (+ (point) 1) (1- (save-excursion (search-forward "}")))))
+;;   (t
+;;    (buffer-substring-no-properties (+ (point) 1) (line-end-position)))))
+
+;; MH: New version that preserves text properties (just changed 
+;;     buffer-substring-no-properties to buffer-substring)
 (defun ciao-get-error-message (level)
   "Return the error message while parsing errors, depends on LEVEL."
   (cond
    ((eq level 'test-failed)
-    (buffer-substring-no-properties (+ (point) 1)
+    (buffer-substring (+ (point) 1)
                                     (save-excursion (search-forward-regexp "PASSED\\|FAILED\\|}")
                                                     (goto-char (1- (line-beginning-position)))
                                                     (point))))
    ((eq level 'test-passed)
-    (concat "PASSED " (buffer-substring-no-properties (+ (point) 1) (line-end-position))))
-   ;; Case for messages of type "{WARNING ..."
+    (concat "PASSED " (buffer-substring (+ (point) 1) (line-end-position))))
+   ;; Case for messages of type "{WARNING/ERROR/..."
    ((eq (char-after (line-beginning-position)) ?{) ; { at beginning of line
-    (buffer-substring-no-properties (+ (point) 1) (1- (save-excursion (search-forward "}")))))
+    (buffer-substring (+ (point) 1) (1- (save-excursion (search-forward "}")))))
    
-   ;; Case for messages of type "{In ... \nWARNING ..."
+   ;; Case for messages of type "{In ... \nWARNING/ERROR/..."
    ((eq (char-after (line-beginning-position 0)) ?{) ; { at beginning of previous line
-    (buffer-substring-no-properties (+ (point) 1) (1- (save-excursion (search-forward "}")))))
+    (buffer-substring (+ (point) 1) (1- (save-excursion (search-forward "}")))))
   (t
-   (buffer-substring-no-properties (+ (point) 1) (line-end-position)))))
+   (buffer-substring (+ (point) 1) (line-end-position)))))
 
 (defun ciao-error-level (string)
   "Verify if STRING is an error tag and return its value."

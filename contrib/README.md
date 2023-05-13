@@ -1,14 +1,20 @@
 # ciao-emacs-plus
 
-Flycheck and Company support for `ciao-mode`.
+Flycheck and Company support for Ciao Prolog (`ciao-mode`).
+
+* Flycheck provides on the fly checking of assertions, tests, syntax,
+  and documentation.
+
+* Company provides rich contextual help, by accessing the manuals.
 
 ## Installation and Setup
 Emacs 24 is needed for using [flycheck](https://github.com/flycheck/flycheck).
 If you don't have `flycheck` or `company` installed yet, installing this package
 (`ciao-emacs-plus`) will do it automatically. 
 
-As MELPA repository is not available in Emacs by default and it is needed to install
-`flycheck`, you will have to add this code to your Emacs init file.
+As the MELPA repository is not available in Emacs by default and it is
+needed to install `flycheck`, you will have to add this code to your
+Emacs init file:
 
 ```	emacs-lisp
 (require 'package)
@@ -26,13 +32,13 @@ Install `ciao-emacs-plus` package via Emacs built-in package manager (`package.e
 > ```
 > [ALT+X]package-refresh-contents[RET]
 >``` 
->  Once the packages are refreshed, try installing again.
+> Once the packages are refreshed, try installing again.
 
-For `flycheck` support, add the next line into your Emacs init file for adding the checkers.
+For `flycheck` support, add the next line into your Emacs init file for adding the checkers:
 ```	emacs-lisp
 (eval-after-load 'flycheck '(add-hook 'flycheck-mode-hook 'flycheck-ciao-setup))
 ```
-If you use [use-package](https://github.com/jwiegley/use-package), you can insert instead
+If you use [use-package](https://github.com/jwiegley/use-package), you can insert instead:
 ```	emacs-lisp
 (use-package flycheck-ciao
   :after flycheck
@@ -40,16 +46,16 @@ If you use [use-package](https://github.com/jwiegley/use-package), you can inser
   (flycheck-mode . flycheck-ciao-setup)
   )
 ```
-> **Optional**: Enable `flycheck-mode` in all buffers where syntax checking is possible.
+> **Optional**: Enable `flycheck-mode` in all buffers where syntax checking is possible:
 > ```	emacs-lisp
 > (add-hook 'after-init-hook 'global-flycheck-mode)
 > ```
 
-For Company support, insert the next line into your Emacs init file.
+For Company support, insert the following line into your Emacs init file:
 ```	emacs-lisp
 (eval-after-load 'company '(add-hook 'company-mode-hook 'company-ciao-setup))
 ```
-If you use [use-package](https://github.com/jwiegley/use-package), you can insert instead
+If you use [use-package](https://github.com/jwiegley/use-package), you can insert instead:
 ```	emacs-lisp
 (use-package company-ciao
   :after company
@@ -57,7 +63,8 @@ If you use [use-package](https://github.com/jwiegley/use-package), you can inser
   (company-mode . company-ciao-setup)
   )
 ```
-> **Optional**: Enable `company-mode` in all buffers where possible.
+> **Optional**: Enable `company-mode` in all buffers where possible:
 > ```	emacs-lisp
 > (add-hook 'after-init-hook 'global-company-mode)
 > ```
+See also the instructions and tips in each individual package. 

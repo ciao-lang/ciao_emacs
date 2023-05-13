@@ -4,7 +4,7 @@
 
 ;; Author: Miguel Angel Sanchez Ordaz <ma.sanchez.ordaz@imdea.org>
 ;; Keywords: convenience languages tools
-;; Package-Version: 0.1
+;; Package-Version: 0.2
 ;; Package-Requires: ((emacs "24.0") (flycheck "0.18"))
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -20,11 +20,16 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+;; Manuel Hermenegildo <manuel.hermenegildo@imdea.org>:
+;;     Changes for highlighting of messages (font-lock).
+
 ;;; Commentary:
-;; Flycheck support for ciao-mode including different checkers.
+;; Flycheck support for Ciao Prolog (ciao-mode) including different checkers:
 ;;
-;; ciaoc uses CiaoC for checking syntax errors.
-;; ciaopp uses CiaoPP for checking assertions and syntax errors.
+;; ciaoc: uses CiaoC for checking syntax and compilation.
+;; ciaopp: uses CiaoPP for checking assertions, tests, and syntax.
+;; lpdoc: uses PDdoc for checking documentation.
+;; ciao-test: uses CiaoC for checking by testing.
 ;;
 ;; Setup:
 ;; 1. Install package via package.el.
@@ -33,11 +38,58 @@
 ;; 	(eval-after-load 'flycheck '(add-hook 'flycheck-mode-hook #'flycheck-ciao-setup))
 ;; 3. Optional: Enable Flycheck Mode in all buffers where syntax checking is possible.
 ;; 	(add-hook 'after-init-hook #'global-flycheck-mode)
+;;
+;; This can be useful: 
+;; (defface flycheck-info
+;;   ;; Use just margin mark (no underline) for info-level messages
+;;   ;; (e.g., checked)
+;;   '((t))
+;;   "Flycheck face for informational messages."
+;;   :group 'flycheck-faces)
+
+;; By default flycheck info messages (pop-ups) are shown in the minibuffer. 
+;; An alternative is flycheck-pos-tip-mode. The following mods
+;; fix a minor issue and allow font-lock-based highlighting of the
+;; messages in the pop-ups. 
+;; 
+;; (with-eval-after-load 'flycheck
+;;   (progn
+;;     (flycheck-pos-tip-mode)
+;;     (setq flycheck-pos-tip-timeout 0)
+;;     ;; Fixes problem with tool tip width (was one character short)
+;;     (defun pos-tip-tooltip-width (width char-width)
+;;       "Calculate tooltip pixel width."
+;;       (+ (* width char-width)
+;;          (ash (+ pos-tip-border-width
+;; 	         pos-tip-internal-border-width)
+;; 	      2)))
+;;     ;; Fix so that text properties are displayed
+;;     (defun flycheck-pos-tip-error-messages (errors)
+;;       "Display ERRORS, using a graphical tooltip on GUI frames."
+;;       (when errors
+;;         (if (display-graphic-p)
+;;             (let ((message (flycheck-help-echo-all-error-messages errors))
+;;                   (line-height (car (window-line-height))))
+;;               (flycheck-pos-tip--check-pos)
+;;               ;; MH: This is the relevant change:
+;;               ;; pos-tip-show -> pos-tip-show-no-propertize
+;;               (pos-tip-show-no-propertize message nil nil nil flycheck-pos-tip-timeout
+;;                                           flycheck-pos-tip-max-width nil
+;;                                           ;; Add a little offset to the tooltip to move it away
+;;                                           ;; from the corresponding text in the buffer.  We
+;;                                           ;; explicitly take the line height into account because
+;;                                           ;; pos-tip computes the offset from the top of the line
+;;                                           ;; apparently.
+;;                                           nil (and line-height (+ line-height 5)))
+;;               )
+;;           (funcall flycheck-pos-tip-display-errors-tty-function errors))))))
+
 
 ;;; Code:
 
 (require 'ciao)
 (require 'flycheck)
+(require 'font-lock)
 
 (defconst flycheck-ciao-temporary-file-suffix
   "_flycheck_tmp_co"
@@ -72,9 +124,18 @@ from the run (can contain more than one error)."
           (level nil)
           (begin-line nil)
           (end-line nil)
-          (message nil))
+          (message nil)
+          ;; MH: useful for debugging
+          ;; (buff (get-buffer-create "*CiaoMessages*"))
+          )
+      ;; MH: useful for debugging 
+      ;; (save-excursion (set-buffer buff)
       (with-temp-buffer
+        (erase-buffer)
+        ;; MH: Added coloring in the temporary buffer
+        (ciao-inferior-font-lock-defaults-create 'ciaopp-cproc) ; Inserts font-lock rules
         (insert output)
+        (font-lock-ensure) ; Forces font-lock redraw
         (goto-char (point-min))
         (let ((error-found nil)
               (last-error nil))
@@ -89,7 +150,11 @@ from the run (can contain more than one error)."
                     (if (not file-tmp) (buffer-file-name buffer)
                       (replace-regexp-in-string (concat flycheck-ciao-temporary-file-suffix ".") "."  file-tmp))))
             (setq level (ciao-error-get error-found 'level))
+            ;; MH: Optional: Add prefix or separators (could be a line too,
+            ;; but blank lines deleted?) "\u27a4 " (triangle) "\u2022 " (bullet)
+            ;; (setq message (concat "\u2022 " (ciao-error-get error-found 'message)))
             (setq message (ciao-error-get error-found 'message))
+            ;; (pos-tip-show-no-propertize message) ;; MH: ***
             (push (flycheck-error-new-at
                    (if (< begin-line 1) 1 begin-line)
                    0
@@ -233,7 +298,7 @@ from the run (can contain more than one error)."
   )
 
 (flycheck-define-checker lpdoc
-  "A Ciao documetation checker using LPDoc for ciao-mode"
+  "A Ciao documentation checker using LPDoc for ciao-mode"
   :command ("lpdoc"
             "-t"
             "nil"

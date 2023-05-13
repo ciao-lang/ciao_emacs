@@ -21,8 +21,9 @@
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 ;;; Commentary:
-;; This package adds new functionalities the the ciao-mode based on
-;; providing the Ciao support for various standard Emacs packages
+;; This package adds new functionalities to the Ciao Prolog mode
+;; (ciao-mode) by adding Ciao support to various standard Emacs
+;; packages
 
 ;;; Code:
 
