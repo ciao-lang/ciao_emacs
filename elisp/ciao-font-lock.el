@@ -461,16 +461,24 @@ affect other syntax highlighting."
 
 ; ---------------------------------------------------------------------------
 
-(defun ciao-inferior-font-lock-defaults-create ()
-  "Locally set `font-lock-defaults' for inferior Ciao process."
+(defun ciao-inferior-font-lock-defaults-create (cproc)
+  "Locally set `font-lock-defaults' for inferior Ciao process.
+CPROC is the type of inferior process (for CiaoPP special case)."
   ;; MR added to support font-lock
   (if (ciao-emacs-can-do-font-lock-p)
-      (setq-local font-lock-defaults
-                  '(ciao-inferior-font-lock-keywords
-                    t ;; 't' means font-lock-keywords-only
-                    nil ((?_ . "w")) nil
-                    (font-lock-syntactic-face-function
-                     . ciao-syntactic-face-function)))))
+      (progn 
+        (setq-local font-lock-defaults
+                    '(ciao-inferior-font-lock-keywords 
+                      t ;; 't' means font-lock-keywords-only
+                      nil ((?_ . "w")) nil
+                      (font-lock-syntactic-face-function
+                       . ciao-syntactic-face-function)))
+        (if (eq cproc 'ciaopp-cproc) ;; Special case for CiaoPP buffer
+            (progn
+              (font-lock-add-keywords
+               nil ;; nil means current buffer
+               (ciao-inferior-ciaopp-font-lock-keywords))))
+        )))
 
 (defun ciao-inferior-font-lock-keywords ()
       `(
@@ -521,6 +529,63 @@ affect other syntax highlighting."
         . ciao-face-startup-message)              ;; Startup, second line
 ;	("\\(^\\?- *[^{ ]\\|^| \\?- *\\).*\\.[ \t]*\n"
 ;	 . ciao-face-prompt) ;; Query doesn't work(?)
+))
+
+;; MH: This is special coloring for when buffer is a CiaoPP inferior buffer.
+;; Also used to color, e.g., flycheck temporary buffers.
+;; These two roles could (perhaos should) be separated. 
+(defun ciao-inferior-ciaopp-font-lock-keywords ()
+      `(
+        ;; Misc assertion checking messages
+        ("\\(=>\\| : \\)" . ciao-face-check-assrt)
+        ("^{Checking assertions of\n.*$" . ciao-face-note-mess) ;; Not 100% reliable (multiline) but OM for this use.
+        ("^could not be derived from inferred \\(calls\\|success\\|comp\\):" . ciao-face-note-mess)
+        ("^because on \\(call\\|success\\|comp\\))" . ciao-face-note-mess)
+        ("^because the predicate never succeeds (for the given precondition)" . ciao-face-note-mess)
+        ("^because the \\(calls\\|success\\|comp\\) field is incompatible with inferred \\(calls\\|success\\|comp\\):" . ciao-face-note-mess)
+        ("^because because the predicate is never called with the given precondition" . ciao-face-note-mess)
+        ("^because on \\(call\\|success\\)" . ciao-face-note-mess)
+        ("^because" . ciao-face-note-mess)
+        ("^\\(\\[[a-zA-Z0-9]*\\]\\) \\(.*$\\)" 
+         (1 ciao-face-note-mess)
+         (2 ciao-face-entry-assrt)) ;; For domains; improve?
+        ("^with:" . ciao-face-note-mess)
+        (,(concat "^\\(\\[Predicate-level\\]\\|\\[Call site-level\\]\\) "
+                  "\\(Checked:\\) \\([0-9.()% ]*\\) "
+                  "\\(False:\\) \\([0-9.()% ]*\\) "
+                  "\\(Check:\\) \\([0-9.()% ]*\\) "
+                  "\\(Total:\\) \\([0-9.()% ]*\\)"
+                  )
+         (1 ciao-face-entry-assrt)
+         (2 ciao-face-checked-assrt)
+         ; (3 'bold)
+         (4 ciao-face-false-assrt)
+         ; (5 'bold)
+         (6 ciao-face-check-assrt)
+         ; (7 'bold)
+         (8 ciao-face-entry-assrt)
+         ; (9 'bold)
+         )
+        ;; ("^\\[\\(Predicate-level\\|Call site-level\\)\\] Checked: " . ciao-face-checked-assrt)
+        ;; Assertion state
+        (,(ciao-assrt-kind-regexp "checked") 1 ciao-face-checked-assrt keep)
+        (,(ciao-assrt-kind-regexp "true") 1 ciao-face-true-assrt keep)
+        (,(ciao-assrt-kind-regexp "false") 1 ciao-face-false-assrt keep)
+        (,(ciao-assrt-kind-regexp "trust") 1 ciao-face-trust-assrt keep)
+        (,(ciao-assrt-kind-regexp "check") 1 ciao-face-check-assrt keep)
+        ;; Assertions
+        (,(ciao-direct-regexp
+           (concat "[a-zA-Z0-9 \t]*\\<" ; accept any status prefix
+                   (regexp-opt '("decl" "pred" "comp" "calls" "success" "test" "texec") t)))
+         0 ciao-face-check-assrt keep)
+        (,(ciao-direct-regexp "prop") 0 ciao-face-prop-assrt keep)
+        (,(ciao-direct-regexp "test") 0 ciao-face-test-assrt keep)
+        (,(ciao-direct-regexp "texec") 0 ciao-face-texec-assrt keep)
+        (,(ciao-direct-regexp "regtype") 0 ciao-face-type-assrt keep)
+        (,(ciao-direct-regexp "mtype") 0 ciao-face-type-assrt keep) ;; experimental --JF
+        (,(ciao-direct-regexp "mprop") 0 ciao-face-type-assrt keep) ;; experimental --JF
+        (,(ciao-direct-regexp "entry") 0 ciao-face-entry-assrt keep)
+        (,(ciao-direct-regexp "modedef") 0 ciao-face-modedef-assrt keep)
 ))
 
 

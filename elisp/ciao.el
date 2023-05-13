@@ -153,7 +153,7 @@ argument `cproc' specifies the Ciao process to run."
 	;;
 	(ciao-syntax-mode-variables)
 	(ciao-setup-inferior-bindings)
-	(ciao-inferior-font-lock-defaults-create)
+	(ciao-inferior-font-lock-defaults-create cproc)
 	(ciao-debugger-mode-variables)
 	(ciao-debugger-init)
 	(run-hooks 'ciao-inferior-mode-hook))))
