@@ -33,7 +33,7 @@
 ;;
 ;; Setup:
 ;; 1. Install package via package.el.
-;; [ALT+X][RET]package-install-file[RET](Path of "flycheck-ciao.el")[RET]
+;; [ALT+X][RET]package-install-file[RET](Path to "flycheck-ciao.el")[RET]
 ;; 2. Insert the next line into your Emacs init file
 ;; 	(eval-after-load 'flycheck '(add-hook 'flycheck-mode-hook #'flycheck-ciao-setup))
 ;; 3. Optional: Enable Flycheck Mode in all buffers where syntax checking is possible.
