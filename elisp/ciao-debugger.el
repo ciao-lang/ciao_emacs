@@ -538,7 +538,7 @@ in the source files and the Ciao toplevel are synchronized."
 	  (set-window-point window overlay-arrow-position)))))
 
 (defun ciao-debug-transform-port (port)
-  "Arrow to show in source file. It's determines from PORT."
+  "Arrow to show in source file. It is determined from PORT."
   (cond ((string= "Call" port) "C=>")
 	((string= "Exit" port) "E=>")
 	((string= "Fail" port) "F=>")
