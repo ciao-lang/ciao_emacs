@@ -317,12 +317,17 @@ Ciao interactive buffer for a complete list of commands):"))
 			       'comint-history-isearch-backward-regexp)
     (ciao-report-defined-key ciao-inferior-mode-map
 			     'comint-previous-matching-input))
-  (ciao-report-defined-key ciao-inferior-mode-map 
- 			   'comint-dynamic-complete
-			   "Dynamically find completion of the item at
+    (ciao-report-defined-key ciao-inferior-mode-map 
+			   ( if (version<= emacs-version "24.1")
+			       'comint-dynamic-complete
+			     'completion-at-point
+              ;; Since emacs 24.1 comint-dynamic-complete becomes obsolete. Being replaced by completion-at-point
+			   )
+			       "Dynamically find completion of the item at
 point. Note that this completion command refers generally to filenames
  (rather than, e.g., predicate names, as in the previous functions)."
-			   "\t")
+			       "\t")
+
   (ciao-report-defined-key ciao-inferior-mode-map
 			   'comint-dynamic-list-filename-completions
                            "List all (filename) completions of the
