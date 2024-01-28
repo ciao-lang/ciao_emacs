@@ -113,8 +113,6 @@ modern emacses, and also in ascii mode with emacs>= 21.1)."
   '(
     ;; functions
     "fun_eval" "fun_return" "lazy" "funct" 
-    ;; backwards compatibility:
-    "function"
     ;; argnames
     "argnames" 
     ;; make
