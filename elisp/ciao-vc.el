@@ -528,28 +528,28 @@ is unmodified."
 
 ;;;###autoload
 (defun ciao-fetch-next-changelog-entry () 
-
-   "When a unique version numbering is being maintained across several
+"When a unique version numbering is being maintained across several
 files, this command allows inspecting all changes sequentially by
 visiting all the files in which the changes were made:
 
-    @begin{itemize}
+@begin{itemize}
 
-    @item If in a source file, find the next changelog entry in the
+@item If in a source file, find the next changelog entry in the
 source file, open in another window the corresponding
 @file{GlobalChangeLog} file, and position the cursor at the
-corresponding entry. This allows browsing the previous and following
-changes made, which may perhaps reside in other files in the system.
+corresponding entry. This allows browsing the previous and
+following changes made, which may perhaps reside in other files
+in the system.
 
-   @item If in a @file{GlobalChangeLog} file, look for the next entry
-in the file, and open in another window the source file in which the
-corresponding comment resides, positioning the corresponding comment
-at the top of the screen. This allows going through a section of the
-@file{GlobalChangeLog} file checking all the corresponding comments in
-the different files in which they occur.
+@item If in a @file{GlobalChangeLog} file, look for the next
+entry in the file, and open in another window the source file in
+which the corresponding comment resides, positioning the
+corresponding comment at the top of the screen. This allows going
+through a section of the @file{GlobalChangeLog} file checking all
+the corresponding comments in the different files in which they
+occur.
 
-    @end{itemize}
-
+@end{itemize}
 "
 
   (interactive)
