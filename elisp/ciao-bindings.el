@@ -41,8 +41,8 @@
 
 ;;;###autoload
 (defun ciao-customize-all () 
-  (interactive)
   "Enter interface customization option browser."
+  (interactive)
   (customize-group 'ciao))
 
 ;; Do not change the two lines below (Patched by installation!):
@@ -876,26 +876,18 @@ how things are set up in your @tt{.emacs} file).")
     "Ciao Mode Debug Menus" ciao-mode-menus-debug)
   (easy-menu-define ciao-menu-sys ciao-mode-map 
     "Ciao Mode System Menus" ciao-mode-menus-sys)
-  
-  (easy-menu-add ciao-menu-sys)
-  (easy-menu-add ciao-menu-debug)
-  (easy-menu-add ciao-menu-ciaopp)
-  (easy-menu-add ciao-menu-lpdoc)
-  (easy-menu-add ciao-menu-customize)
-  (easy-menu-add ciao-menu-help))
+  )
 
 (defun ciao-setup-inferior-menu-bar ()
   "Define the menus for the Ciao inferior mode"
 
   (easy-menu-define ciao-inferior-menu-help ciao-inferior-mode-map 
     "Ciao Inferior Mode Help Menu" ciao-mode-menus-help) 
-  (easy-menu-add ciao-inferior-menu-help)
   (easy-menu-define ciao-inferior-menu-customize ciao-inferior-mode-map 
     "Ciao Mode Customization Menus" ciao-mode-menus-customize)
-  (easy-menu-add ciao-inferior-menu-customize)
   (easy-menu-define ciao-inferior-menu ciao-inferior-mode-map 
     "Ciao Mode Menu" ciao-inferior-mode-menus)
-  (easy-menu-add ciao-inferior-menu))
+  )
 
 ;;---------------------------------------------------------------------------
 ;; Tool bars

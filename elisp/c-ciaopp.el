@@ -53,7 +53,6 @@
   ;; option in the menu
   (easy-menu-define ciao-c-menu-ciaopp ciaopp-c-mode-map 
     "CiaoPP Mode Menus" ciao-mode-menus-c)
-  (easy-menu-add ciao-c-menu-ciaopp)
   ;; toolbar
   (ciao-c-setup-tool-bar))
 

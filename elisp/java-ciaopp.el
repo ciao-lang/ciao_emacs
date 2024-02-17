@@ -112,7 +112,6 @@
   ;; option in the menu
   (easy-menu-define ciao-java-menu-ciaopp java-mode-map 
     "CiaoPP Mode Menus" ciao-mode-menus-java)
-  (easy-menu-add ciao-java-menu-ciaopp)
   ;; toolbar
   (ciao-java-setup-tool-bar))
 
