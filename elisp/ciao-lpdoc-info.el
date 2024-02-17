@@ -87,7 +87,9 @@
 ;; Modules, imports, exports, ...
           (goto-char (point-min))
           (while (re-search-forward
-                  "^   \\(\\* Exports\\|\\* Library usage\\|\\* New operators defined\
+                  "^   \\(\\• Exports\\|\\• Library usage\\|\\• New operators defined\
+\\|\\• New declarations defined\\|\\• New modes defined\\|\\• Implicit imports\
+\\|* Exports\\|\\* Library usage\\|\\* New operators defined\
 \\|\\* New declarations defined\\|\\* New modes defined\\|\\* Implicit imports\\):"
                   nil t)
             (put-text-property (match-beginning 1) (+ (match-end 1) 1) ; +1 for the ':'
@@ -98,6 +100,8 @@
           (goto-char (point-min))
           (while (re-search-forward
                   "^ *\\(Author(s)\\|^Version\\|Usage [0-9]*\\|Usage\\|Other properties\
+\\|− Packages\\|− Predicates\\|− Properties\\|− Multifiles\
+\\|− Regular Types\\|− Packages\\|− System library modules\\|− System library modules\
 \\|- Packages\\|- Predicates\\|- Properties\\|- Multifiles\
 \\|- Regular Types\\|- Packages\\|- System library modules\\|- System library modules\
 \\):"
@@ -111,13 +115,17 @@
           (goto-char (point-min))
           (while (re-search-forward
                   "^ *\\(\\(\
+− The following properties \\|\
+− If the following properties \\|\
+− Call and exit \\|\
+then the following properties \\|\
 - The following properties \\|\
 - If the following properties \\|\
-then the following properties \\|\
 - Call and exit \\)\
 \\(are added\\|hold\\|should hold\\|do not hold\\|are proved to hold\\|are\\|are not\\|should be\\) \
 \\(at call time:\\|upon exit:\\|globally:\\|compatible with:\\)\\|\
-- Calls should, and exit will be compatible with:\\)"
+\\(− Calls should, and exit will be compatible with:\\|\
+- Calls should, and exit will be compatible with:\\)\\)"
                   nil t)
             (if (not (match-beginning 2))
                 (put-text-property (match-beginning 1) (match-end 1)
