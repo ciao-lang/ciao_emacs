@@ -67,11 +67,11 @@
             (put-text-property
              (match-beginning 2) (match-end 2)
              'font-lock-face (cl-case (intern (match-string 2))
-                               ('PREDICATE     'ciao-face-debug-call)
-                               ('DECLARATION   'ciao-face-debug-exit)
-                               ('REGTYPE       'ciao-face-debug-redo)
-                               ('PROPERTY      'ciao-face-debug-redo)
-                               ('MODE          'ciao-face-debug-fail)
+                               (PREDICATE     'ciao-face-debug-call)
+                               (DECLARATION   'ciao-face-debug-exit)
+                               (REGTYPE       'ciao-face-debug-redo)
+                               (PROPERTY      'ciao-face-debug-redo)
+                               (MODE          'ciao-face-debug-fail)
                                ))
             (put-text-property (match-beginning 3) (match-end 3)
                                'invisible t)
@@ -126,18 +126,18 @@ then the following properties \\|\
                (match-beginning 1) (match-end 4)
                'font-lock-face
                (cl-case (intern (match-string 3))
-                 ('hold                  'ciao-face-check-assrt)   ; true/trust
-                 ('are\ proved\ to\ hold 'ciao-face-checked-assrt) ; checked
-                 ('should\ hold          'ciao-face-check-assrt)   ; check
-                 ('do\ not\ hold         'ciao-face-false-assrt)   ; false
+                 (hold                  'ciao-face-check-assrt)   ; true/trust
+                 (are\ proved\ to\ hold 'ciao-face-checked-assrt) ; checked
+                 (should\ hold          'ciao-face-check-assrt)   ; check
+                 (do\ not\ hold         'ciao-face-false-assrt)   ; false
                  ;
-                 ('are                   'ciao-face-check-assrt)   ; true/trush
-                 ('should\ be            'ciao-face-check-assrt)   ; check (compat)
-                 ('are\ not              'ciao-face-false-assrt)   ; false (compat)
+                 (are                   'ciao-face-check-assrt)   ; true/trush
+                 (should\ be            'ciao-face-check-assrt)   ; check (compat)
+                 (are\ not              'ciao-face-false-assrt)   ; false (compat)
                  ;
-                 ('are\ added            'ciao-face-modedef-assrt) ; modes
+                 (are\ added            'ciao-face-modedef-assrt) ; modes
                  ; 
-                 ('otherwise             'ciao-face-quoted-atom)   ; 
+                 (otherwise             'ciao-face-quoted-atom)   ; 
                  )
                )))
 
