@@ -495,7 +495,7 @@ save it in the same symbol."
       (setq ciao-widget-values (list par)))))
 
 (defun ciao-get-graphic-menu-option (key)
-  "Returns the value of the widget-id 'key'."
+  "Returns the value of the widget-id `key'."
   (if (boundp 'ciao-widget-values)
       (cdr (assoc key ciao-widget-values))
     nil))

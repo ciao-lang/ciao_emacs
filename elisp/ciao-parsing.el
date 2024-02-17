@@ -279,7 +279,7 @@ class, or normal module)."
 
 (defun ciao-error-session-next (procbuffer cproc)
   "Locate next Ciao error in PROCBUFFER and highlight it in CPROC buffer.
-Ciao error structure is '(beginline endline file infline level message):
+Ciao error structure is \\='(beginline endline file infline level message):
     beginline/endline = line where error is found in source buffer.
     file = source file.
     infline = line where error is found in compiler buffer.
@@ -308,7 +308,7 @@ Ciao error structure is '(beginline endline file infline level message):
 
 (defun ciao-error-session-previous (procbuffer cproc)
   "Locate previous Ciao error in PROCBUFFER and highlight it in CPROC buffer.
-Ciao error structure is '(beginline endline file infline level message):
+Ciao error structure is \\='(beginline endline file infline level message):
     beginline/endline = line where error is found in source buffer.
     file = source file.
     infline = line where error is found in compiler buffer.

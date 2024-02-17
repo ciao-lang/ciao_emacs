@@ -114,9 +114,9 @@ inferior process"
   `no-settings-behaviour' controls the behaviour if no
   SETTINGS.pl file is found. It can be:
 
-   - 'error: prompts an error
+   - \\='error: prompts an error
 
-   - 'create-buffer-default: create a default SETTINGS.pl file
+   - \\='create-buffer-default: create a default SETTINGS.pl file
      appropriate for just `sourcefile'."
   
   (let

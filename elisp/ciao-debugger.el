@@ -68,7 +68,7 @@ right now. It is saved for when flag is not set.")
 
 (defvar ciao-debug-filter-pending-text nil
   "Non-nil means this is text that has been saved for later in
-'ciao-debug-filter'.")
+\\='ciao-debug-filter.")
 
 (defvar ciao-debug-delete-prompt-marker nil)
 

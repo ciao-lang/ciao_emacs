@@ -47,7 +47,7 @@
   "This variable accummulates the text that
 ciao-ciaopp-process-graphical-menu gets with the previous calls to
 this hook in order to be able to parse it (needed since Emacs returns
-pieces of strings, like: 'men' 'u option: ' '[a,b]' '? ', at each
+pieces of strings, like: \"men\" \"u option: \" \"[a,b]\" \"? \", at each
 call.")
 
 (defvar ciao-widget-id 0
@@ -69,7 +69,7 @@ value of this variable.")
 
 (defvar ciao-widget-values nil
    "A list that contains the current values of the widgets created. It
-should look like: '((1 option_widget1) (2 option_widget2)).")
+should look like: \\='((1 option_widget1) (2 option_widget2)).")
 
 (defvar ciao-cancel-widget-values nil
   "Each time the menu is started, this variable saves the current menu
@@ -276,12 +276,12 @@ clicking the OK button in the graphical menu.")
 Recommended as a parent keymap for modes using widgets.")
 
 (defun ciao-create-enumerated-list (args num)
-"Starting by number 'num', it returns a list of pairs (value number)
-composed by 1 element of the list 'args' and successive numbers of
-'num'.
+"Starting by number `num', it returns a list of pairs (value number)
+composed by one element of the list `args' and successive numbers of
+`num'.
 
  Example:
- (ciao-create-enumerated-list '(a b c) 0)
+ (ciao-create-enumerated-list \\='(a b c) 0)
   => ((0 a) (1 b) (2 c))"
 (let ( (ele   (car args)) )
   (if (not (cdr args))
@@ -301,7 +301,7 @@ composed by 1 element of the list 'args' and successive numbers of
 combo-box items.
 
 Example:
- (ciao-gm-define-combo-box-list '((aa 1) (bb 2) (cc 3)))
+ (ciao-gm-define-combo-box-list \\='((aa 1) (bb 2) (cc 3)))
   => ((item :tag aa :value 1) (item :tag bb :value 2) (item :tag cc :value 3))"
 (let ( (tag    (car  (car args)))
        (value  (cadr (car args)))
