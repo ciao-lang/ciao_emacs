@@ -144,23 +144,23 @@ The tests should be specified using test assertions in the module."
   (setq ciao-testing-command-passed "run_tests_in_module_check_exp_assrts")
   (ciao-send-testing-command-on-buffer))
 
-;;;###autoload
-(defun ciao-run-tests-in-buffer-and-related ()
-  "Run the tests in the current buffer and all related modules.
-
-The tests should be specified using test assertions in those modules."
-  (interactive)
-  (setq ciao-testing-command-passed "run_tests_related_modules")
-  (ciao-send-testing-command-on-buffer))
+;; ;;;###autoload
+;; (defun ciao-run-tests-in-buffer-and-related ()
+;;   "Run the tests in the current buffer and all related modules.
+;; 
+;; The tests should be specified using test assertions in those modules."
+;;   (interactive)
+;;   (setq ciao-testing-command-passed "run_tests_related_modules")
+;;   (ciao-send-testing-command-on-buffer))
   
-;;;###autoload
-(defun ciao-show-untested-preds-buffer ()
-  "Show any exported predicates that do not have test assertions.
-
-This is an aid towards ensuring that all exported predicates have tests."
-  (interactive)
-  (setq ciao-testing-command-passed "show_untested_exp_preds")
-  (ciao-send-testing-command-on-buffer))
+;; ;;;###autoload
+;; (defun ciao-show-untested-preds-buffer ()
+;;   "Show any exported predicates that do not have test assertions.
+;; 
+;; This is an aid towards ensuring that all exported predicates have tests."
+;;   (interactive)
+;;   (setq ciao-testing-command-passed "show_untested_exp_preds")
+;;   (ciao-send-testing-command-on-buffer))
 
 ;; (defun ciao-send-testing-command-on-buffer (predname) 
 ;;   (ciao-send-compiler-command
