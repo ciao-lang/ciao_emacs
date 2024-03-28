@@ -259,9 +259,9 @@ not have the Ciao paths in the @tt{INFOPATH} and @tt{MANPATH}
 @index{environment variables} (whether these variables are set
 automatically or not for users depends on how the Ciao system was
 installed). See the Ciao installation
-instructions (@ref{Installing Ciao from the source distribution}
-or @ref{Installing Ciao from a Win32 binary distribution}) for
-details.
+instructions (@ref{Installing Ciao})
+@comment{from the source distribution Installing Ciao from a Win32 binary distribution}
+for details.
 
 @section{Emacs version compatibility} "
 
