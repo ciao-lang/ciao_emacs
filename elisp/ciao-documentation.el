@@ -321,13 +321,24 @@ function is a string it is taken to be the comment."
     "\n@item{"
     (ciao-print-keys (car info))
     "} "
-    (let ((function (car (cdr info))))
+    (let ((function (car (cdr info)))
+          (tempstyle)
+          (newdoc))
       (if (stringp function)
 	  function
-	(documentation function)))
+        ;; This is to translate ` and ' correctly
+        (if (version<= "25.1" emacs-version)
+            (progn
+              (setq tempstyle (text-quoting-style))
+              (setq text-quoting-style 'straight)
+              (setq newdoc (format-message (documentation function)))
+              (setq text-quoting-style tempstyle)
+              newdoc)
+          (documentation function))
+        ))
     "\n"
-    ))
-  )
+    )))
+  
 
 (defun ciao-print-keys (str) 
   "Format key binding sequences in lpdoc format."
@@ -442,35 +453,44 @@ function is a string it is taken to be the comment."
 
 (defun ciao-describe-func (s)
   "Format the description of a symbol."
-  (cond
-   ;; It is a customizable variable 
-   ((and (boundp s) (get s 'custom-type)) 
-    (insert 
-     (concat "@item{@tt{" 
-	     (symbol-name s)
-	     "} (@em{"))
-    (if (listp (get s 'custom-type))
-	(insert
-	 (symbol-name 
-	  (type-of
-	   (car (cdr (car (cdr 
-			   (get 's 'custom-type))))))))
-      (insert (symbol-name (get s
-				       'custom-type))))
-    (insert "})}\n")
-    (insert 
-     (concat 
-      (documentation-property s 'variable-documentation)
-      "\n")))
-   ;; It is a face
-   ((documentation-property s 'face-documentation)
-    (insert 
-     (concat "@item{@tt{" 
-	     (symbol-name s)
-	     "} (@em{face})}\n"
-	     (documentation-property s 'face-documentation)
-	     "\n")))
-   ))
+  (let (tempstyle)
+    ;; This is to translate ` and ' correctly
+    (if (version<= "25.1" emacs-version)
+        (progn 
+          (setq tempstyle (text-quoting-style))
+          (setq text-quoting-style 'straight)))
+    (cond
+     ;; It is a customizable variable 
+     ((and (boundp s) (get s 'custom-type)) 
+      (insert 
+       (concat "@item{@tt{" 
+	       (symbol-name s)
+	       "} (@em{"))
+      (if (listp (get s 'custom-type))
+	  (insert
+	   (symbol-name 
+	    (type-of
+	     (car (cdr (car (cdr 
+			     (get 's 'custom-type)))))))) ; TODO: quote on s?
+                             (insert (symbol-name (get s 'custom-type))))
+      (insert "})}\n")
+      (insert 
+       (concat 
+        (documentation-property s 'variable-documentation)
+        "\n")))
+     ;; It is a face
+     ((documentation-property s 'face-documentation)
+      (insert 
+       (concat "@item{@tt{" 
+	       (symbol-name s)
+	       "} (@em{face})}\n"
+	       (documentation-property s 'face-documentation)
+	       "\n")))
+     )
+    (if (version<= "25.1" emacs-version)
+        (setq text-quoting-style tempstyle))
+    ))
+
 
 
 ;; Provide ourselves:
