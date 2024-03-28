@@ -329,7 +329,9 @@ function is a string it is taken to be the comment."
         ;; This is to translate ` and ' correctly
         (if (boundp 'text-quoting-style)
             (progn
-              (setq tempstyle (text-quoting-style))
+              ;; Function call does not work in older versions of Emacs?
+              ;; (setq tempstyle (text-quoting-style))
+              (setq tempstyle text-quoting-style)
               (setq text-quoting-style 'straight)
               (setq newdoc (format-message (documentation function)))
               (setq text-quoting-style tempstyle)
@@ -457,7 +459,9 @@ function is a string it is taken to be the comment."
     ;; This is to translate ` and ' correctly
     (if (boundp 'text-quoting-style)
         (progn 
-          (setq tempstyle (text-quoting-style))
+          ;; Function call does not work in older versions of Emacs?
+          ;; (setq tempstyle (text-quoting-style))
+          (setq tempstyle text-quoting-style)
           (setq text-quoting-style 'straight)))
     (cond
      ;; It is a customizable variable 
