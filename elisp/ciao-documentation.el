@@ -327,7 +327,7 @@ function is a string it is taken to be the comment."
       (if (stringp function)
 	  function
         ;; This is to translate ` and ' correctly
-        (if (version<= "25.1" emacs-version)
+        (if (boundp 'text-quoting-style)
             (progn
               (setq tempstyle (text-quoting-style))
               (setq text-quoting-style 'straight)
@@ -455,7 +455,7 @@ function is a string it is taken to be the comment."
   "Format the description of a symbol."
   (let (tempstyle)
     ;; This is to translate ` and ' correctly
-    (if (version<= "25.1" emacs-version)
+    (if (boundp 'text-quoting-style)
         (progn 
           (setq tempstyle (text-quoting-style))
           (setq text-quoting-style 'straight)))
@@ -487,7 +487,7 @@ function is a string it is taken to be the comment."
 	       (documentation-property s 'face-documentation)
 	       "\n")))
      )
-    (if (version<= "25.1" emacs-version)
+    (if (boundp 'text-quoting-style)
         (setq text-quoting-style tempstyle))
     ))
 
