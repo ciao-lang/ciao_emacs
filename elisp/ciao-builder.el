@@ -47,9 +47,9 @@
 
 (defun ciao-builder-command (cmd)
   "Execute the `cmd' ciao builder command"
-  (async-shell-command
-   (ciao-builder-cmdstr cmd)
-   (ciao-get-builder-proc-buffer)))
+  (let ((b (ciao-get-builder-proc-buffer)))
+    (async-shell-command (ciao-builder-cmdstr cmd) b)
+    (with-current-buffer b (ciao-inferior-mode))))
 
 ;; TODO: Missing sub- and special targets (e.g., core.ciaobase, core.engine, etc.)
 (defun ask-bundle (msg)
@@ -98,6 +98,14 @@
   (let 
       ((target (ask-bundle "(Re)Build the specified Ciao bundle [docs]: ")))
     (ciao-builder-command (concat "build --docs " target))))
+
+;;;###autoload
+(defun ciao-test () 
+  "Test the specified Ciao bundle"
+  (interactive)
+  (let 
+      ((target (ask-bundle "Test the specified Ciao bundle: ")))
+    (ciao-builder-command (concat "test " target))))
 
 ;;;###autoload
 (defun ciao-install () 
