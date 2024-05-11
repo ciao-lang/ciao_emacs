@@ -14,7 +14,15 @@ mode:
  - `outli.el`: a copy of [outli](https://github.com/jdtsmith/outli) (GPL License)
    an Org-like code outliner for section folding.
 
-## Installation and Setup
+The following sections describe the installation and setup for each
+component. In most cases, it is necessary that this `contrib/`
+directory is in your `load-path` adding to your `.emacs.d/init.el` file:
+
+```emacs-lisp
+(setq load-path (cons (expand-file-name ".../contrib") load-path))
+```
+
+## Flycheck and company
 
 Emacs 24 is needed for using [flycheck](https://github.com/flycheck/flycheck).
 If you don't have `flycheck` or `company` installed yet, installing this package
@@ -24,7 +32,7 @@ As the MELPA repository is not available in Emacs by default and it is
 needed to install `flycheck`, you will have to add this code to your
 Emacs init file:
 
-```	emacs-lisp
+```emacs-lisp
 (require 'package)
 
 (add-to-list 'package-archives
@@ -43,11 +51,11 @@ Install `ciao-emacs-plus` package via Emacs built-in package manager (`package.e
 > Once the packages are refreshed, try installing again.
 
 For `flycheck` support, add the next line into your Emacs init file for adding the checkers:
-```	emacs-lisp
+```emacs-lisp
 (eval-after-load 'flycheck '(add-hook 'flycheck-mode-hook 'flycheck-ciao-setup))
 ```
 If you use [use-package](https://github.com/jwiegley/use-package), you can insert instead:
-```	emacs-lisp
+```emacs-lisp
 (use-package flycheck-ciao
   :after flycheck
   :hook
@@ -55,16 +63,16 @@ If you use [use-package](https://github.com/jwiegley/use-package), you can inser
   )
 ```
 > **Optional**: Enable `flycheck-mode` in all buffers where syntax checking is possible:
-> ```	emacs-lisp
+> ```emacs-lisp
 > (add-hook 'after-init-hook 'global-flycheck-mode)
 > ```
 
 For Company support, insert the following line into your Emacs init file:
-```	emacs-lisp
+```emacs-lisp
 (eval-after-load 'company '(add-hook 'company-mode-hook 'company-ciao-setup))
 ```
 If you use [use-package](https://github.com/jwiegley/use-package), you can insert instead:
-```	emacs-lisp
+```emacs-lisp
 (use-package company-ciao
   :after company
   :hook
@@ -72,7 +80,44 @@ If you use [use-package](https://github.com/jwiegley/use-package), you can inser
   )
 ```
 > **Optional**: Enable `company-mode` in all buffers where possible:
-> ```	emacs-lisp
+> ```emacs-lisp
 > (add-hook 'after-init-hook 'global-company-mode)
 > ```
 See also the instructions and tips in each individual package. 
+
+## Agda-input
+
+```emacs-lisp
+(require 'agda-input)
+```
+
+Then activate with `M-x set-input-method` and `Agda`.
+
+## Outli
+
+This is a convenient configuration for the Ciao code base:
+
+```emacs-lisp
+(require 'outli)
+(setq outli-heading-config
+      '((emacs-lisp-mode ";; " ?* t t)
+        (tex-mode "%% " ?* t)
+        (js-mode "/// " ?# t)
+        (c-mode "/// " ?# t)
+        (ciao-mode "%! " ?# none) ; keep style
+        (org-mode)
+        (t
+         (let*
+             ((c
+               (or comment-start "#"))
+              (space
+               (unless
+                   (eq
+                    (aref c
+                          (1-
+                           (length c)))
+                    32)
+                 " ")))
+           (concat c space))
+         42)))
+```
