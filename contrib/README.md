@@ -1,13 +1,21 @@
-# ciao-emacs-plus
+# Ciao Emacs Plus
 
-Flycheck and Company support for Ciao Prolog (`ciao-mode`).
+This directory contains some extensions and goodies for the Ciao emacs
+mode:
 
-* Flycheck provides on the fly checking of assertions, tests, syntax,
-  and documentation.
+ - Flycheck and Company support for Ciao Prolog (`ciao-mode`):
+   - Flycheck provides on the fly checking of assertions, tests,
+     syntax, and documentation.
+   - Company provides rich contextual help, by accessing the manuals.
 
-* Company provides rich contextual help, by accessing the manuals.
+ - `agda-input.el`: a copy of the Agda input method (MIT License) to type
+   mathematican and other symbols in Unicode.
+
+ - `outli.el`: a copy of [outli](https://github.com/jdtsmith/outli) (GPL License)
+   an Org-like code outliner for section folding.
 
 ## Installation and Setup
+
 Emacs 24 is needed for using [flycheck](https://github.com/flycheck/flycheck).
 If you don't have `flycheck` or `company` installed yet, installing this package
 (`ciao-emacs-plus`) will do it automatically. 
