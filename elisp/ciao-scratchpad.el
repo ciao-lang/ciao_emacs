@@ -97,16 +97,18 @@ current dir (or creates one)."
 
 ;; TODO: This only takes the module name; there will be conflicts with
 ;; the hierarchical module system.
+;; Solved partially by associating to sourcefile (which includes the
+;; path) instead of just filename 
 (defun ciao-scratchpad-source-assoc-dir (sourcefile)
   "The temporary directory associated to `sourcefile'."
   (let* ((filename (file-name-nondirectory sourcefile))
-	 (tmpdir (cdr (assoc filename ciao-scratchpad-source-assoc-dir-list))))
+	 (tmpdir (cdr (assoc sourcefile ciao-scratchpad-source-assoc-dir-list))))
     (if tmpdir
 	tmpdir
       (setq tmpdir (ciao-scratchpad-new-code-dir filename))
       (setq ciao-scratchpad-source-assoc-dir-list
 	    (cons 
-	     (cons filename tmpdir)
+	     (cons sourcefile tmpdir)
 	     ciao-scratchpad-source-assoc-dir-list)))
       tmpdir
     ))
