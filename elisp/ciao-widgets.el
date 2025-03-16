@@ -77,11 +77,11 @@ values. This is in order to be able to restore these values will be
 restored if the cancel button is pressed in the graphical menu.")
 
 (defvar ciao-gm-recovering 0
-  "Sometimes the CiaoPP top-level menu can generate a 'Note:
+  "Sometimes the CiaoPP top-level menu can generate a `Note:
 Incorrect Option'. When this happens, the ciao-gm-recovering
-variable is increased in 1, and the graphical menu
+variable is increased by 1, and the graphical menu
 hook (ciao-ciaopp-process-graphical-menu) starts inserting
-carriage returns in to avoid more errors. When a prompt is
+carriage returns to avoid more errors. When a prompt is
 reached, the current prompt hook (ciao-ciaopp-show-graphic-menu)
 will restart the menu process if this variable is greater than
 0. After incorrect option is obtained twice, it will stop and

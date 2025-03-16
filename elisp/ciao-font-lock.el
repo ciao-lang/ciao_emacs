@@ -125,7 +125,8 @@ modern emacses, and also in ascii mode with emacs>= 21.1)."
 would like highlighted (colored). Be careful, since wrong entries may
 affect other syntax highlighting."
   :group 'ciaolang
-  :type 'list)
+  :type '(repeat string)
+  )
 ;; Also, 'ciao-user-directives' now customizable; see above in file.
 
 (defun ciao-font-lock-defaults-create ()

@@ -763,7 +763,7 @@ strings, commnds, etc.)."
 ;;     (((class color) (background dark)) (:background "SlateGray2" :foreground "black"))
 ;;     (((class color) (background light)) (:inherit 'region))
 ;;     (((class color) (background dark)) (:inherit 'region)))
-      (((class color)) (:inherit 'region)))
+      (((class color)) (:inherit region)))
     ; (t (:inverse-video t)))
   "Face to use for highlighting code areas (e.g., when locating 
    the code area that an error message refers to)."
