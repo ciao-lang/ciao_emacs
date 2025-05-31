@@ -111,8 +111,8 @@ modern emacses, and also in ascii mode with emacs>= 21.1)."
 
 (defvar ciao-library-directives
   '(
-    ;; functions
-    "fun_eval" "fun_return" "lazy" "funct" 
+    ;; xsyntax (fsyntax, etc.)
+    "fun_eval" "fun_return" "lazy" "funct" "notation" "notation_macro"
     ;; argnames
     "argnames" 
     ;; make
